@@ -1,0 +1,20 @@
+Proposal
+================
+2022-11-12
+
+# Members (names and UNIs)
+
+Qingyue(Josie) Zhuo, qz2493; Baoyi Feng, bf2506; Yijin Wang, yw4005;
+Tvisha Devavarapu, td2749
+
+# Tentative Title
+
+# Motivation
+
+# Intended final products
+
+# Anticipated data sources
+
+# Planned analyses / visualizations / coding challenges
+
+# Planned timeline
