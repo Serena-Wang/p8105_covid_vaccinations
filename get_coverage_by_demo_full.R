@@ -1,47 +1,60 @@
-# Collect links to all historical versions of converage-by-demo.csv
-query_base_file <- "people/coverage-by-demo.csv"
-page = 1
-links <- data.frame()
-while (TRUE) {
-  request <- httr::GET(
-    'https://api.github.com/repos/nychealth/covid-vaccine-data/commits',
-    query = list(path = query_base_file, 
-                 sort = "author-date",
-                 page = as.character(page)))
-  
-  if (request$status_code > 400) {
-    break
-  }
-  
-  content <- httr::content(request)
-  
-  if(length(content) == 0){
-    break
-  }
-  
-  for (i in 1:length(content)){
+library(tidyverse)
+library(readr)
+library(httr)
+library(tidyr)
+library(purrr)
+
+# Collect links to all historical versions of query base file 
+get_links <- function(query_base_file){
+  page = 1
+  links <- data.frame()
+  while (TRUE) {
+    request <- httr::GET(
+      'https://api.github.com/repos/nychealth/covid-vaccine-data/commits',
+      query = list(path = query_base_file, 
+                   sort = "author-date",
+                   page = as.character(page)))
     
-    curr_date = as.Date(sub("\\T.*", "", content[[i]]$commit$author$date))
-    
-    if (!(curr_date %in% links$date)){
-      a_commit <- data.frame(date = content[[i]]$commit$author$date,
-                             sha = content[[i]]$sha) %>%
-        tidyr::separate(date, into = c("date", "time"), sep = "T") %>%
-        dplyr::mutate(time =  sub("\\Z.*", "",time),
-                      date = as.Date(date),
-                      file_link = paste0(
-                        "https://raw.githubusercontent.com/nychealth/covid-vaccine-data/",
-                        sha,"/",query_base_file)) %>%
-        dplyr::select(-sha, -time)
-      
-      
-      links <- links %>% dplyr::bind_rows(a_commit)
-      } 
+    if (request$status_code > 400) {
+      break
     }
-  page <- page + 1
-}
+    
+    content <- httr::content(request)
+    
+    if(length(content) == 0){
+      break
+    }
+    
+    for (i in 1:length(content)){
+      
+      curr_date = as.Date(sub("\\T.*", "", content[[i]]$commit$author$date))
+      
+      if (!(curr_date %in% links$date)){
+        a_commit <- data.frame(date = content[[i]]$commit$author$date,
+                               sha = content[[i]]$sha) %>%
+          tidyr::separate(date, into = c("date", "time"), sep = "T") %>%
+          dplyr::mutate(time =  sub("\\Z.*", "",time),
+                        date = as.Date(date),
+                        file_link = paste0(
+                          "https://raw.githubusercontent.com/nychealth/covid-vaccine-data/",
+                          sha,"/",query_base_file)) %>%
+          dplyr::select(-sha, -time)
+        
+        
+        links <- links %>% dplyr::bind_rows(a_commit)
+        } 
+      }
+    page <- page + 1
+  }
+  
+  return(links)
+}  
+
+links <- get_links("people/coverage-by-demo.csv")
 
 write_csv(links, "./Data/coverage_by_demo_links.csv")
+
+
 
 # read in all files 
 coverage_by_demo_full <- map_dfr(
@@ -75,4 +88,12 @@ coverage_by_demo_full <- map_dfr(
   })
 
 write_csv(coverage_by_demo_full, "./Data/coverage_by_demo_full.csv")
-      
+
+coverage_boro_demo_full_links <- get_links("people/coverage-by-boro-demo-fully.csv")
+
+coverage_boro_demo_full <- map_dfr(
+  coverage_boro_demo_full_links$file_link, read_csv)
+
+write_csv(coverage_boro_demo_full, "./Data/coverage_boro_demo_full.csv")
+
+
