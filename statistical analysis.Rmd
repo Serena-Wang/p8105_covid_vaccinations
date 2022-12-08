@@ -1,0 +1,208 @@
+---
+title: "Statistical Analysis"
+author: "Qingyue Zhuo qz2493"
+date: "2022-12-01"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(modelr)
+library(mgcv)
+```
+
+### Selection of Predictors
+
+* Data Cleaning
+
+```{r}
+stratified = 
+  read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv") %>%
+  janitor::clean_names() %>%
+  select(group, subgroup, perc_partially, perc_fully, perc_additional) %>%
+  drop_na()
+```
+
+```{r}
+unstratified = 
+  read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_boro_demo_full.csv") %>%
+  janitor::clean_names() %>%
+  select(age_group, race_ethnicity, city_perc_fully) %>%
+  filter(
+    !age_group %in% c("Boroughwide", "All ages", "65+", "13-17", "18-44", "45-64") 
+)
+```
+
+
+#### Chi-square Test 
+
+* Boroughs
+
+We predicted that there is no difference in vaccination rate in NYC across the six boroughs. We will perform the chi-square test to verify our assumption.
+
+H0: the expected vaccination rates are the same across all boroughs.
+
+H1: the expected vaccination rate are not same across all boroughs.
+
+```{r}
+demo_boro = 
+  stratified %>%
+  filter(group == "Borough") %>% 
+  select(-group) %>%
+  group_by(subgroup) %>%
+  summarise(
+    partial_vaccin = mean(perc_partially),
+    full_vaccin = mean(perc_fully),
+    additional_vaccin = mean(perc_additional))
+
+knitr::kable(demo_boro, digits = 3)
+
+chisq.test(demo_boro$partial_vaccin)
+chisq.test(demo_boro$full_vaccin)
+chisq.test(demo_boro$additional_vaccin)
+```
+Interpretation: The result of chi-square shows that χ2<χcrit, at significant level α=0.05, so we fail to reject the null hypothesis and conclude that the vaccination rate is same across all boroughs.
+
+* Race
+
+We predicted that there is no difference in vaccination rate in NYC across the six types of race. We will perform the chi-square test to verify our assumption.
+
+H0: the expected vaccination rates are the same across all races.
+
+H1: the expected vaccination rates are not same across all races.
+
+```{r}
+demo_race = 
+  stratified %>%
+  filter(group == "Race/ethnicity") %>%
+  select(-group) %>%
+  group_by(subgroup) %>%
+  summarise(
+    partial_vaccin = mean(perc_partially),
+    full_vaccin = mean(perc_fully),
+    additional_vaccin = mean(perc_additional))
+
+knitr::kable(demo_race, digit = 3)
+
+chisq.test(demo_race$partial_vaccin)
+chisq.test(demo_race$full_vaccin)
+chisq.test(demo_race$additional_vaccin)
+```
+Interpretation: The result of chi-square shows that p-value for partial vaccination rate is greater than 0.05, while p-values for full and additional vaccination rates are smaller than the significant value α=0.05, so we can conclude that partial vaccination rate is same across all races, while full and additional vaccination rates are difference across races in NYC.
+
+* Sex
+
+We predicted that there is no difference in vaccination rate in NYC across genders. We will perform the chi-square test to verify our assumption.
+
+H0: the expected vaccination rates are the same across genders.
+
+H1: the expected vaccination rates are not same across all genders.
+```{r}
+demo_sex = 
+  stratified %>%
+  filter(group == "Sex") %>%
+  select(-group) %>%
+  group_by(subgroup) %>%
+  summarise(
+    partial_vaccin = mean(perc_partially),
+    full_vaccin = mean(perc_fully),
+    additional_vaccin = mean(perc_additional))
+
+knitr::kable(demo_sex)
+
+chisq.test(demo_sex$partial_vaccin)
+chisq.test(demo_sex$full_vaccin)
+chisq.test(demo_sex$additional_vaccin)
+```
+Interpretation: The result of chi-square shows that χ2<χcrit, at significant level α=0.05, so we fail to reject the null hypothesis and conclude that the vaccination rate is same for male and female.
+
+* age
+
+We predicted that there is no difference in vaccination rate in NYC across differenc age groups. We will perform the chi-square test to verify our assumption.
+
+H0: the expected vaccination rates are the same across age groups.
+
+H1: the expected vaccination rate are not same across age groups.
+```{r}
+demo_age = 
+  stratified %>%
+  filter(
+    group == "Age",
+    subgroup != "'5-12",
+    subgroup != "'0-4",
+    subgroup != "'13-17") %>%
+  select(-group) %>% 
+  group_by(subgroup) %>%
+  summarise(
+    partial_vaccin = mean(perc_partially),
+    full_vaccin = mean(perc_fully),
+    additional_vaccin = mean(perc_additional))
+
+knitr::kable(demo_age, digits = 3)
+
+chisq.test(demo_age$partial_vaccin)
+chisq.test(demo_age$full_vaccin)
+chisq.test(demo_age$additional_vaccin)
+```
+Interpretation: The result of chi-square shows that χ2>χcrit, at significant level α=0.05, so we reject the null hypothesis and conclude that the vaccination rate is not same for difference age groups. \
+
+Conclusion: according to the results of chi-square test, we can conclude that race and age are significant predictors of the vaccination rate in NYC, so we will fit the model with these two predictors.
+
+### Model Fitting
+We propose 2 models for prediction:
+
+ 1. Linear Model of city_perc_fully ~ age_group  +  race_ethnicity
+
+ 2. Linear Model of city_perc_fully ~ age_group  +  race_ethnicity + age_group * race_ethnicity, assuming that there are interaction
+ 
+* Main Effect Model
+```{r}
+fit_lm_main = lm(city_perc_fully ~ age_group  +  race_ethnicity, 
+                 data = unstratified )
+fit_lm_main  %>% broom::tidy() %>% knitr::kable(digits = 2)
+```
+
+* Interaction Model
+```{r}
+fit_lm_interaction = lm(city_perc_fully ~ age_group  +  race_ethnicity +
+                        age_group * race_ethnicity, 
+                        data = unstratified )
+fit_lm_interaction  %>% broom::tidy() %>% knitr::kable(digits = 2)
+```
+
+### Cross Validation 
+The predictors we chose above are statistically significant. What's more, we notice that interaction terms are contributing to model predictability. We would say the interaction model  will be better than the other one because its root means square error seems to be smaller. Therefore, interaction model could be useful for predicting the fully vaccinated rate in NYC.
+```{r}
+cv_df =
+  crossv_mc(unstratified, 100) %>% 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble))
+```
+
+```{r}
+cv_df = 
+  cv_df %>% 
+  mutate(
+    main_mod  = map(train, ~lm(city_perc_fully ~ age_group  +  race_ethnicity, data = .x)),
+    interaction_mod = map(train, ~lm(city_perc_fully ~ age_group  +  race_ethnicity + age_group * race_ethnicity, data = .x))) %>% 
+  mutate(
+    rmse_main = map2_dbl(main_mod, test, ~rmse(model = .x, data = .y)),
+    rmse_interaction = map2_dbl(interaction_mod, test, ~rmse(model = .x, data = .y)))
+```
+
+```{r}
+cv_df %>% 
+  select(starts_with("rmse")) %>% 
+  pivot_longer(
+    everything(),
+    names_to = "model", 
+    values_to = "rmse",
+    names_prefix = "rmse_") %>% 
+  mutate(model = fct_inorder(model)) %>% 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()
+```
+
+### Model Comparison
+Age, race and their interaction term are good predictors for anticipating the fully vaccinated rate in NYC.

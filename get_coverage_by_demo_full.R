@@ -96,4 +96,7 @@ coverage_boro_demo_full <- map_dfr(
 
 write_csv(coverage_boro_demo_full, "./Data/coverage_boro_demo_full.csv")
 
+nyc_variant_data <- read_csv(
+  file = "https://github.com/nychealth/coronavirus-data/blob/dc3547bf87c25738dc230906d302a1915a8a0d93/variants/variant-epi-data.csv")
 
+write_csv(nyc_variant_data, "./Data/nyc_variant_data.csv")
