@@ -1,0 +1,339 @@
+---
+title: "Vaccination Rate - Demographic Features"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+```{r, message = FALSE, echo=FALSE}
+library(plotly)
+library(readr)
+library(janitor)
+library(tidyverse)
+library(lubridate)
+```
+
+
+
+## Introduction 
+
+We are interested in comparing COVID-19 vaccination rates of different demographic groups in NYC. In this section, we are analyzing COVID-19 vaccination rates with data from NYC Health. NYC Health curates daily COVID-19 vaccination data stratified by a handful of demographic features such as age, race/ethnicity, sex and boroughs. It also  include granular vaccination information such as primary does, booster doses, at least 1 dose. 
+
+Here is detailed vaccination status defined by NYC Health (credits to NYC Health Github Repository):
+
+Status | Definition
+-------|-----------
+Partially vaccinated | People who have received the first dose of a two-does primary vaccine series (Pfizer-BioNtech or Moderna) 
+Completed primary series | People who have received the two-dose series of the Moderna or Pfizer vaccine, or the single-dose series of the Johnson & Johnson vaccine. This was previously referred to as "fully vaccinated."
+At least one dose | People who have received either the first dose of the two-dose Pfizer or Moderna primary vaccine series or the one dose of the Johnson & Johnson primary vaccine series. New Yorkers who received the AstraZeneca vaccine are only counted if they received both doses of the two-dose vaccine.
+Additional/booster doses| People who have received additional doses of an FDA-approved vaccine after completing their primary series. This includes first and second booster shots, as well as additional doses for people who are immunocompromised.
+
+To adjust for population of each demographic group, we are analyzing the estimated vaccination rate calculated by NYC Health. The first data point is for May 23th, 2021, and all of the data we used in our analysis are data as of November 29th, 2022.
+
+```{r, message = FALSE, echo=FALSE}
+# Load in preprocessed data
+coverage_by_demo_full <- read_csv("./Data/coverage_by_demo_full.csv") %>%
+  clean_names() %>%
+  # observation on week_end is a summary of the week ahead this date (Mon-Sun).
+  mutate(week_end = ceiling_date(date, "weeks", week_start = 1))%>%
+  group_by(week_end, population, group, subgroup) %>%
+  filter(date == max(date)) %>%
+  drop_na()
+```
+
+## Estimated fully vaccinatd rate: Weekly progress for each borough
+```{r, message = FALSE, echo=FALSE}
+selected_group <- "Borough"
+borough_data <- coverage_by_demo_full %>%
+  filter(group == selected_group,
+         subgroup != "Citywide")
+```
+
+```{r, message = FALSE}
+borough_data %>%
+  filter(population == "All ages") %>%
+  ungroup() %>%
+  plot_ly(
+    x = ~week_end, 
+    y = ~perc_fully/100,
+    color = ~subgroup,
+    type = 'scatter', mode = 'lines+markers',
+    line =list(colorscale = 'Accent'),
+    hovertemplate = paste('<br><b>Week</b>: %{x}<br>',
+                          '<b>Vaccination Rate</b>: %{y:.2%}<br><extra></extra>')
+) %>%
+  layout(title = "Vaccination Progress By Borough <br> Fully Vaccinated, All Ages",
+    xaxis = list(title = "Week", showgrid = TRUE),
+    yaxis = list(title = "Vaccination Rate",showgrid = TRUE))
+```
+
+## Estimated fully vaccination rate: Borough and Age groups as of November 29th, 2022.
+```{r}
+borough_data %>%
+  filter(week_end == max(week_end)) %>%
+  plot_ly(
+    x = ~population, 
+    y = ~subgroup,
+    z = ~perc_fully/100,
+    type = "heatmap",
+    #coloraxis = list(cmax = 1.2, cmin = 0),
+    hovertemplate = paste('<b>Age Group</b>: %{x}<br>',
+                          '<b>Location</b>: %{y}<br>',
+                          '<b>Vaccination Rate</b>: %{z:.2%}<br><extra></extra>'),
+    zmin = 0, zmax = 1.2, zauto = FALSE,
+    colors = colorRamp(c("white", "green")),
+    opacity = 0.5,
+    colorbar = list(title = "")
+) %>%
+  layout(title = "Full Vaccination Rate Heatmap",
+    xaxis = list(title = "Age groups",
+                      categoryorder = "array",
+                      categoryarray = 
+                        c("Children (0-17)", "Children (5-17)", "Children (13-17)", "Adults (18+)", "All ages")),
+         yaxis = list(title = "Borough",
+                      categoryorder = "total descending"))
+
+```
+##  Estimated additional/booster vaccination rate: Weekly progress for each borough
+
+```{r, message = FALSE}
+borough_data %>%
+  filter(population == "All ages") %>%
+  ungroup() %>%
+  plot_ly(
+    x = ~week_end, 
+    y = ~perc_additional/100,
+    color = ~subgroup,
+    type = 'scatter', mode = 'lines+markers',
+    line =list(colorscale = 'Accent'),
+    hovertemplate = paste('<br><b>Week</b>: %{x}<br>',
+                          '<b>Vaccination Rate</b>: %{y:.2%}<br><extra></extra>')
+) %>%
+  layout(title = "Vaccination Progress By Borough <br> Booster, All Ages",
+    xaxis = list(title = "Week", showgrid = TRUE),
+    yaxis = list(title = "Vaccination Rate",showgrid = TRUE))
+```
+## Estimated additional/booster vaccination rate:  Borough and Age groups as of November 29th, 2022.
+
+```{r}
+borough_data %>%
+  filter(week_end == max(week_end)) %>%
+  plot_ly(
+    x = ~population, 
+    y = ~subgroup,
+    z = ~perc_additional/100,
+    type = "heatmap",
+    zmin = 0, zmax = 1.2, zauto = FALSE,
+    colors = colorRamp(c("white", "green")),
+    opacity = 0.5,
+    colorbar = list(title = ""),
+    hovertemplate = paste('<b>Age Group</b>: %{x}<br>',
+                          '<b>Location</b>: %{y}<br>',
+                          '<b>Vaccination Rate</b>: %{z:.2%}<br><extra></extra>')
+) %>%
+  layout(title = "Booster Vaccination Rate Heatmap",
+    xaxis = list(title = "Age groups",
+                      categoryorder = "array",
+                      categoryarray = 
+                        c("Children (0-17)", "Children (5-17)", "Children (13-17)", "Adults (18+)", "All ages")),
+         yaxis = list(title = "Borough",
+                      categoryorder = "total descending"))
+```
+
+
+## Estimated fully vaccinatd rate: Weekly progress for each race
+```{r, message = FALSE, echo=FALSE}
+selected_group <- "Race/ethnicity"
+race_data <- coverage_by_demo_full %>%
+  filter(group == selected_group)
+```
+
+```{r, message = FALSE}
+race_data %>%
+  filter(population == "All ages") %>%
+  ungroup() %>%
+  plot_ly(
+    x = ~week_end, 
+    y = ~perc_fully/100,
+    color = ~subgroup,
+    type = 'scatter', mode = 'lines+markers',
+    line =list(colorscale = 'Accent'),
+    hovertemplate = paste('<br><b>Week</b>: %{x}<br>',
+                          '<b>Vaccination Rate</b>: %{y:.2%}<br><extra></extra>')
+) %>%
+  layout(title = "Vaccination Progress By Race <br> Fully vaccinated, All Ages",
+    xaxis = list(title = "Week", showgrid = TRUE),
+    yaxis = list(title = "Vaccination Rate",showgrid = TRUE))
+```
+## Estimated fully vaccination rate: Race and Age groups as of November 29th, 2022.
+
+We noticed that some estimated vaccination rate is above 100%. This is a known problem acknowledged by NYC Health. Multi race is misreport under a single race.
+
+```{r}
+race_data %>%
+  filter(week_end == max(week_end)) %>%
+  plot_ly(
+    x = ~population, 
+    y = ~subgroup,
+    z = ~perc_fully/100,
+    type = "heatmap",
+    zmin = 0, zmax = 1.2, zauto = FALSE,
+    colors = colorRamp(c("white", "green")),
+    opacity = 0.5,
+    colorbar = list(title = ""),
+    hovertemplate = paste('<b>Age Group</b>: %{x}<br>',
+                          '<b>Race</b>: %{y}<br>',
+                          '<b>Vaccination Rate</b>: %{z:.2%}<br><extra></extra>')
+) %>%
+  layout(title = "Full Vaccination Rate Heatmap",
+    xaxis = list(title = "Age groups",
+                      categoryorder = "array",
+                      categoryarray = 
+                        c("Children (0-17)", "Children (5-17)", "Children (13-17)", "Adults (18+)", "All ages")),
+         yaxis = list(title = "Race",
+                      categoryorder = "total descending"))
+```
+## Estimated additional/booster vaccination rate: Weekly progress for each race
+
+```{r, message = FALSE}
+race_data %>%
+  filter(population == "All ages") %>%
+  ungroup() %>%
+  plot_ly(
+    x = ~week_end, 
+    y = ~perc_additional/100,
+    color = ~subgroup,
+    type = 'scatter', mode = 'lines+markers',
+    line =list(colorscale = 'Accent'),
+    hovertemplate = paste('<br><b>Week</b>: %{x}<br>',
+                          '<b>Vaccination Rate</b>: %{y:.2%}<br><extra></extra>')
+) %>%
+  layout(title = "Vaccination Progress By Race <br> Booster, All Ages",
+    xaxis = list(title = "Week", showgrid = TRUE),
+    yaxis = list(title = "Vaccination Rate",showgrid = TRUE))
+```
+## Estimated additional/booster vaccination rate:  Race and Age groups as of November 29th, 2022.
+
+```{r}
+race_data %>%
+  filter(week_end == max(week_end)) %>%
+  plot_ly(
+    x = ~population, 
+    y = ~subgroup,
+    z = ~perc_additional/100,
+    type = "heatmap",
+    zmin = 0, zmax = 1.2, zauto = FALSE,
+    colors = colorRamp(c("white", "green")),
+    opacity = 0.5,
+    colorbar = list(title = ""),
+    hovertemplate = paste('<b>Age Group</b>: %{x}<br>',
+                          '<b>Race</b>: %{y}<br>',
+                          '<b>Vaccination Rate</b>: %{z:.2%}<br><extra></extra>')
+) %>%
+  layout(title = "Booster Vaccination Rate Heatmap",
+    xaxis = list(title = "Age groups",
+                      categoryorder = "array",
+                      categoryarray = 
+                        c("Children (0-17)", "Children (5-17)", "Children (13-17)", "Adults (18+)", "All ages")),
+         yaxis = list(title = "Race",
+                      categoryorder = "total descending"))
+```
+## Estimated fully vaccinatd rate: Weekly progress for each race
+```{r, message = FALSE, echo=FALSE}
+selected_group <- "Sex"
+sex_data <- coverage_by_demo_full %>%
+  filter(group == selected_group)
+```
+
+```{r, message = FALSE}
+sex_data %>%
+  filter(population == "All ages") %>%
+  ungroup() %>%
+  plot_ly(
+    x = ~week_end, 
+    y = ~perc_fully/100,
+    color = ~subgroup,
+    type = 'scatter', mode = 'lines+markers',
+    line =list(colorscale = 'Accent'),
+    hovertemplate = paste('<br><b>Week</b>: %{x}<br>',
+                          '<b>Vaccination Rate</b>: %{y:.2%}<br><extra></extra>')
+) %>%
+  layout(title = "Vaccination Progress By Sex <br> Fully vaccinated, All Ages",
+    xaxis = list(title = "Week", showgrid = TRUE),
+    yaxis = list(title = "Vaccination Rate",showgrid = TRUE))
+```
+
+## Estimated fully vaccination rate: Sex and Age groups as of November 29th, 2022.
+```{r}
+sex_data %>%
+  filter(week_end == max(week_end)) %>%
+  plot_ly(
+    x = ~population, 
+    y = ~subgroup,
+    z = ~perc_fully/100,
+    type = "heatmap",
+    zmin = 0, zmax = 1.2, zauto = FALSE,
+    colors = colorRamp(c("white", "green")),
+    opacity = 0.5,
+    colorbar = list(title = ""),
+    hovertemplate = paste('<b>Age Group</b>: %{x}<br>',
+                          '<b>Sex</b>: %{y}<br>',
+                          '<b>Vaccination Rate</b>: %{z:.2%}<br><extra></extra>')
+) %>%
+  layout(title = "Full Vaccination Rate Heatmap",
+    xaxis = list(title = "Age groups",
+                      categoryorder = "array",
+                      categoryarray = 
+                        c("Children (0-17)", "Children (5-17)", "Children (13-17)", "Adults (18+)", "All ages")),
+         yaxis = list(title = "Sex",
+                      categoryorder = "total descending"))
+```
+
+## Estimated additional/booster vaccination rate: Weekly progress for each sex
+```{r, message = FALSE}
+sex_data %>%
+  filter(population == "All ages") %>%
+  ungroup() %>%
+  plot_ly(
+    x = ~week_end, 
+    y = ~perc_additional/100,
+    color = ~subgroup,
+    type = 'scatter', mode = 'lines+markers',
+    line =list(colorscale = 'Accent'),
+    hovertemplate = paste('<br><b>Week</b>: %{x}<br>',
+                          '<b>Vaccination Rate</b>: %{y:.2%}<br><extra></extra>')
+) %>%
+  layout(title = "Vaccination Progress By Sex <br> Booster, All Ages",
+    xaxis = list(title = "Week", showgrid = TRUE),
+    yaxis = list(title = "Vaccination Rate",showgrid = TRUE))
+```
+## Estimated additional/booster vaccination rate:  Sex and Age groups as of November 29th, 2022.
+```{r}
+sex_data %>%
+  filter(week_end == max(week_end)) %>%
+  plot_ly(
+    x = ~population, 
+    y = ~subgroup,
+    z = ~perc_additional/100,
+    type = "heatmap",
+    zmin = 0, zmax = 1.2, zauto = FALSE,
+    colors = colorRamp(c("white", "green")),
+    opacity = 0.5,
+    colorbar = list(title = ""), 
+    hovertemplate = paste('<b>Age Group</b>: %{x}<br>',
+                          '<b>Sex</b>: %{y}<br>',
+                          '<b>Vaccination Rate</b>: %{z:.2%}<br><extra></extra>')
+) %>%
+  layout(title = "Booster Vaccination Rate Heatmap",
+    xaxis = list(title = "Age groups",
+                      categoryorder = "array",
+                      categoryarray = 
+                        c("Children (0-17)", "Children (5-17)", "Children (13-17)", "Adults (18+)", "All ages")),
+         yaxis = list(title = "Sex",
+                      categoryorder = "total descending"))
+```
+
