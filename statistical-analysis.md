@@ -270,7 +270,7 @@ model with these two predictors.
 
 ### Model Fitting
 
-We propose 2 models for prediction:
+We propose 3 models for prediction:
 
 1.  Linear Model of city_perc_fully \~ age_group
 
