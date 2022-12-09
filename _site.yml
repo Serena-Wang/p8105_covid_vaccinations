@@ -1,0 +1,29 @@
+name: "Website Settings"
+output_dir: "."
+navbar:
+  title: "Home"
+  left:
+  - text: About
+    menu:
+    - text: "Our Project"
+      href: project_report.html
+   
+  right:
+    - text: "Location of Incidents in NYC"
+      href: demographic_features.html
+    - text: "Exploratory Analysis"
+      href: demographic_features.html
+    - text: "Contributing Factors"
+      href: demographic_features.html
+    - text: "Poisson Analysis"
+      href: demographic_features.html
+    - text: "Predictive Model"
+      href: demographic_features.html
+    - icon: fa-github fa-lg
+      href: https://github.com/Serena-Wang/p8105_covid_vaccinations
+output:
+  html_document:
+    theme: journal
+    
+    
+   
