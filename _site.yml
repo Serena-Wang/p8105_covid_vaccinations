@@ -14,9 +14,9 @@ navbar:
     - text: "Exploratory Analysis"
       href: exploratory_analysis.html
     - text: "Statistical Analysis"
-      href: demographic_features.html
+      href: statistical-analysis.html
     - text: "Model Fitting"
-      href: demographic_features.html
+      href: Model-Fitting.html
     - text: "Overall Vaccination Trends"
       href: https://tvishad.shinyapps.io/shiny/
     - icon: fa-github fa-lg
