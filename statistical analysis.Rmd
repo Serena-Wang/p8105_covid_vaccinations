@@ -38,7 +38,7 @@ stratified =
   drop_na()
 ```
 
-The second dataset take
+The second dataset categorizes observations by their age group and race/ethnicity. 
 ```{r}
 unstratified = 
   read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_boro_demo_full.csv") %>%
