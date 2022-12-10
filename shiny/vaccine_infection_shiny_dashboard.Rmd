@@ -1,0 +1,182 @@
+---
+title: "NEW YORK CITY: COVID-19 OVERALL VACCINATION TRENDS"
+output: html.document
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+    source: embed
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(shiny)
+library(ggplot2)
+library(lubridate)
+
+
+
+dose_data = 
+  read_csv("./Data/doses-by-day.csv") %>%
+  janitor::clean_names() %>% 
+  mutate(date = as.Date(date))
+
+health_data = 
+  read_csv("./Data/New_York_State_Statewide_COVID-19_Reinfection_Data.csv") %>%
+  janitor::clean_names() %>% 
+  filter(redc_region == "New York City") %>% 
+  mutate(begin_date_of_the_week = as.Date(begin_date_of_the_week, format = "%m/%d/%Y")) %>% 
+  rename(date = begin_date_of_the_week) %>% 
+  arrange(date)
+
+death_hosp_data = 
+  read_csv("./Data/hospitalizations_deaths.csv") %>% 
+  janitor::clean_names() %>% 
+  select(date_of_interest, hospitalized_count, death_count) %>% 
+  mutate(date_of_interest = as.Date(date_of_interest, format = "%m/%d/%Y")) %>% 
+  rename(date = date_of_interest) %>% 
+  mutate(week = floor_date(date, "weeks", week_start = 1)) %>% 
+  group_by(week) %>% 
+  summarise(deaths = sum(death_count),
+            hospitalizations = sum(hospitalized_count))
+
+combined_data = 
+  left_join(dose_data, health_data, by = "date") %>% 
+  mutate(week = floor_date(date, "weeks", week_start = 1),
+         primary_daily = admin_dose1_daily + admin_dose2_daily + admin_single_daily) %>% 
+  group_by(week) %>% 
+  summarise(All_Primary_Doses = sum(primary_daily),
+            Dose_1 = sum(admin_dose1_daily),
+            Dose_2 = sum(admin_dose2_daily),
+            Single_Primary = sum(admin_single_daily),
+            All_Doses = sum(admin_alldoses_daily),
+            All_Boosters = sum(admin_additional_daily),
+            Booster1_Additional = sum(admin_additional1_daily),
+            Booster2_Additional = sum(admin_additional2_daily),
+            First_Infections = sum(first_infections_count, na.rm = TRUE),
+            Reinfections = sum(reinfections_count, na.rm = TRUE)) %>% 
+  rename(date = week)
+
+
+
+```
+
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+vac_type = c("All_Doses", "All_Primary_Doses", "Dose_1", "Dose_2", "Single_Primary", "All_Boosters", "Booster1_Additional", "Booster2_Additional")
+
+
+selectInput(
+  inputId = "vac_type",
+  label = h3("Vaccine Type"),
+  choices = vac_type,
+  selected = "All_Doses"
+)
+
+
+dateRangeInput(
+  inputId = "date_range",
+  label = h3("Date Range"),
+  start = "2020-02-24",
+  end = "2022-11-07",
+  min = "2020-02-24",
+  max = "2022-11-07",
+  format = "yyyy-mm-dd"
+)
+
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### **Weekly Counts: Vaccines By Type, First Infections, and Re-Infections**
+
+```{r}
+
+renderPlotly({
+  
+  combined_data %>% 
+    filter(
+      date >= input$date_range[1],
+      date <= input$date_range[2]) %>% 
+  plot_ly(x = ~date, y = ~get(input$vac_type), type = "scatter", mode = "lines", name = "Vaccine Counts") %>%
+    add_trace(x = ~date, y = ~First_Infections, type = "scatter", mode = "lines+markers", 
+              name = "First Infections", line = list(color = "#d62728")) %>% 
+    add_trace(x = ~date, y = ~Reinfections, type = "scatter", mode = "lines+markers", 
+              name = "Re-Infections", line = list(color = "#e377c2")) %>% 
+    layout(xaxis = list(title = "<b>Date<b>"),
+           yaxis = list(title = "<b>Weekly Counts<b>"),
+           legend = list(orientation = "h", xanchor = "center", x = 0.5, y = 5))
+  
+  })
+
+
+```
+
+
+### **Cumulative Counts: Primary and Booster Vaccines**
+
+```{r}
+
+renderPlotly({
+  
+  total_df = 
+  dose_data %>%
+  relocate(date, admin_additional1_cumulative, admin_additional2_cumulative, admin_alldoses_cumulative, admin_alldoses_primary, everything()) %>% 
+  pivot_longer(
+    admin_additional1_cumulative:admin_alldoses_primary,
+    names_to = "cumulative",
+    names_prefix = "admin_",
+    values_to = "count") %>% 
+  select(date, cumulative, count) %>% 
+  arrange(date)
+
+total_plot = 
+  total_df %>%
+  mutate(cumulative = case_when(cumulative == "alldoses_primary" ~ "All Primary Doses",
+                                cumulative == "alldoses_cumulative" ~ "All Doses",
+                                cumulative == "additional1_cumulative" ~ "1st Boosters + Additional",
+                                cumulative == "additional2_cumulative" ~ "2nd Boosters + Additional")) %>% 
+  filter(
+    date >= input$date_range[1],
+    date <= input$date_range[2]) %>%
+  plot_ly(x = ~date, y = ~count) %>%
+  add_lines(color = ~cumulative) %>% 
+  layout(xaxis = list(title = "<b>Date<b>"),
+         yaxis = list(title = "<b>Cumulative Counts<b>"),
+         legend = list(orientation = "h", xanchor = "center", x = 0.5, y = 5))
+
+total_plot
+  
+})
+
+```
+
+Row {data-height=350}
+-------------------------------------
+
+### **Weekly Counts: COVID-related Hospitalizations and Deaths**
+
+```{r}
+
+renderPlotly({
+  
+  death_hosp_data %>% 
+  plot_ly(x = ~week) %>%
+    add_trace(y = ~deaths, type = "scatter", mode = "lines+markers", 
+              name = "Death Counts", line = list(color = "#d62728")) %>% 
+    add_trace(y = ~hospitalizations, type = "scatter", mode = "lines+markers", 
+              name = "Hospitalization Counts", line = list(color = "#e377c2")) %>% 
+    layout(xaxis = list(title = "<b>Date<b>"),
+           yaxis = list(title = "<b>Weekly Counts<b>"),
+           legend = list(orientation = "h", xanchor = "center", x = 0.5))
+  
+  })
+
+
+```

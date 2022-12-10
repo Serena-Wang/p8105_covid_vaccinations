@@ -1,0 +1,991 @@
+Begin Date of the Week,REDC Region,First Infections Count,Reinfections Count
+11/21/2022,Capital Region,638,178
+11/21/2022,Central New York,361,86
+11/21/2022,Finger Lakes,668,175
+11/21/2022,Long Island,5284,2019
+11/21/2022,Mid-Hudson,3151,1150
+11/21/2022,Mohawk Valley,240,81
+11/21/2022,New York City,14324,5072
+11/21/2022,North Country,200,62
+11/21/2022,Southern Tier,496,152
+11/21/2022,Western New York,673,169
+11/14/2022,Capital Region,668,184
+11/14/2022,Central New York,419,133
+11/14/2022,Finger Lakes,784,202
+11/14/2022,Long Island,4884,1908
+11/14/2022,Mid-Hudson,2884,922
+11/14/2022,Mohawk Valley,292,85
+11/14/2022,New York City,14522,4910
+11/14/2022,North Country,213,54
+11/14/2022,Southern Tier,541,162
+11/14/2022,Western New York,652,207
+11/07/2022,Capital Region,819,193
+11/07/2022,Central New York,466,122
+11/07/2022,Finger Lakes,844,211
+11/07/2022,Long Island,4434,1527
+11/07/2022,Mid-Hudson,2811,861
+11/07/2022,Mohawk Valley,302,104
+11/07/2022,New York City,13956,4556
+11/07/2022,North Country,291,65
+11/07/2022,Southern Tier,532,148
+11/07/2022,Western New York,878,275
+10/31/2022,Capital Region,1076,304
+10/31/2022,Central New York,637,168
+10/31/2022,Finger Lakes,1045,270
+10/31/2022,Long Island,4960,1688
+10/31/2022,Mid-Hudson,3247,951
+10/31/2022,Mohawk Valley,473,147
+10/31/2022,New York City,14726,4595
+10/31/2022,North Country,429,89
+10/31/2022,Southern Tier,791,201
+10/31/2022,Western New York,1295,356
+10/24/2022,Capital Region,1238,287
+10/24/2022,Central New York,777,199
+10/24/2022,Finger Lakes,1094,256
+10/24/2022,Long Island,4675,1518
+10/24/2022,Mid-Hudson,3075,862
+10/24/2022,Mohawk Valley,546,163
+10/24/2022,New York City,13123,3744
+10/24/2022,North Country,412,79
+10/24/2022,Southern Tier,771,225
+10/24/2022,Western New York,1463,346
+10/17/2022,Capital Region,1171,249
+10/17/2022,Central New York,919,254
+10/17/2022,Finger Lakes,1191,271
+10/17/2022,Long Island,4292,1242
+10/17/2022,Mid-Hudson,2982,773
+10/17/2022,Mohawk Valley,584,192
+10/17/2022,New York City,11742,3216
+10/17/2022,North Country,492,100
+10/17/2022,Southern Tier,798,212
+10/17/2022,Western New York,1517,398
+10/10/2022,Capital Region,1586,338
+10/10/2022,Central New York,1191,282
+10/10/2022,Finger Lakes,1409,331
+10/10/2022,Long Island,4419,1280
+10/10/2022,Mid-Hudson,3028,779
+10/10/2022,Mohawk Valley,751,213
+10/10/2022,New York City,11715,3019
+10/10/2022,North Country,608,147
+10/10/2022,Southern Tier,968,236
+10/10/2022,Western New York,1546,443
+10/03/2022,Capital Region,1558,328
+10/03/2022,Central New York,1436,419
+10/03/2022,Finger Lakes,1499,340
+10/03/2022,Long Island,4469,1167
+10/03/2022,Mid-Hudson,3233,771
+10/03/2022,Mohawk Valley,859,229
+10/03/2022,New York City,10984,2661
+10/03/2022,North Country,653,134
+10/03/2022,Southern Tier,985,248
+10/03/2022,Western New York,1776,418
+09/26/2022,Capital Region,1599,339
+09/26/2022,Central New York,1479,402
+09/26/2022,Finger Lakes,1520,354
+09/26/2022,Long Island,4926,1325
+09/26/2022,Mid-Hudson,3441,878
+09/26/2022,Mohawk Valley,882,260
+09/26/2022,New York City,11911,2937
+09/26/2022,North Country,720,135
+09/26/2022,Southern Tier,939,249
+09/26/2022,Western New York,1739,427
+09/19/2022,Capital Region,1731,382
+09/19/2022,Central New York,1563,462
+09/19/2022,Finger Lakes,1439,365
+09/19/2022,Long Island,5551,1552
+09/19/2022,Mid-Hudson,3800,969
+09/19/2022,Mohawk Valley,969,285
+09/19/2022,New York City,12729,3055
+09/19/2022,North Country,672,186
+09/19/2022,Southern Tier,1003,289
+09/19/2022,Western New York,1766,435
+09/12/2022,Capital Region,1496,345
+09/12/2022,Central New York,1457,361
+09/12/2022,Finger Lakes,1241,305
+09/12/2022,Long Island,5524,1484
+09/12/2022,Mid-Hudson,3604,947
+09/12/2022,Mohawk Valley,791,289
+09/12/2022,New York City,12017,2819
+09/12/2022,North Country,712,159
+09/12/2022,Southern Tier,1014,239
+09/12/2022,Western New York,1853,468
+09/05/2022,Capital Region,1282,298
+09/05/2022,Central New York,1120,285
+09/05/2022,Finger Lakes,1082,258
+09/05/2022,Long Island,4583,1185
+09/05/2022,Mid-Hudson,2758,707
+09/05/2022,Mohawk Valley,694,208
+09/05/2022,New York City,10781,2444
+09/05/2022,North Country,515,99
+09/05/2022,Southern Tier,796,220
+09/05/2022,Western New York,1573,374
+08/29/2022,Capital Region,1262,285
+08/29/2022,Central New York,940,240
+08/29/2022,Finger Lakes,970,223
+08/29/2022,Long Island,4636,1277
+08/29/2022,Mid-Hudson,2894,702
+08/29/2022,Mohawk Valley,630,142
+08/29/2022,New York City,11930,2753
+08/29/2022,North Country,456,122
+08/29/2022,Southern Tier,919,227
+08/29/2022,Western New York,1553,393
+08/22/2022,Capital Region,1220,249
+08/22/2022,Central New York,1034,227
+08/22/2022,Finger Lakes,1023,209
+08/22/2022,Long Island,4949,1349
+08/22/2022,Mid-Hudson,3233,816
+08/22/2022,Mohawk Valley,630,171
+08/22/2022,New York City,13239,2881
+08/22/2022,North Country,581,120
+08/22/2022,Southern Tier,897,251
+08/22/2022,Western New York,1727,422
+08/15/2022,Capital Region,1420,238
+08/15/2022,Central New York,962,287
+08/15/2022,Finger Lakes,1029,241
+08/15/2022,Long Island,5226,1317
+08/15/2022,Mid-Hudson,3510,811
+08/15/2022,Mohawk Valley,696,195
+08/15/2022,New York City,15331,3197
+08/15/2022,North Country,600,128
+08/15/2022,Southern Tier,798,203
+08/15/2022,Western New York,1696,419
+08/08/2022,Capital Region,1424,293
+08/08/2022,Central New York,970,234
+08/08/2022,Finger Lakes,1011,216
+08/08/2022,Long Island,6086,1514
+08/08/2022,Mid-Hudson,4030,1002
+08/08/2022,Mohawk Valley,711,160
+08/08/2022,New York City,17280,3738
+08/08/2022,North Country,547,110
+08/08/2022,Southern Tier,637,197
+08/08/2022,Western New York,1418,355
+08/01/2022,Capital Region,1505,279
+08/01/2022,Central New York,1065,233
+08/01/2022,Finger Lakes,1121,238
+08/01/2022,Long Island,6699,1680
+08/01/2022,Mid-Hudson,4609,983
+08/01/2022,Mohawk Valley,666,161
+08/01/2022,New York City,20747,4607
+08/01/2022,North Country,448,86
+08/01/2022,Southern Tier,738,171
+08/01/2022,Western New York,1521,349
+07/25/2022,Capital Region,1582,287
+07/25/2022,Central New York,932,194
+07/25/2022,Finger Lakes,1114,215
+07/25/2022,Long Island,7542,1852
+07/25/2022,Mid-Hudson,5030,1106
+07/25/2022,Mohawk Valley,596,149
+07/25/2022,New York City,23542,5060
+07/25/2022,North Country,443,71
+07/25/2022,Southern Tier,806,148
+07/25/2022,Western New York,1547,338
+07/18/2022,Capital Region,1617,280
+07/18/2022,Central New York,958,185
+07/18/2022,Finger Lakes,1168,220
+07/18/2022,Long Island,8488,2022
+07/18/2022,Mid-Hudson,5031,1117
+07/18/2022,Mohawk Valley,533,96
+07/18/2022,New York City,25755,5192
+07/18/2022,North Country,483,72
+07/18/2022,Southern Tier,759,132
+07/18/2022,Western New York,1631,344
+07/11/2022,Capital Region,1607,262
+07/11/2022,Central New York,835,156
+07/11/2022,Finger Lakes,1048,167
+07/11/2022,Long Island,8465,1980
+07/11/2022,Mid-Hudson,4967,1030
+07/11/2022,Mohawk Valley,486,68
+07/11/2022,New York City,28064,5645
+07/11/2022,North Country,441,75
+07/11/2022,Southern Tier,631,103
+07/11/2022,Western New York,1471,280
+07/04/2022,Capital Region,1266,188
+07/04/2022,Central New York,666,119
+07/04/2022,Finger Lakes,894,140
+07/04/2022,Long Island,8513,1853
+07/04/2022,Mid-Hudson,5020,997
+07/04/2022,Mohawk Valley,384,82
+07/04/2022,New York City,27291,5069
+07/04/2022,North Country,366,47
+07/04/2022,Southern Tier,577,84
+07/04/2022,Western New York,1161,223
+06/27/2022,Capital Region,1180,158
+06/27/2022,Central New York,543,73
+06/27/2022,Finger Lakes,752,116
+06/27/2022,Long Island,7307,1502
+06/27/2022,Mid-Hudson,4792,886
+06/27/2022,Mohawk Valley,420,62
+06/27/2022,New York City,23853,4297
+06/27/2022,North Country,325,37
+06/27/2022,Southern Tier,503,76
+06/27/2022,Western New York,1064,182
+06/20/2022,Capital Region,1157,126
+06/20/2022,Central New York,588,85
+06/20/2022,Finger Lakes,651,116
+06/20/2022,Long Island,6584,1274
+06/20/2022,Mid-Hudson,4259,779
+06/20/2022,Mohawk Valley,399,86
+06/20/2022,New York City,20733,3584
+06/20/2022,North Country,294,47
+06/20/2022,Southern Tier,461,76
+06/20/2022,Western New York,1045,193
+06/13/2022,Capital Region,999,138
+06/13/2022,Central New York,541,62
+06/13/2022,Finger Lakes,716,110
+06/13/2022,Long Island,6172,1084
+06/13/2022,Mid-Hudson,3770,680
+06/13/2022,Mohawk Valley,381,46
+06/13/2022,New York City,19324,3116
+06/13/2022,North Country,317,36
+06/13/2022,Southern Tier,477,86
+06/13/2022,Western New York,829,137
+06/06/2022,Capital Region,1285,139
+06/06/2022,Central New York,567,101
+06/06/2022,Finger Lakes,853,114
+06/06/2022,Long Island,6149,1131
+06/06/2022,Mid-Hudson,4137,680
+06/06/2022,Mohawk Valley,390,53
+06/06/2022,New York City,19262,2977
+06/06/2022,North Country,428,54
+06/06/2022,Southern Tier,544,63
+06/06/2022,Western New York,1093,161
+05/30/2022,Capital Region,1764,231
+05/30/2022,Central New York,568,70
+05/30/2022,Finger Lakes,1063,142
+05/30/2022,Long Island,7513,1293
+05/30/2022,Mid-Hudson,4833,754
+05/30/2022,Mohawk Valley,567,79
+05/30/2022,New York City,21052,3282
+05/30/2022,North Country,502,70
+05/30/2022,Southern Tier,790,120
+05/30/2022,Western New York,1462,239
+05/23/2022,Capital Region,2447,326
+05/23/2022,Central New York,878,104
+05/23/2022,Finger Lakes,1584,253
+05/23/2022,Long Island,8681,1479
+05/23/2022,Mid-Hudson,5918,886
+05/23/2022,Mohawk Valley,846,149
+05/23/2022,New York City,23838,3708
+05/23/2022,North Country,660,75
+05/23/2022,Southern Tier,1177,162
+05/23/2022,Western New York,2389,343
+05/16/2022,Capital Region,3522,434
+05/16/2022,Central New York,1205,155
+05/16/2022,Finger Lakes,2529,353
+05/16/2022,Long Island,11589,1871
+05/16/2022,Mid-Hudson,7419,1055
+05/16/2022,Mohawk Valley,1187,218
+05/16/2022,New York City,26848,3876
+05/16/2022,North Country,881,102
+05/16/2022,Southern Tier,1716,270
+05/16/2022,Western New York,3971,548
+05/09/2022,Capital Region,4279,492
+05/09/2022,Central New York,1795,257
+05/09/2022,Finger Lakes,3491,505
+05/09/2022,Long Island,12647,1929
+05/09/2022,Mid-Hudson,8628,1190
+05/09/2022,Mohawk Valley,1400,241
+05/09/2022,New York City,26633,3596
+05/09/2022,North Country,1120,133
+05/09/2022,Southern Tier,2235,374
+05/09/2022,Western New York,5690,830
+05/02/2022,Capital Region,4254,469
+05/02/2022,Central New York,2217,282
+05/02/2022,Finger Lakes,3573,489
+05/02/2022,Long Island,10618,1448
+05/02/2022,Mid-Hudson,7363,1000
+05/02/2022,Mohawk Valley,1707,260
+05/02/2022,New York City,24543,2996
+05/02/2022,North Country,1120,112
+05/02/2022,Southern Tier,2444,382
+05/02/2022,Western New York,6085,800
+04/25/2022,Capital Region,3638,385
+04/25/2022,Central New York,2414,315
+04/25/2022,Finger Lakes,3737,483
+04/25/2022,Long Island,8045,1094
+04/25/2022,Mid-Hudson,5737,678
+04/25/2022,Mohawk Valley,1750,261
+04/25/2022,New York City,19904,2279
+04/25/2022,North Country,1108,120
+04/25/2022,Southern Tier,2240,308
+04/25/2022,Western New York,5645,719
+04/18/2022,Capital Region,2971,275
+04/18/2022,Central New York,2790,375
+04/18/2022,Finger Lakes,3823,416
+04/18/2022,Long Island,6197,778
+04/18/2022,Mid-Hudson,4589,507
+04/18/2022,Mohawk Valley,1639,236
+04/18/2022,New York City,15558,1652
+04/18/2022,North Country,984,97
+04/18/2022,Southern Tier,2095,287
+04/18/2022,Western New York,4560,550
+04/11/2022,Capital Region,2322,214
+04/11/2022,Central New York,2846,308
+04/11/2022,Finger Lakes,2988,329
+04/11/2022,Long Island,6009,808
+04/11/2022,Mid-Hudson,4277,431
+04/11/2022,Mohawk Valley,1562,224
+04/11/2022,New York City,15789,1762
+04/11/2022,North Country,805,75
+04/11/2022,Southern Tier,1796,221
+04/11/2022,Western New York,3140,370
+04/04/2022,Capital Region,1652,134
+04/04/2022,Central New York,2907,330
+04/04/2022,Finger Lakes,2304,255
+04/04/2022,Long Island,4759,606
+04/04/2022,Mid-Hudson,4118,442
+04/04/2022,Mohawk Valley,1243,160
+04/04/2022,New York City,13972,1347
+04/04/2022,North Country,703,58
+04/04/2022,Southern Tier,1494,220
+04/04/2022,Western New York,2087,195
+03/28/2022,Capital Region,1045,95
+03/28/2022,Central New York,2558,251
+03/28/2022,Finger Lakes,1503,141
+03/28/2022,Long Island,3041,362
+03/28/2022,Mid-Hudson,2854,270
+03/28/2022,Mohawk Valley,785,98
+03/28/2022,New York City,10422,988
+03/28/2022,North Country,583,55
+03/28/2022,Southern Tier,1054,131
+03/28/2022,Western New York,1243,118
+03/21/2022,Capital Region,925,96
+03/21/2022,Central New York,2438,224
+03/21/2022,Finger Lakes,972,85
+03/21/2022,Long Island,2273,248
+03/21/2022,Mid-Hudson,1988,199
+03/21/2022,Mohawk Valley,557,67
+03/21/2022,New York City,8662,736
+03/21/2022,North Country,435,46
+03/21/2022,Southern Tier,1021,95
+03/21/2022,Western New York,884,94
+03/14/2022,Capital Region,794,76
+03/14/2022,Central New York,1713,132
+03/14/2022,Finger Lakes,682,66
+03/14/2022,Long Island,1618,186
+03/14/2022,Mid-Hudson,1481,136
+03/14/2022,Mohawk Valley,413,40
+03/14/2022,New York City,6086,446
+03/14/2022,North Country,516,34
+03/14/2022,Southern Tier,534,50
+03/14/2022,Western New York,752,55
+03/07/2022,Capital Region,653,47
+03/07/2022,Central New York,1161,81
+03/07/2022,Finger Lakes,565,59
+03/07/2022,Long Island,1287,155
+03/07/2022,Mid-Hudson,1179,91
+03/07/2022,Mohawk Valley,396,42
+03/07/2022,New York City,4581,326
+03/07/2022,North Country,425,34
+03/07/2022,Southern Tier,574,54
+03/07/2022,Western New York,630,57
+02/28/2022,Capital Region,790,74
+02/28/2022,Central New York,1095,90
+02/28/2022,Finger Lakes,584,68
+02/28/2022,Long Island,1323,110
+02/28/2022,Mid-Hudson,1177,126
+02/28/2022,Mohawk Valley,368,42
+02/28/2022,New York City,4133,302
+02/28/2022,North Country,525,43
+02/28/2022,Southern Tier,657,57
+02/28/2022,Western New York,775,76
+02/21/2022,Capital Region,955,60
+02/21/2022,Central New York,1075,96
+02/21/2022,Finger Lakes,717,62
+02/21/2022,Long Island,1543,154
+02/21/2022,Mid-Hudson,1339,104
+02/21/2022,Mohawk Valley,527,53
+02/21/2022,New York City,4272,313
+02/21/2022,North Country,608,44
+02/21/2022,Southern Tier,794,84
+02/21/2022,Western New York,997,80
+02/14/2022,Capital Region,1521,108
+02/14/2022,Central New York,1424,141
+02/14/2022,Finger Lakes,1188,109
+02/14/2022,Long Island,2125,204
+02/14/2022,Mid-Hudson,1915,171
+02/14/2022,Mohawk Valley,806,82
+02/14/2022,New York City,5734,456
+02/14/2022,North Country,945,55
+02/14/2022,Southern Tier,1211,138
+02/14/2022,Western New York,1487,107
+02/07/2022,Capital Region,2066,142
+02/07/2022,Central New York,2167,164
+02/07/2022,Finger Lakes,1933,175
+02/07/2022,Long Island,3255,338
+02/07/2022,Mid-Hudson,2898,253
+02/07/2022,Mohawk Valley,1151,132
+02/07/2022,New York City,8615,605
+02/07/2022,North Country,1408,85
+02/07/2022,Southern Tier,1668,189
+02/07/2022,Western New York,2233,209
+01/31/2022,Capital Region,3238,211
+01/31/2022,Central New York,3131,226
+01/31/2022,Finger Lakes,3007,233
+01/31/2022,Long Island,5504,525
+01/31/2022,Mid-Hudson,4517,372
+01/31/2022,Mohawk Valley,1718,165
+01/31/2022,New York City,14417,990
+01/31/2022,North Country,1951,133
+01/31/2022,Southern Tier,2338,212
+01/31/2022,Western New York,3626,274
+01/24/2022,Capital Region,5445,353
+01/24/2022,Central New York,5047,378
+01/24/2022,Finger Lakes,5161,432
+01/24/2022,Long Island,9006,955
+01/24/2022,Mid-Hudson,7984,749
+01/24/2022,Mohawk Valley,2928,255
+01/24/2022,New York City,25943,1923
+01/24/2022,North Country,2911,159
+01/24/2022,Southern Tier,3887,335
+01/24/2022,Western New York,6367,520
+01/17/2022,Capital Region,8754,598
+01/17/2022,Central New York,7839,561
+01/17/2022,Finger Lakes,8189,660
+01/17/2022,Long Island,17571,1862
+01/17/2022,Mid-Hudson,14879,1258
+01/17/2022,Mohawk Valley,4349,417
+01/17/2022,New York City,56278,3958
+01/17/2022,North Country,3815,245
+01/17/2022,Southern Tier,5198,447
+01/17/2022,Western New York,10372,832
+01/10/2022,Capital Region,13896,913
+01/10/2022,Central New York,11245,851
+01/10/2022,Finger Lakes,13254,1051
+01/10/2022,Long Island,34765,3585
+01/10/2022,Mid-Hudson,29997,2649
+01/10/2022,Mohawk Valley,5792,500
+01/10/2022,New York City,120955,8514
+01/10/2022,North Country,4816,238
+01/10/2022,Southern Tier,7548,677
+01/10/2022,Western New York,17435,1361
+01/03/2022,Capital Region,18254,1297
+01/03/2022,Central New York,15687,1273
+01/03/2022,Finger Lakes,17603,1678
+01/03/2022,Long Island,72091,7598
+01/03/2022,Mid-Hudson,54332,5489
+01/03/2022,Mohawk Valley,6987,601
+01/03/2022,New York City,268188,20040
+01/03/2022,North Country,5662,304
+01/03/2022,Southern Tier,9310,782
+01/03/2022,Western New York,25682,2253
+12/27/2021,Capital Region,13567,824
+12/27/2021,Central New York,10641,738
+12/27/2021,Finger Lakes,11744,1023
+12/27/2021,Long Island,86869,8868
+12/27/2021,Mid-Hudson,56714,5567
+12/27/2021,Mohawk Valley,4864,354
+12/27/2021,New York City,308979,24783
+12/27/2021,North Country,3079,119
+12/27/2021,Southern Tier,6200,494
+12/27/2021,Western New York,19312,1635
+12/20/2021,Capital Region,6453,327
+12/20/2021,Central New York,4686,244
+12/20/2021,Finger Lakes,5487,333
+12/20/2021,Long Island,51948,5433
+12/20/2021,Mid-Hudson,29974,2902
+12/20/2021,Mohawk Valley,2607,163
+12/20/2021,New York City,191913,15928
+12/20/2021,North Country,1420,36
+12/20/2021,Southern Tier,3455,165
+12/20/2021,Western New York,7532,512
+12/13/2021,Capital Region,5055,139
+12/13/2021,Central New York,3826,127
+12/13/2021,Finger Lakes,4814,136
+12/13/2021,Long Island,27366,2155
+12/13/2021,Mid-Hudson,14483,899
+12/13/2021,Mohawk Valley,2632,101
+12/13/2021,New York City,91573,6109
+12/13/2021,North Country,1649,38
+12/13/2021,Southern Tier,4689,232
+12/13/2021,Western New York,5589,180
+12/06/2021,Capital Region,4342,59
+12/06/2021,Central New York,3448,52
+12/06/2021,Finger Lakes,5024,66
+12/06/2021,Long Island,13650,480
+12/06/2021,Mid-Hudson,7846,207
+12/06/2021,Mohawk Valley,2502,59
+12/06/2021,New York City,23873,817
+12/06/2021,North Country,1925,33
+12/06/2021,Southern Tier,3900,134
+12/06/2021,Western New York,6202,89
+11/29/2021,Capital Region,5356,55
+11/29/2021,Central New York,3959,57
+11/29/2021,Finger Lakes,6686,101
+11/29/2021,Long Island,11927,325
+11/29/2021,Mid-Hudson,7128,149
+11/29/2021,Mohawk Valley,2853,53
+11/29/2021,New York City,16413,380
+11/29/2021,North Country,2293,25
+11/29/2021,Southern Tier,3646,69
+11/29/2021,Western New York,8274,125
+11/22/2021,Capital Region,3977,48
+11/22/2021,Central New York,2365,42
+11/22/2021,Finger Lakes,4740,39
+11/22/2021,Long Island,7330,155
+11/22/2021,Mid-Hudson,4192,98
+11/22/2021,Mohawk Valley,2046,33
+11/22/2021,New York City,10230,236
+11/22/2021,North Country,1717,28
+11/22/2021,Southern Tier,2251,33
+11/22/2021,Western New York,6528,92
+11/15/2021,Capital Region,4348,40
+11/15/2021,Central New York,2784,41
+11/15/2021,Finger Lakes,5462,52
+11/15/2021,Long Island,6561,158
+11/15/2021,Mid-Hudson,3979,105
+11/15/2021,Mohawk Valley,2234,42
+11/15/2021,New York City,10091,212
+11/15/2021,North Country,1817,26
+11/15/2021,Southern Tier,2782,35
+11/15/2021,Western New York,7092,98
+11/08/2021,Capital Region,3625,40
+11/08/2021,Central New York,2469,38
+11/08/2021,Finger Lakes,5124,57
+11/08/2021,Long Island,5100,106
+11/08/2021,Mid-Hudson,3361,76
+11/08/2021,Mohawk Valley,1993,28
+11/08/2021,New York City,8033,195
+11/08/2021,North Country,1656,20
+11/08/2021,Southern Tier,2459,33
+11/08/2021,Western New York,5965,64
+11/01/2021,Capital Region,2824,25
+11/01/2021,Central New York,2055,40
+11/01/2021,Finger Lakes,4079,40
+11/01/2021,Long Island,3750,91
+11/01/2021,Mid-Hudson,2459,87
+11/01/2021,Mohawk Valley,1670,26
+11/01/2021,New York City,6432,203
+11/01/2021,North Country,1553,23
+11/01/2021,Southern Tier,2010,30
+11/01/2021,Western New York,4587,63
+10/25/2021,Capital Region,2287,20
+10/25/2021,Central New York,1856,18
+10/25/2021,Finger Lakes,2886,27
+10/25/2021,Long Island,3048,62
+10/25/2021,Mid-Hudson,2139,72
+10/25/2021,Mohawk Valley,1306,15
+10/25/2021,New York City,5500,161
+10/25/2021,North Country,1313,17
+10/25/2021,Southern Tier,1681,24
+10/25/2021,Western New York,3472,48
+10/18/2021,Capital Region,2257,25
+10/18/2021,Central New York,1849,18
+10/18/2021,Finger Lakes,2470,29
+10/18/2021,Long Island,3330,77
+10/18/2021,Mid-Hudson,2172,62
+10/18/2021,Mohawk Valley,1202,12
+10/18/2021,New York City,5898,168
+10/18/2021,North Country,1225,22
+10/18/2021,Southern Tier,1683,25
+10/18/2021,Western New York,2898,34
+10/11/2021,Capital Region,2293,26
+10/11/2021,Central New York,2375,29
+10/11/2021,Finger Lakes,2785,24
+10/11/2021,Long Island,4082,91
+10/11/2021,Mid-Hudson,2780,82
+10/11/2021,Mohawk Valley,1423,26
+10/11/2021,New York City,7564,216
+10/11/2021,North Country,1398,9
+10/11/2021,Southern Tier,2162,31
+10/11/2021,Western New York,2913,46
+10/04/2021,Capital Region,2297,29
+10/04/2021,Central New York,2585,45
+10/04/2021,Finger Lakes,2880,39
+10/04/2021,Long Island,4679,113
+10/04/2021,Mid-Hudson,3113,90
+10/04/2021,Mohawk Valley,1524,30
+10/04/2021,New York City,8739,261
+10/04/2021,North Country,1370,11
+10/04/2021,Southern Tier,2250,43
+10/04/2021,Western New York,3020,44
+09/27/2021,Capital Region,2178,19
+09/27/2021,Central New York,2534,34
+09/27/2021,Finger Lakes,2582,32
+09/27/2021,Long Island,4796,116
+09/27/2021,Mid-Hudson,2793,75
+09/27/2021,Mohawk Valley,1546,23
+09/27/2021,New York City,8985,224
+09/27/2021,North Country,1343,7
+09/27/2021,Southern Tier,1901,29
+09/27/2021,Western New York,2859,36
+09/20/2021,Capital Region,2177,28
+09/20/2021,Central New York,2375,40
+09/20/2021,Finger Lakes,2632,36
+09/20/2021,Long Island,5521,129
+09/20/2021,Mid-Hudson,3088,83
+09/20/2021,Mohawk Valley,1407,23
+09/20/2021,New York City,10394,278
+09/20/2021,North Country,1377,19
+09/20/2021,Southern Tier,2114,31
+09/20/2021,Western New York,2867,41
+09/13/2021,Capital Region,2097,27
+09/13/2021,Central New York,2141,34
+09/13/2021,Finger Lakes,2423,31
+09/13/2021,Long Island,5994,152
+09/13/2021,Mid-Hudson,3641,94
+09/13/2021,Mohawk Valley,1320,26
+09/13/2021,New York City,12062,302
+09/13/2021,North Country,1410,10
+09/13/2021,Southern Tier,1949,27
+09/13/2021,Western New York,2908,52
+09/06/2021,Capital Region,1913,24
+09/06/2021,Central New York,2065,43
+09/06/2021,Finger Lakes,2141,52
+09/06/2021,Long Island,6229,167
+09/06/2021,Mid-Hudson,3813,90
+09/06/2021,Mohawk Valley,1041,21
+09/06/2021,New York City,11880,290
+09/06/2021,North Country,1297,16
+09/06/2021,Southern Tier,1596,24
+09/06/2021,Western New York,2577,40
+08/30/2021,Capital Region,1859,25
+08/30/2021,Central New York,1908,33
+08/30/2021,Finger Lakes,1912,20
+08/30/2021,Long Island,6076,161
+08/30/2021,Mid-Hudson,3649,94
+08/30/2021,Mohawk Valley,1043,27
+08/30/2021,New York City,12095,264
+08/30/2021,North Country,1052,14
+08/30/2021,Southern Tier,1652,41
+08/30/2021,Western New York,2179,32
+08/23/2021,Capital Region,1803,21
+08/23/2021,Central New York,1610,26
+08/23/2021,Finger Lakes,1979,42
+08/23/2021,Long Island,6456,142
+08/23/2021,Mid-Hudson,3849,114
+08/23/2021,Mohawk Valley,1007,17
+08/23/2021,New York City,13300,298
+08/23/2021,North Country,789,6
+08/23/2021,Southern Tier,1412,28
+08/23/2021,Western New York,1926,28
+08/16/2021,Capital Region,1655,20
+08/16/2021,Central New York,1445,30
+08/16/2021,Finger Lakes,1609,28
+08/16/2021,Long Island,5912,160
+08/16/2021,Mid-Hudson,3620,80
+08/16/2021,Mohawk Valley,777,11
+08/16/2021,New York City,13252,309
+08/16/2021,North Country,534,2
+08/16/2021,Southern Tier,876,10
+08/16/2021,Western New York,1511,26
+08/09/2021,Capital Region,1515,13
+08/09/2021,Central New York,1187,21
+08/09/2021,Finger Lakes,1425,31
+08/09/2021,Long Island,5247,118
+08/09/2021,Mid-Hudson,3658,95
+08/09/2021,Mohawk Valley,567,17
+08/09/2021,New York City,13217,343
+08/09/2021,North Country,448,3
+08/09/2021,Southern Tier,777,15
+08/09/2021,Western New York,1268,24
+08/02/2021,Capital Region,1269,12
+08/02/2021,Central New York,762,16
+08/02/2021,Finger Lakes,1055,23
+08/02/2021,Long Island,4566,125
+08/02/2021,Mid-Hudson,3123,96
+08/02/2021,Mohawk Valley,456,12
+08/02/2021,New York City,12664,335
+08/02/2021,North Country,250,2
+08/02/2021,Southern Tier,542,13
+08/02/2021,Western New York,980,15
+07/26/2021,Capital Region,832,6
+07/26/2021,Central New York,460,8
+07/26/2021,Finger Lakes,570,17
+07/26/2021,Long Island,3502,97
+07/26/2021,Mid-Hudson,2026,64
+07/26/2021,Mohawk Valley,237,4
+07/26/2021,New York City,10248,271
+07/26/2021,North Country,136,3
+07/26/2021,Southern Tier,290,7
+07/26/2021,Western New York,793,14
+07/19/2021,Capital Region,460,4
+07/19/2021,Central New York,203,8
+07/19/2021,Finger Lakes,369,5
+07/19/2021,Long Island,2209,70
+07/19/2021,Mid-Hudson,1144,44
+07/19/2021,Mohawk Valley,89,6
+07/19/2021,New York City,7065,182
+07/19/2021,North Country,91,3
+07/19/2021,Southern Tier,143,3
+07/19/2021,Western New York,442,13
+07/12/2021,Capital Region,249,1
+07/12/2021,Central New York,119,3
+07/12/2021,Finger Lakes,173,8
+07/12/2021,Long Island,1266,56
+07/12/2021,Mid-Hudson,661,31
+07/12/2021,Mohawk Valley,74,1
+07/12/2021,New York City,4371,123
+07/12/2021,North Country,51,2
+07/12/2021,Southern Tier,74,3
+07/12/2021,Western New York,269,9
+07/05/2021,Capital Region,120,1
+07/05/2021,Central New York,92,3
+07/05/2021,Finger Lakes,148,17
+07/05/2021,Long Island,742,27
+07/05/2021,Mid-Hudson,460,33
+07/05/2021,Mohawk Valley,52,3
+07/05/2021,New York City,2809,97
+07/05/2021,North Country,30,1
+07/05/2021,Southern Tier,60,5
+07/05/2021,Western New York,137,6
+06/28/2021,Capital Region,38,7
+06/28/2021,Central New York,77,0
+06/28/2021,Finger Lakes,123,5
+06/28/2021,Long Island,409,49
+06/28/2021,Mid-Hudson,229,23
+06/28/2021,Mohawk Valley,31,2
+06/28/2021,New York City,1743,87
+06/28/2021,North Country,40,1
+06/28/2021,Southern Tier,41,4
+06/28/2021,Western New York,96,8
+06/21/2021,Capital Region,47,5
+06/21/2021,Central New York,65,6
+06/21/2021,Finger Lakes,102,8
+06/21/2021,Long Island,350,37
+06/21/2021,Mid-Hudson,236,22
+06/21/2021,Mohawk Valley,44,2
+06/21/2021,New York City,1334,101
+06/21/2021,North Country,53,0
+06/21/2021,Southern Tier,55,5
+06/21/2021,Western New York,66,9
+06/14/2021,Capital Region,86,4
+06/14/2021,Central New York,69,4
+06/14/2021,Finger Lakes,123,10
+06/14/2021,Long Island,349,38
+06/14/2021,Mid-Hudson,210,25
+06/14/2021,Mohawk Valley,39,2
+06/14/2021,New York City,1259,86
+06/14/2021,North Country,44,2
+06/14/2021,Southern Tier,68,5
+06/14/2021,Western New York,62,5
+06/07/2021,Capital Region,89,3
+06/07/2021,Central New York,130,5
+06/07/2021,Finger Lakes,210,9
+06/07/2021,Long Island,407,51
+06/07/2021,Mid-Hudson,318,28
+06/07/2021,Mohawk Valley,66,1
+06/07/2021,New York City,1420,79
+06/07/2021,North Country,61,1
+06/07/2021,Southern Tier,86,4
+06/07/2021,Western New York,124,3
+05/31/2021,Capital Region,144,4
+05/31/2021,Central New York,180,6
+05/31/2021,Finger Lakes,363,13
+05/31/2021,Long Island,503,36
+05/31/2021,Mid-Hudson,379,31
+05/31/2021,Mohawk Valley,118,5
+05/31/2021,New York City,1685,76
+05/31/2021,North Country,66,1
+05/31/2021,Southern Tier,186,11
+05/31/2021,Western New York,240,6
+05/24/2021,Capital Region,238,5
+05/24/2021,Central New York,393,11
+05/24/2021,Finger Lakes,622,23
+05/24/2021,Long Island,569,53
+05/24/2021,Mid-Hudson,460,23
+05/24/2021,Mohawk Valley,162,4
+05/24/2021,New York City,2104,70
+05/24/2021,North Country,109,2
+05/24/2021,Southern Tier,254,9
+05/24/2021,Western New York,407,9
+05/17/2021,Capital Region,413,11
+05/17/2021,Central New York,506,17
+05/17/2021,Finger Lakes,1119,26
+05/17/2021,Long Island,919,64
+05/17/2021,Mid-Hudson,731,39
+05/17/2021,Mohawk Valley,230,3
+05/17/2021,New York City,3025,104
+05/17/2021,North Country,224,3
+05/17/2021,Southern Tier,379,7
+05/17/2021,Western New York,751,18
+05/10/2021,Capital Region,542,8
+05/10/2021,Central New York,642,14
+05/10/2021,Finger Lakes,1518,22
+05/10/2021,Long Island,1394,74
+05/10/2021,Mid-Hudson,1005,29
+05/10/2021,Mohawk Valley,289,11
+05/10/2021,New York City,4423,108
+05/10/2021,North Country,322,4
+05/10/2021,Southern Tier,524,13
+05/10/2021,Western New York,1066,29
+05/03/2021,Capital Region,770,10
+05/03/2021,Central New York,690,14
+05/03/2021,Finger Lakes,1898,50
+05/03/2021,Long Island,1840,82
+05/03/2021,Mid-Hudson,1435,42
+05/03/2021,Mohawk Valley,460,8
+05/03/2021,New York City,6132,130
+05/03/2021,North Country,386,5
+05/03/2021,Southern Tier,591,8
+05/03/2021,Western New York,1530,25
+04/26/2021,Capital Region,798,14
+04/26/2021,Central New York,941,15
+04/26/2021,Finger Lakes,2053,23
+04/26/2021,Long Island,2727,82
+04/26/2021,Mid-Hudson,2096,46
+04/26/2021,Mohawk Valley,463,13
+04/26/2021,New York City,9029,157
+04/26/2021,North Country,402,6
+04/26/2021,Southern Tier,690,13
+04/26/2021,Western New York,2109,13
+04/19/2021,Capital Region,912,11
+04/19/2021,Central New York,904,14
+04/19/2021,Finger Lakes,2219,33
+04/19/2021,Long Island,3792,86
+04/19/2021,Mid-Hudson,3014,67
+04/19/2021,Mohawk Valley,549,8
+04/19/2021,New York City,12206,162
+04/19/2021,North Country,356,4
+04/19/2021,Southern Tier,872,18
+04/19/2021,Western New York,2818,40
+04/12/2021,Capital Region,1368,18
+04/12/2021,Central New York,1066,14
+04/12/2021,Finger Lakes,2407,37
+04/12/2021,Long Island,5719,115
+04/12/2021,Mid-Hudson,4229,69
+04/12/2021,Mohawk Valley,679,18
+04/12/2021,New York City,17765,184
+04/12/2021,North Country,422,7
+04/12/2021,Southern Tier,1034,12
+04/12/2021,Western New York,4071,40
+04/05/2021,Capital Region,1606,20
+04/05/2021,Central New York,1051,18
+04/05/2021,Finger Lakes,2655,33
+04/05/2021,Long Island,7805,118
+04/05/2021,Mid-Hudson,5710,67
+04/05/2021,Mohawk Valley,740,7
+04/05/2021,New York City,23077,222
+04/05/2021,North Country,459,8
+04/05/2021,Southern Tier,900,6
+04/05/2021,Western New York,4515,33
+03/29/2021,Capital Region,1635,14
+03/29/2021,Central New York,979,16
+03/29/2021,Finger Lakes,2098,30
+03/29/2021,Long Island,8861,114
+03/29/2021,Mid-Hudson,6706,104
+03/29/2021,Mohawk Valley,658,5
+03/29/2021,New York City,25189,206
+03/29/2021,North Country,443,2
+03/29/2021,Southern Tier,1016,13
+03/29/2021,Western New York,4109,33
+03/22/2021,Capital Region,1827,20
+03/22/2021,Central New York,854,13
+03/22/2021,Finger Lakes,1720,28
+03/22/2021,Long Island,10108,107
+03/22/2021,Mid-Hudson,7942,109
+03/22/2021,Mohawk Valley,712,13
+03/22/2021,New York City,29215,257
+03/22/2021,North Country,450,5
+03/22/2021,Southern Tier,1061,11
+03/22/2021,Western New York,3470,26
+03/15/2021,Capital Region,1437,11
+03/15/2021,Central New York,736,12
+03/15/2021,Finger Lakes,1387,28
+03/15/2021,Long Island,9102,80
+03/15/2021,Mid-Hudson,7206,77
+03/15/2021,Mohawk Valley,687,6
+03/15/2021,New York City,27025,193
+03/15/2021,North Country,350,7
+03/15/2021,Southern Tier,897,8
+03/15/2021,Western New York,2542,28
+03/08/2021,Capital Region,1328,10
+03/08/2021,Central New York,624,11
+03/08/2021,Finger Lakes,1329,16
+03/08/2021,Long Island,8990,88
+03/08/2021,Mid-Hudson,7010,71
+03/08/2021,Mohawk Valley,584,4
+03/08/2021,New York City,27030,180
+03/08/2021,North Country,371,3
+03/08/2021,Southern Tier,863,12
+03/08/2021,Western New York,2117,19
+03/01/2021,Capital Region,1330,11
+03/01/2021,Central New York,711,15
+03/01/2021,Finger Lakes,1270,15
+03/01/2021,Long Island,8586,72
+03/01/2021,Mid-Hudson,6550,65
+03/01/2021,Mohawk Valley,643,6
+03/01/2021,New York City,26211,198
+03/01/2021,North Country,605,2
+03/01/2021,Southern Tier,1036,24
+03/01/2021,Western New York,2010,20
+02/22/2021,Capital Region,1482,10
+02/22/2021,Central New York,787,10
+02/22/2021,Finger Lakes,1527,15
+02/22/2021,Long Island,8735,67
+02/22/2021,Mid-Hudson,6507,69
+02/22/2021,Mohawk Valley,686,5
+02/22/2021,New York City,27565,192
+02/22/2021,North Country,827,4
+02/22/2021,Southern Tier,980,10
+02/22/2021,Western New York,2277,12
+02/15/2021,Capital Region,1353,8
+02/15/2021,Central New York,811,4
+02/15/2021,Finger Lakes,1530,8
+02/15/2021,Long Island,7900,65
+02/15/2021,Mid-Hudson,6319,50
+02/15/2021,Mohawk Valley,690,2
+02/15/2021,New York City,25132,187
+02/15/2021,North Country,917,5
+02/15/2021,Southern Tier,955,12
+02/15/2021,Western New York,2227,20
+02/08/2021,Capital Region,1602,13
+02/08/2021,Central New York,1017,9
+02/08/2021,Finger Lakes,1750,11
+02/08/2021,Long Island,9667,59
+02/08/2021,Mid-Hudson,6895,56
+02/08/2021,Mohawk Valley,822,3
+02/08/2021,New York City,28862,182
+02/08/2021,North Country,1002,2
+02/08/2021,Southern Tier,938,13
+02/08/2021,Western New York,2907,27
+02/01/2021,Capital Region,2232,8
+02/01/2021,Central New York,1150,7
+02/01/2021,Finger Lakes,2111,6
+02/01/2021,Long Island,10062,56
+02/01/2021,Mid-Hudson,6960,52
+02/01/2021,Mohawk Valley,1031,4
+02/01/2021,New York City,27536,167
+02/01/2021,North Country,1109,1
+02/01/2021,Southern Tier,1328,12
+02/01/2021,Western New York,3149,15
+01/25/2021,Capital Region,3183,18
+01/25/2021,Central New York,1561,2
+01/25/2021,Finger Lakes,2813,15
+01/25/2021,Long Island,14430,85
+01/25/2021,Mid-Hudson,9626,81
+01/25/2021,Mohawk Valley,1493,13
+01/25/2021,New York City,36904,204
+01/25/2021,North Country,1371,3
+01/25/2021,Southern Tier,1688,22
+01/25/2021,Western New York,3975,8
+01/18/2021,Capital Region,4307,14
+01/18/2021,Central New York,2462,12
+01/18/2021,Finger Lakes,3538,12
+01/18/2021,Long Island,16804,88
+01/18/2021,Mid-Hudson,11458,98
+01/18/2021,Mohawk Valley,2049,5
+01/18/2021,New York City,38197,201
+01/18/2021,North Country,1730,3
+01/18/2021,Southern Tier,2174,10
+01/18/2021,Western New York,4646,17
+01/11/2021,Capital Region,5399,30
+01/11/2021,Central New York,3395,14
+01/11/2021,Finger Lakes,5027,18
+01/11/2021,Long Island,19444,90
+01/11/2021,Mid-Hudson,12291,78
+01/11/2021,Mohawk Valley,2811,9
+01/11/2021,New York City,40410,193
+01/11/2021,North Country,1946,1
+01/11/2021,Southern Tier,2415,15
+01/11/2021,Western New York,5955,17
+01/04/2021,Capital Region,6931,22
+01/04/2021,Central New York,4488,14
+01/04/2021,Finger Lakes,6916,20
+01/04/2021,Long Island,24601,116
+01/04/2021,Mid-Hudson,14111,88
+01/04/2021,Mohawk Valley,3581,14
+01/04/2021,New York City,43639,210
+01/04/2021,North Country,2175,3
+01/04/2021,Southern Tier,3332,10
+01/04/2021,Western New York,7425,18

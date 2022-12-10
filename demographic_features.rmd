@@ -3,6 +3,9 @@ title: "Vaccination Rate - Demographic Features"
 output: 
   html_document:
     code_folding: hide
+    toc: true
+    toc_float: true
+  always_allow_html: true
 ---
 
 ```{r setup, include=FALSE} 
