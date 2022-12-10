@@ -16,7 +16,7 @@ navbar:
     - text: "Statistical Analysis"
       href: statistical-analysis.html
     - text: "Model Prediction"
-      href: demographic_features.html
+      href: Model-Fitting.html
     - text: "Overall Vaccination Trends"
       href: https://tvishad.shinyapps.io/shiny/
     - icon: fa-github fa-lg
