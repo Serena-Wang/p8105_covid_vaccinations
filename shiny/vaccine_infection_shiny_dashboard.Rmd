@@ -160,7 +160,7 @@ total_plot
 Row {data-height=350}
 -------------------------------------
 
-### **Weekly Counts: Vaccines By Type, First Infections, and Re-Infections**
+### **Weekly Counts: COVID-related Hospitalizations and Deaths**
 
 ```{r}
 
