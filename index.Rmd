@@ -33,6 +33,8 @@ Since the discovery of multiple cases of COVID-19 in December 2019, the outbreak
 <img src="image/johnson.jpg" style="width:30%">
 </center>
 
+
+
  
 But inequities in global vaccine access are also becoming apparent. Due to systematic disparities in access to health resources, we are interested in exploring whether there exist disparities in vaccination rates across different races, ages, gender, and geographies in NYC. 
 
@@ -83,3 +85,11 @@ some conclusion
 * Baoyi Feng
 * Yijin Wang
 * Tvisha Devavarapu
+
+## References
+
+### Photo references: 
+* Pfizer https://images.app.goo.gl/ncW8utUJiZw8cobn9
+* Moderna https://images.app.goo.gl/GDdVNvuDqUoZmSjg9
+* Johnson https://images.app.goo.gl/edZzYCwC18VPiGto8
+
