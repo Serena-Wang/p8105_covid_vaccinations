@@ -1,6 +1,6 @@
 ---
 title: "NEW YORK CITY: COVID-19 OVERALL VACCINATION TRENDS"
-output: 
+output: html.document
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
