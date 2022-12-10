@@ -59,9 +59,9 @@ knitr::kable(head(unstratified), digits = 3)
 
 We predicted that there is no difference in vaccination rate in NYC across the six boroughs. We will perform the chi-square test to verify our assumption.
 
-H0: the expected vaccination rates are the same across all boroughs.
+H0: the mean vaccination rates are the same across all boroughs.
 
-H1: the expected vaccination rate are not same across all boroughs.
+H1: the mean vaccination rate are not same across all boroughs.
 
 ```{r, message = FALSE}
 demo_boro = 
@@ -90,9 +90,9 @@ Interpretation: The result of chi-square shows that χ2<χcrit, at significant l
 
 We predicted that there is no difference in vaccination rate in NYC across the six types of race. We will perform the chi-square test to verify our assumption.
 
-H0: the expected vaccination rates are the same across all races.
+H0: the mean vaccination rates are the same across all races.
 
-H1: the expected vaccination rates are not same across all races.
+H1: the mean vaccination rates are not same across all races.
 
 ```{r, message = FALSE}
 demo_race = 
@@ -126,9 +126,9 @@ Interpretation: The result of chi-square shows that χ2<χcrit, at significant l
 
 We predicted that there is no difference in vaccination rate in NYC across genders. We will perform the chi-square test to verify our assumption.
 
-H0: the expected vaccination rates are the same across genders.
+H0: the mean vaccination rates are the same across genders.
 
-H1: the expected vaccination rates are not same across all genders.
+H1: the mean vaccination rates are not same across all genders.
 
 ```{r, message = FALSE}
 demo_sex = 
@@ -156,9 +156,9 @@ Interpretation: The result of chi-square shows that χ2<χcrit, at significant l
 
 We predicted that there is no difference in vaccination rate in NYC across differenc age groups. We will perform the chi-square test to verify our assumption.
 
-H0: the expected vaccination rates are the same across age groups.
+H0: the mean vaccination rates are the same across age groups.
 
-H1: the expected vaccination rate are not same across age groups.
+H1: the mean vaccination rate are not same across age groups.
 
 ```{r, message = FALSE}
 demo_age = 

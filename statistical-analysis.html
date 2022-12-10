@@ -555,10 +555,8 @@ knitr::kable(head(unstratified), digits = 3)</code></pre>
 <p>We predicted that there is no difference in vaccination rate in NYC
 across the six boroughs. We will perform the chi-square test to verify
 our assumption.</p>
-<p>H0: the expected vaccination rates are the same across all
-boroughs.</p>
-<p>H1: the expected vaccination rate are not same across all
-boroughs.</p>
+<p>H0: the mean vaccination rates are the same across all boroughs.</p>
+<p>H1: the mean vaccination rate are not same across all boroughs.</p>
 <pre class="r"><code>demo_boro = 
   stratified %&gt;%
   filter(group == &quot;Borough&quot;) %&gt;% 
@@ -630,8 +628,8 @@ conclude that the vaccination rate is same across all boroughs.</p>
 <p>We predicted that there is no difference in vaccination rate in NYC
 across the six types of race. We will perform the chi-square test to
 verify our assumption.</p>
-<p>H0: the expected vaccination rates are the same across all races.</p>
-<p>H1: the expected vaccination rates are not same across all races.</p>
+<p>H0: the mean vaccination rates are the same across all races.</p>
+<p>H1: the mean vaccination rates are not same across all races.</p>
 <pre class="r"><code>demo_race = 
   stratified %&gt;%
   filter(group == &quot;Race/ethnicity&quot;) %&gt;%
@@ -709,9 +707,8 @@ conclude that the vaccination rate is same across races.</p>
 <p>We predicted that there is no difference in vaccination rate in NYC
 across genders. We will perform the chi-square test to verify our
 assumption.</p>
-<p>H0: the expected vaccination rates are the same across genders.</p>
-<p>H1: the expected vaccination rates are not same across all
-genders.</p>
+<p>H0: the mean vaccination rates are the same across genders.</p>
+<p>H1: the mean vaccination rates are not same across all genders.</p>
 <pre class="r"><code>demo_sex = 
   stratified %&gt;%
   filter(group == &quot;Sex&quot;) %&gt;%
@@ -764,9 +761,8 @@ conclude that the vaccination rate is same for male and female.</p>
 <p>We predicted that there is no difference in vaccination rate in NYC
 across differenc age groups. We will perform the chi-square test to
 verify our assumption.</p>
-<p>H0: the expected vaccination rates are the same across age
-groups.</p>
-<p>H1: the expected vaccination rate are not same across age groups.</p>
+<p>H0: the mean vaccination rates are the same across age groups.</p>
+<p>H1: the mean vaccination rate are not same across age groups.</p>
 <pre class="r"><code>demo_age = 
   stratified %&gt;%
   filter(
