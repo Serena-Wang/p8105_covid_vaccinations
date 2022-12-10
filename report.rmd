@@ -78,7 +78,7 @@ Observations:
 * During the period that Delta variant was dominant in lab sample sequences, cumulative vaccination rate climbed steadily reaching to the peaks. 
 * Most COVID related hospitalizations and deaths occurred between March and April 2020. This was considerably prior to the vaccine rollouts. 
 
-### [Heatmaps](https://serena-wang.github.io/p8105_covid_vaccinations/exploratory_analysis.html#Vaccination_Rate_-_Demographic_Features)
+### [Vaccionate Rate Heatmap](https://serena-wang.github.io/p8105_covid_vaccinations/exploratory_analysis.html#Vaccination_Rate_-_Demographic_Features)
 
 We did an exploratory analysis of the relationship among vaccination rate and different demographic features. In this section, we focused on 2 vaccination statuses: complete primary series vaccination and booster vaccination. The definition of each vaccination status is outlined in our section. For each vaccination status and a demographic feature, we plotted a line plot for overall weekly progress for vaccination rate colored by each level of the demographic feature, and a heatmap for the latest status of vaccination rates. 
 
@@ -90,5 +90,33 @@ Observations:
 * From the race/ethnicity perspective, booster vaccination rate has a similar trend, with native american and asian population having the top 2 highest vaccination rate. Booster vaccination rate is much lower than primary vaccination rate. However, adults have higher booster vaccination rates than children for all race groups. Among the children population, Asian children (13-17) have the highest booster vaccination rate. 
 * Female primary series vaccination rate and male primary series vaccination rate are very similar. Until November 29th, age groups from children (13-17) to (adults 18+)  have higher vaccination rates for all sexes, compared with lower age groups. 
 * Similarly, booster vaccination rates by sex are very close. Until November 29th, adults have higher booster vaccination rates than children for all sexes.  
+
+## Hypothesis Testing
+
+According to the tidy dataset, several geographical and demographic factors were measured across time, and may have a direct influence on the overall vaccination count in NYC. We conducted chi-square tests to examine individual association of borough, race, age, and gender in determining the vaccination count in NYC. We then built statistical models between selected geographical and demographic factors and the primary series vaccination counts in NYC. 
+
+
+## Discussion:
+
+### Problems: 
+
+*  Technical challenges with establishing the shiny flexdashboard.
+* Hiccups with git! We faced many (many many many … many) challenges in the process of bringing the website into its current form.
+* Initially, it was quite daunting to identify the scope of analyses regarding the topic and then to find contextually relevant data sources that were suitable to provide answers to the questions we were considering. 
+
+### Results/Takeaways:
+
+* There do exist demographic differences amongst vaccination trends in New York City.
+* In general, the booster vaccination rate is lower than the primary series vaccination rate across the board.
+*  Vaccination rate differs across age-groups and a larger group of adults (compared to children under 18) are vaccinated against COVID (at least primary series).
+
+### Products: 
+
+* An interactive visualization of the current overall weekly and cumulative vaccination trends including  simultaneous display of infections and re-infection counts, and also  hospitalization and death counts. 
+* In-depth exploratory analyses that revealed demographic differences amongst vaccine coverage patterns across New York City. 
+Statistical analyses to explore potential differences in vaccination rates across lines of age and race. 
+* A simple predictive model that seeks to predict overall vaccination rate using age, race, and their interaction terms as the predictors. 
+
+
 
 
