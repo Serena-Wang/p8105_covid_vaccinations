@@ -29,7 +29,7 @@ From the previous data exploration, visualization and analysis process, we notic
 ### Selection of Predictors
 
 * Data Cleaning
-The first dataset is stratifed by age, race/ethnicity, gender, or geographical locations.
+The first dataset is stratified by age, race/ethnicity, gender, or geographical locations.
 ```{r}
 stratified = 
   read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv") %>%
