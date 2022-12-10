@@ -2,7 +2,7 @@
 title: "NEW YORK CITY: COVID-19 OVERALL VACCINATION TRENDS"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
+    orientation: rows
     vertical_layout: fill
     source: embed
 runtime: shiny
@@ -30,6 +30,17 @@ health_data =
   mutate(begin_date_of_the_week = as.Date(begin_date_of_the_week, format = "%m/%d/%Y")) %>% 
   rename(date = begin_date_of_the_week) %>% 
   arrange(date)
+
+death_hosp_data = 
+  read_csv("./Data/hospitalizations_deaths.csv") %>% 
+  janitor::clean_names() %>% 
+  select(date_of_interest, hospitalized_count, death_count) %>% 
+  mutate(date_of_interest = as.Date(date_of_interest, format = "%m/%d/%Y")) %>% 
+  rename(date = date_of_interest) %>% 
+  mutate(week = floor_date(date, "weeks", week_start = 1)) %>% 
+  group_by(week) %>% 
+  summarise(deaths = sum(death_count),
+            hospitalizations = sum(hospitalized_count))
 
 combined_data = 
   left_join(dose_data, health_data, by = "date") %>% 
@@ -71,16 +82,16 @@ selectInput(
 dateRangeInput(
   inputId = "date_range",
   label = h3("Date Range"),
-  start = "2020-12-14",
-  end = "2022-11-10",
-  min = "2020-12-14",
-  max = "2022-11-10",
+  start = "2020-02-24",
+  end = "2022-11-07",
+  min = "2020-02-24",
+  max = "2022-11-07",
   format = "yyyy-mm-dd"
 )
 
 ```
 
-Column {data-width=500}
+Row {data-height=650}
 -----------------------------------------------------------------------
 
 ### **Weekly Counts: Vaccines By Type, First Infections, and Re-Infections**
@@ -100,15 +111,13 @@ renderPlotly({
               name = "Re-Infections", line = list(color = "#e377c2")) %>% 
     layout(xaxis = list(title = "<b>Date<b>"),
            yaxis = list(title = "<b>Weekly Counts<b>"),
-           legend = list(orientation = "h", xanchor = "center", x = 0.5))
+           legend = list(orientation = "h", xanchor = "center", x = 0.5, y = 5))
   
   })
 
 
 ```
 
-Column {data-width=500}
------------------------------------------------------------------------
 
 ### **Cumulative Counts: Primary and Booster Vaccines**
 
@@ -140,7 +149,7 @@ total_plot =
   add_lines(color = ~cumulative) %>% 
   layout(xaxis = list(title = "<b>Date<b>"),
          yaxis = list(title = "<b>Cumulative Counts<b>"),
-         legend = list(orientation = "h", xanchor = "center", x = 0.5))
+         legend = list(orientation = "h", xanchor = "center", x = 0.5, y = 5))
 
 total_plot
   
@@ -148,3 +157,26 @@ total_plot
 
 ```
 
+Row {data-height=350}
+-------------------------------------
+
+### **Weekly Counts: Vaccines By Type, First Infections, and Re-Infections**
+
+```{r}
+
+renderPlotly({
+  
+  death_hosp_data %>% 
+  plot_ly(x = ~week) %>%
+    add_trace(y = ~deaths, type = "scatter", mode = "lines+markers", 
+              name = "Death Counts", line = list(color = "#d62728")) %>% 
+    add_trace(y = ~hospitalizations, type = "scatter", mode = "lines+markers", 
+              name = "Hospitalization Counts", line = list(color = "#e377c2")) %>% 
+    layout(xaxis = list(title = "<b>Date<b>"),
+           yaxis = list(title = "<b>Weekly Counts<b>"),
+           legend = list(orientation = "h", xanchor = "center", x = 0.5))
+  
+  })
+
+
+```
