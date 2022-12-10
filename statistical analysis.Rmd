@@ -2,7 +2,7 @@
 title: "Statistical Analysis"
 author: "Qingyue Zhuo qz2493"
 date: "2022-12-01"
-output: github_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -11,6 +11,20 @@ library(tidyverse)
 library(modelr)
 library(mgcv)
 ```
+
+From the previous data exploration, visualization and analysis process, we notice that several geographical and demographic factors may have a direct influence on the overall vaccination rate in NYC. Here we want to dig deeper into the data set and form the statistical relationship between vaccination rate and the spatial & social indicators. We conducted chi-square tests to examine the significant predictors among borough, race, age, and gender in determining the vaccination rate in NYC. We then built statistical models between selected factors and the fully vaccination rate in NYC
+
+### Description of Dataset:
+
+* The Coverage_by_Boro dataset contains the absolute counts and estimated percentage of NYC residents vaccinated for COVID-19. People are stratified by age, race/ethnicity, gender, or geographical locations.  For each group, the observations were further divided into subgroups. Vaccination results by specific demographic category or geographical areas were recorded by day. We selected vaccination rate rather than counts as the target variable adjusting for the different group size. We used this dataset to select the predictors.
+  - Target variable 1: percentage of partially vaccinated - the estimated proportion of the population partially vaccinated by the indicated subgroup 
+  - Target variable 2: percentage of fully vaccinated -  the estimated percentage of the population who completed the major series of Covid vaccination in the subgroup
+  - Target variable 3: percentage of addition vaccinated: the estimated proportion of the population with additional/ booster vaccination by the indicated subgroup
+\All three measurements are cumulative.
+
+* The Coverage_demo_full data set contains the number and percentage of NYC residents vaccinated for COVID-19. People are categorized by both age and race/ethnicity. We selected the percentage of fully vaccinated people as our target variable. We used this dataset to fit the model.
+  - Target Variable in model fitting : percentage of fully vaccinated -  the estimated percentage of the population who completed the major series of Covid vaccination in the subgroup
+
 
 ### Selection of Predictors
 
@@ -33,7 +47,6 @@ unstratified =
     !age_group %in% c("Boroughwide", "All ages", "65+", "13-17", "18-44", "45-64") 
 )
 ```
-
 
 #### Chi-square Test 
 
