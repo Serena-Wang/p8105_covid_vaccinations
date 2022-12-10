@@ -10,7 +10,7 @@ navbar:
    
   right:
     - text: "Data Pre-Processing"
-      href: demographic_features.html
+      href: PRE_PROCESSING.html
     - text: "Exploratory Analysis"
       href: demographic_features.html
     - text: "Statistical Analysis"

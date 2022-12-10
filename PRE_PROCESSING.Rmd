@@ -1,0 +1,54 @@
+---
+title: "Data Pre-Processing"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+  always_allow_html: true
+---
+
+### Data Sources
+
+#### New York City Department of Health and Mental Hygiene [(NYC DOHMH)](https://www.nyc.gov/site/doh/data/data-home.page)
+
+**Doses** [(Source)](https://github.com/nychealth/covid-vaccine-data/blob/main/doses/doses-by-day.csv)
+
+This GitHub folder contains data on the COVID-19 vaccine administered by the New York City vaccination agency and reported to the CIR. Included are vaccinations by vaccine type and age for New York City residents and non-New York City residents and overall cumulative vaccinations and daily vaccinations in New York City. We focus on `doses-by-day` data.
+
+
+**People** [(Source)](https://github.com/nychealth/covid-vaccine-data/tree/main/people)
+
+This folder contains information on the number of NYC residents vaccinated for COVID-19 in NYC, NYS, NJ or elsewhere and reported to the CIR by NYC providers. We merged all the data related to "coverage by demo" to `coverage by demo full data` and "coverage by boro demo" to `coverage boro demo full data` from history. "coverage by demo" files contain information about the cumulative counts and estimated percentage of people who received COVID-19 vaccine stratified by age, race/ethnicity, and gender. "coverage by boro demo" files contain information about counts and percentages of COVID-19 vaccination outcomes in every borough in NYC, which are stratified by age and race/ethnicity.
+
+We should notice:
+
+* Percentages = $\frac{\sum Vaccination\ Counts}{\sum Estimated\ Population\ in\ Specific\  Area}$
+
+* Vaccination coverage may be over 100% because the vaccination may exceed the estimated population in smaller geographies or for demographic categories.
+
+* These "coverage by boro demo" files does not show the data for unknown race/ethnicity and the data for race/ethnicity in small number. (i.e. not including data on people who identify as American Indian and Alaska Native); These "coverage by demo" files include category of Native Hawaiian and other Pacific Islander (NHPI) into Asian data due to small numbers, and data on other races/ethnicities and unknown race/ethnicity or sex are available.
+
+
+```{r}
+
+```
+
+
+#### New York State Department of Health [(NYS DH)](https://coronavirus.health.ny.gov/covid-19-data-new-york)
+
+**New York State Statewide COVID-19 Reinfection Data** [(Source)](https://health.data.ny.gov/Health/New-York-State-Statewide-COVID-19-Reinfection-Data/7aaj-cdtu)
+
+This dataset reports the number of reinfections in New York State since January 2021. A reinfection is when a person becomes infected with COVID and later becomes infected again. A person is considered a reinfection if they test positive again 90 days or more after their first positive test. The goal of this dataset is to provide users timely information about the trends in reinfections in New York State. This dataset is created by the New York State Department of Health from data reported to Electronica Clinical Laboratory Reporting System (ECLRS).
+
+**COVID-19 Variant Data** [(Source)](https://coronavirus.health.ny.gov/covid-19-variant-data)
+
+We called it a variant after the original virus had one or more mutations. And the COVID-19 virus (SARS-CoV-2) has hundreds of variants identified and described.
+
+
+
+#### NYC OpenData [(NYC OD)](https://data.cityofnewyork.us/Health/COVID-19-Daily-Counts-of-Cases-Hospitalizations-an/rc75-m7u3)
+
+Daily count of NYC residents who tested positive for SARS-CoV-2, who were hospitalized with COVID-19, and deaths among COVID-19 patients. *Notice: this dataset is actually provided by NYC DOHMH*
+
+### Data Cleaning

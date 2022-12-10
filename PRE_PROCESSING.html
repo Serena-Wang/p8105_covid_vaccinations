@@ -11,7 +11,7 @@
 
 
 
-<title>COVID Vaccination Rate in NYC</title>
+<title>Data Pre-Processing</title>
 
 <script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -376,108 +376,91 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">COVID Vaccination Rate in NYC</h1>
-<h3 class="subtitle">Exploring Vaccination Rate in New York City from
-Dec.2020 - Nov.2022</h3>
+<h1 class="title toc-ignore">Data Pre-Processing</h1>
 
 </div>
 
 
-<h6 style="text-align: left;">
-By: Qingyue Zhuo | Baoyi Feng | Yijin Wang | Tvisha Devavarapu
-</h6>
-<p><br></br></p>
-<p><left>
-<iframe width="840" height="472" src="https://www.youtube.com/embed/13lw6hl3EJ4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</left></p>
-<div id="background" class="section level2">
-<h2>Background</h2>
-<p>Since the discovery of multiple cases of COVID-19 in December 2019,
-the outbreak has spread rapidly across the globe, resulting in many
-infections and deaths and posing a significant threat to global public
-health security. Because no targeted drug is available, a vaccine for
-the coronavirus is critical to contain the spread of COVID-19. We
-currently have several major vaccines and booster vaccines available
-from Pfizer, Moderna, and Johnson &amp; Johnson in NYC, which have shown
-promising results in reducing the overall infection rate.</p>
-<center class="half">
-<img src="image/PFIZER.jpeg" style="width:30%">
-<img src="image/moderna.jpg" style="width:30%">
-<img src="image/johnson.jpg" style="width:30%">
-</center>
-<p>But inequities in global vaccine access are also becoming apparent.
-Due to systematic disparities in access to health resources, we are
-interested in exploring whether there exist disparities in vaccination
-rates across different races, ages, gender, and geographies in NYC.</p>
-<p>Taking the population in NYC as a whole, we are also interested in
-whether infection rate (first infections &amp; reinfections) is
-associated with vaccination rate across time in NYC.</p>
-</div>
-<div id="datasets" class="section level2">
-<h2>Datasets</h2>
-<p>For the purpose of characterizing the pattern of the COVID-19
-vaccination rate and infection rate in NYC over time:</p>
+<div id="data-sources" class="section level3">
+<h3>Data Sources</h3>
+<div
+id="new-york-city-department-of-health-and-mental-hygiene-nyc-dohmh"
+class="section level4">
+<h4>New York City Department of Health and Mental Hygiene <a
+href="https://www.nyc.gov/site/doh/data/data-home.page">(NYC
+DOHMH)</a></h4>
+<p><strong>Doses</strong> <a
+href="https://github.com/nychealth/covid-vaccine-data/blob/main/doses/doses-by-day.csv">(Source)</a></p>
+<p>This GitHub folder contains data on the COVID-19 vaccine administered
+by the New York City vaccination agency and reported to the CIR.
+Included are vaccinations by vaccine type and age for New York City
+residents and non-New York City residents and overall cumulative
+vaccinations and daily vaccinations in New York City. We focus on
+<code>doses-by-day</code> data.</p>
+<p><strong>People</strong> <a
+href="https://github.com/nychealth/covid-vaccine-data/tree/main/people">(Source)</a></p>
+<p>This folder contains information on the number of NYC residents
+vaccinated for COVID-19 in NYC, NYS, NJ or elsewhere and reported to the
+CIR by NYC providers. We merged all the data related to “coverage by
+demo” to <code>coverage by demo full data</code> and “coverage by boro
+demo” to <code>coverage boro demo full data</code> from history.
+“coverage by demo” files contain information about the cumulative counts
+and estimated percentage of people who received COVID-19 vaccine
+stratified by age, race/ethnicity, and gender. “coverage by boro demo”
+files contain information about counts and percentages of COVID-19
+vaccination outcomes in every borough in NYC, which are stratified by
+age and race/ethnicity.</p>
+<p>We should notice:</p>
 <ul>
-<li><p>We used <code>doses by day data</code> to see the trends of
-getting shots of every vaccine. <a
-href="https://github.com/nychealth/covid-vaccine-data/blob/main/doses/doses-by-day.csv">Doses
-By Day Data</a></p></li>
-<li><p>We also filtered data of NYC on <code>Reinfection Data</code>,
-which gave us timely information about the trends in first infections
-and reinfections in New York City. <a
-href="https://health.data.ny.gov/Health/New-York-State-Statewide-COVID-19-Reinfection-Data/7aaj-cdtu">Reinfection
-Data</a></p></li>
-<li><p>We collected <code>Variant Data</code> from <a
-href="https://coronavirus.health.ny.gov/covid-19-variant-data">Variant
-Data</a></p></li>
-</ul>
-<p>For exploring whether there exist disparities in vaccination rates
-across different races, ages, gender, and geographies:</p>
-<ul>
-<li>we traced back in history and merged all the data related to
-“coverge by demo” to <code>coverage by demo full data</code> and
-“coverage by boro demo” to <code>coverage boro demo full</code> from <a
-href="https://github.com/nychealth/covid-vaccine-data/tree/main/people">People</a></li>
+<li><p>Percentages = <span class="math inline">\(\frac{\sum Vaccination\
+Counts}{\sum Estimated\ Population\ in\
+Specific\  Area}\)</span></p></li>
+<li><p>Vaccination coverage may be over 100% because the vaccination may
+exceed the estimated population in smaller geographies or for
+demographic categories.</p></li>
+<li><p>These “coverage by boro demo” files does not show the data for
+unknown race/ethnicity and the data for race/ethnicity in small number.
+(i.e. not including data on people who identify as American Indian and
+Alaska Native); These “coverage by demo” files include category of
+Native Hawaiian and other Pacific Islander (NHPI) into Asian data due to
+small numbers, and data on other races/ethnicities and unknown
+race/ethnicity or sex are available.</p></li>
 </ul>
 </div>
-<div id="focus-of-our-project" class="section level2">
-<h2>Focus of our Project</h2>
-<p>Considering the area in NYC, knowing that the COVID-19 vaccine is
-effective, we aimed to show trends in vaccination rate and infection
-rate to roughly see the vaccine efficacy. And because of the existence
-of global vaccine disparities, we wanted to investigate associations
-between the vaccination rate and a range of demographic &amp; geographic
-factors.</p>
+<div id="new-york-state-department-of-health-nys-dh"
+class="section level4">
+<h4>New York State Department of Health <a
+href="https://coronavirus.health.ny.gov/covid-19-data-new-york">(NYS
+DH)</a></h4>
+<p><strong>New York State Statewide COVID-19 Reinfection Data</strong>
+<a
+href="https://health.data.ny.gov/Health/New-York-State-Statewide-COVID-19-Reinfection-Data/7aaj-cdtu">(Source)</a></p>
+<p>This dataset reports the number of reinfections in New York State
+since January 2021. A reinfection is when a person becomes infected with
+COVID and later becomes infected again. A person is considered a
+reinfection if they test positive again 90 days or more after their
+first positive test. The goal of this dataset is to provide users timely
+information about the trends in reinfections in New York State. This
+dataset is created by the New York State Department of Health from data
+reported to Electronica Clinical Laboratory Reporting System
+(ECLRS).</p>
+<p><strong>COVID-19 Variant Data</strong> <a
+href="https://coronavirus.health.ny.gov/covid-19-variant-data">(Source)</a></p>
+<p>We called it a variant after the original virus had one or more
+mutations. And the COVID-19 virus (SARS-CoV-2) has hundreds of variants
+identified and described.</p>
 </div>
-<div id="main-questions" class="section level2">
-<h2>Main Questions</h2>
-<p>We followed our exploratory by some detailed questions:</p>
-<ul>
-<li><p>What does the <em>trend</em> of every kind of cumulative
-vaccination rate in NYC over days look like?</p></li>
-<li><p>What does the <em>trend</em> of every kind of daily vaccination
-rate over time look like?</p></li>
-<li><p>What does the <em>trend</em> of infection rate over time look
-like, and is there any interesting information we can recognize when
-comparing this to the other two above?</p></li>
-<li><p>What should be the <em>predictors</em> for vaccination rate?
-Also, is there a <em>significant association</em> between vaccination
-rate and races / ages / gender / boroughs?</p></li>
-<li><p>any predicted model?</p></li>
-</ul>
+<div id="nyc-opendata-nyc-od" class="section level4">
+<h4>NYC OpenData <a
+href="https://data.cityofnewyork.us/Health/COVID-19-Daily-Counts-of-Cases-Hospitalizations-an/rc75-m7u3">(NYC
+OD)</a></h4>
+<p>Daily count of NYC residents who tested positive for SARS-CoV-2, who
+were hospitalized with COVID-19, and deaths among COVID-19 patients.
+<em>Notice: this dataset is actually provided by NYC DOHMH</em></p>
 </div>
-<div id="take-away" class="section level2">
-<h2>Take away</h2>
-<p>some conclusion</p>
 </div>
-<div id="our-team" class="section level2">
-<h2>Our team</h2>
-<ul>
-<li>Qingyue Zhuo</li>
-<li>Baoyi Feng</li>
-<li>Yijin Wang</li>
-<li>Tvisha Devavarapu</li>
-</ul>
+<div id="data-cleaning" class="section level3">
+<h3>Data Cleaning</h3>
 </div>
 
 
