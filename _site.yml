@@ -10,15 +10,15 @@ navbar:
    
   right:
     - text: "Data Pre-Processing"
-      href: demographic_features.html
+      href: PRE_PROCESSING.html
     - text: "Exploratory Analysis"
       href: demographic_features.html
     - text: "Statistical Analysis"
       href: demographic_features.html
     - text: "Model Prediction"
       href: demographic_features.html
-    - text: "Overall vaccination Trends"
-      href: demographic_features.html
+    - text: "Overall Vaccination Trends"
+      href: https://tvishad.shinyapps.io/shiny/
     - icon: fa-github fa-lg
       href: https://github.com/Serena-Wang/p8105_covid_vaccinations
 output:

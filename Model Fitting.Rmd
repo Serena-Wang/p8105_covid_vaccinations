@@ -1,0 +1,98 @@
+---
+title: "Model Fitting"
+author: "Qingyue Zhuo qz2493"
+date: "2022-12-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(modelr)
+library(mgcv)
+
+stratified = 
+  read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv") %>%
+  janitor::clean_names() %>%
+  select(group, subgroup, perc_partially, perc_fully, perc_additional) %>%
+  drop_na()
+
+unstratified = 
+  read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_boro_demo_full.csv") %>%
+  janitor::clean_names() %>%
+  select(age_group, race_ethnicity, city_perc_fully) %>%
+  filter(
+    !age_group %in% c("Boroughwide", "All ages", "65+", "13-17", "18-44", "45-64") 
+)
+```
+
+### Model Fitting
+We propose 3 models for prediction based on previous analysis: 
+
+ 1. Linear Model of city_perc_fully ~ age_group  
+
+ 2. Linear Model of city_perc_fully ~ age_group  +  race_ethnicity
+
+ 3. Linear Model of city_perc_fully ~ age_group  +  race_ethnicity + age_group * race_ethnicity, assuming that there are interaction
+
+* Age Group Model
+```{r}
+fit_lm_age = lm(city_perc_fully ~ age_group, data = unstratified  )
+fit_lm_age  %>% broom::tidy() %>% knitr::kable(digits = 2)
+```
+
+* Main Effect Model
+```{r}
+fit_lm_main = lm(city_perc_fully ~ age_group  +  race_ethnicity, 
+                 data = unstratified )
+fit_lm_main  %>% broom::tidy() %>% knitr::kable(digits = 2)
+```
+
+* Interaction Model
+```{r}
+fit_lm_interaction = lm(city_perc_fully ~ age_group  +  race_ethnicity +
+                        age_group * race_ethnicity, 
+                        data = unstratified )
+fit_lm_interaction  %>% broom::tidy() %>% knitr::kable(digits = 2)
+```
+
+### Cross Validation 
+
+Although race is not statistically significant under the critical value alpha = 0.05, it increases the prediction ability of the simple linear model : lm(city_perc_fully ~ age_group). What's more, we notice that interaction term is contributing to model predictability as well. We would say the interaction model  will be better than the other one because its root means square error seems to be smaller. Therefore, interaction model could be useful for predicting the fully vaccinated rate in NYC.
+
+```{r}
+cv_df =
+  crossv_mc(unstratified, 100) %>% 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble))
+```
+
+```{r}
+cv_df = 
+  cv_df %>% 
+  mutate(
+    age_mod = map(train, ~lm(city_perc_fully ~ age_group, data = .x)),
+    main_mod  = map(train, ~lm(city_perc_fully ~ age_group  +  race_ethnicity, data = .x)),
+    interaction_mod = map(train, ~lm(city_perc_fully ~ age_group  +  race_ethnicity + age_group * race_ethnicity, data = .x))) %>% 
+  mutate(
+    rmse_age = map2_dbl(age_mod, test, ~rmse(model = .x, data = .y)),
+    rmse_main = map2_dbl(main_mod, test, ~rmse(model = .x, data = .y)),
+    rmse_interaction = map2_dbl(interaction_mod, test, ~rmse(model = .x, data = .y)))
+```
+
+```{r}
+cv_df %>% 
+  select(starts_with("rmse")) %>% 
+  pivot_longer(
+    everything(),
+    names_to = "model", 
+    values_to = "rmse",
+    names_prefix = "rmse_") %>% 
+  mutate(model = fct_inorder(model)) %>% 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()
+```
+
+### Model Conclusion
+Age, race and their interaction term are good predictors for anticipating the Covid vaccination rate in NYC.
+
