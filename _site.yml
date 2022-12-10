@@ -17,8 +17,8 @@ navbar:
       href: demographic_features.html
     - text: "Model Prediction"
       href: demographic_features.html
-    - text: "Overall vaccination Trends"
-      href: demographic_features.html
+    - text: "Overall Vaccination Trends"
+      href: vaccine_infection_shiny_dashboard.html
     - icon: fa-github fa-lg
       href: https://github.com/Serena-Wang/p8105_covid_vaccinations
 output:
