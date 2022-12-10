@@ -1,11 +1,8 @@
 ---
 title: "Statistical Analysis"
-output: 
-  html_document:
-    code_folding: hide
-    toc: true
-    toc_float: true
-  always_allow_html: true
+author: "Qingyue Zhuo qz2493"
+date: "2022-12-01"
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -17,7 +14,7 @@ library(mgcv)
 
 From the previous data exploration, visualization and analysis process, we notice that several geographical and demographic factors may have a direct influence on the overall vaccination rate in NYC. Here we want to dig deeper into the data set and form the statistical relationship between vaccination rate and the spatial & social indicators. We conducted chi-square tests to examine the significant predictors among borough, race, age, and gender in determining the vaccination rate in NYC. We then built statistical models between selected factors and the fully vaccination rate in NYC
 
-## Description of Dataset:
+### Description of Dataset:
 
 * The Coverage_by_Boro dataset contains the absolute counts and estimated percentage of NYC residents vaccinated for COVID-19. People are stratified by age, race/ethnicity, gender, or geographical locations.  For each group, the observations were further divided into subgroups. Vaccination results by specific demographic category or geographical areas were recorded by day. We selected vaccination rate rather than counts as the target variable adjusting for the different group size. We used this dataset to select the predictors.
   - Target variable 1: percentage of partially vaccinated - the estimated proportion of the population partially vaccinated by the indicated subgroup 
@@ -29,21 +26,20 @@ From the previous data exploration, visualization and analysis process, we notic
   - Target Variable in model fitting : percentage of fully vaccinated -  the estimated percentage of the population who completed the major series of Covid vaccination in the subgroup
 
 
-## Selection of Predictors and Data Cleaning
+### Selection of Predictors
 
+* Data Cleaning
 The first dataset is stratified by age, race/ethnicity, gender, or geographical locations.
-```{r, message = FALSE}
+```{r}
 stratified = 
   read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv") %>%
   janitor::clean_names() %>%
   select(group, subgroup, perc_partially, perc_fully, perc_additional) %>%
   drop_na()
-
-knitr::kable(head(stratified), digits = 3)
 ```
 
-The second dataset take
-```{r, message = FALSE}
+The second dataset categorizes observations by their age group and race/ethnicity. 
+```{r}
 unstratified = 
   read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_boro_demo_full.csv") %>%
   janitor::clean_names() %>%
@@ -51,13 +47,11 @@ unstratified =
   filter(
     !age_group %in% c("Boroughwide", "All ages", "65+", "13-17", "18-44", "45-64") 
 )
-
-knitr::kable(head(unstratified), digits = 3)
 ```
 
-## Chi-square Test 
+#### Chi-square Test 
 
-### Boroughs
+* Boroughs
 
 We predicted that there is no difference in vaccination rate in NYC across the six boroughs. We will perform the chi-square test to verify our assumption.
 
@@ -65,7 +59,7 @@ H0: the expected vaccination rates are the same across all boroughs.
 
 H1: the expected vaccination rate are not same across all boroughs.
 
-```{r, message = FALSE}
+```{r}
 demo_boro = 
   stratified %>%
   filter(group == "Borough") %>% 
@@ -84,13 +78,13 @@ rownames(demo_boro) = c("Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Isla
 knitr::kable(demo_boro, digits = 3)
 ```
 
-```{r, message = FALSE}
+```{r}
 chisq.test(demo_boro)
 ```
 
 Interpretation: The result of chi-square shows that χ2<χcrit, at significant level α=0.05, so we fail to reject the null hypothesis and conclude that the vaccination rate is same across all boroughs.
 
-### Race
+* Race
 
 We predicted that there is no difference in vaccination rate in NYC across the six types of race. We will perform the chi-square test to verify our assumption.
 
@@ -98,7 +92,7 @@ H0: the expected vaccination rates are the same across all races.
 
 H1: the expected vaccination rates are not same across all races.
 
-```{r, message = FALSE}
+```{r}
 demo_race = 
   stratified %>%
   filter(group == "Race/ethnicity") %>%
@@ -122,13 +116,13 @@ rownames(demo_race) = c("Asian", "Black", "Hispanic/Latino", "Multiracial","Whit
 knitr::kable(demo_race, digit = 3)
 ```
 
-```{r, message = FALSE}
+```{r}
 chisq.test(demo_race)
 ```
 
 Interpretation: The result of chi-square shows that χ2<χcrit, at significant level α=0.05, so we fail to reject the null hypothesis and conclude that the vaccination rate is same across races.
 
-### Sex
+* Sex
 
 We predicted that there is no difference in vaccination rate in NYC across genders. We will perform the chi-square test to verify our assumption.
 
@@ -136,7 +130,7 @@ H0: the expected vaccination rates are the same across genders.
 
 H1: the expected vaccination rates are not same across all genders.
 
-```{r, message = FALSE}
+```{r}
 demo_sex = 
   stratified %>%
   filter(group == "Sex") %>%
@@ -154,13 +148,13 @@ rownames(demo_sex) = c("Female", "Male")
 knitr::kable(demo_sex)
 ```
 
-```{r, message = FALSE}
+```{r}
 chisq.test(demo_sex)
 ```
 
 Interpretation: The result of chi-square shows that χ2<χcrit, at significant level α=0.05, so we fail to reject the null hypothesis and conclude that the vaccination rate is same for male and female.
 
-### Age
+* age
 
 We predicted that there is no difference in vaccination rate in NYC across differenc age groups. We will perform the chi-square test to verify our assumption.
 
@@ -168,7 +162,7 @@ H0: the expected vaccination rates are the same across age groups.
 
 H1: the expected vaccination rate are not same across age groups.
 
-```{r, message = FALSE}
+```{r}
 demo_age = 
   stratified %>%
   filter(
@@ -190,7 +184,7 @@ rownames(demo_age) = c("0-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65-
 knitr::kable(demo_age, digits = 3)
 ```
 
-```{r, message = FALSE}
+```{r}
 chisq.test(demo_age)
 ```
 
