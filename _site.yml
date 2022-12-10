@@ -14,7 +14,7 @@ navbar:
     - text: "Exploratory Analysis"
       href: exploratory_analysis.html
     - text: "Statistical Analysis"
-      href: demographic_features.html
+      href: statistical-analysis.html
     - text: "Model Prediction"
       href: demographic_features.html
     - text: "Overall Vaccination Trends"
