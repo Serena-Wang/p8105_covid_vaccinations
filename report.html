@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Report</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    About
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="project_report.html">Our Project</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="PRE_PROCESSING.html">Data Pre-Processing</a>
+</li>
+<li>
+  <a href="https://tvishad.shinyapps.io/shiny/">Overall Vaccination Trends</a>
+</li>
+<li>
+  <a href="exploratory_analysis.html">Exploratory Analysis</a>
+</li>
+<li>
+  <a href="statistical-analysis.html">Statistical Analysis</a>
+</li>
+<li>
+  <a href="Model-Fitting.html">Model Fitting</a>
+</li>
+<li>
+  <a href="https://github.com/Serena-Wang/p8105_covid_vaccinations">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Report</h1>
+
+</div>
+
+
+<div id="motivation" class="section level2">
+<h2>Motivation</h2>
+<p>Over the past three years of the COVID-19 pandemic, vaccines and
+booster doses have been instrumental in reducing the impact of the virus
+by controlling the number of infections. Taking the population in NYC as
+a whole, we aim to identify and compare the trend in three health
+outcomes: a) infection rate (first infection &amp; reinfection),
+b)death, c) hospitalization over the course of February 2020 to November
+2022. Additionally, taking into context the systematic disparities in
+access to health resources, we wanted to explore whether there exist
+disparities in vaccination rates across different races, ages, and
+geographies. Lastly, we also want to examine the possible associations
+between vaccination rate and a range of demographic &amp; geographic
+predictors with the help of statistical tests.</p>
+</div>
+<div id="related-work" class="section level2">
+<h2>Related work</h2>
+<p>With travel and tourism almost back in full swing, news of new
+infections and reinfections across NYC became more common over the past
+year. Due to this and the release of the new bivalent booster that was
+being suggested as an additional protective measure, we were interested
+in comprehending the current situation of vaccination trends in New York
+City in order to gain insight into existing patterns. In terms of
+content, there are many resources about the COVID-19 vaccination rate
+and coverage scopes in regards to New York City. In particular, we were
+inspired by <a
+href="https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html">this
+post</a> by NYTimes and wanted to analyze vaccination rates in NYC at a
+demographic level. Over the course of our search for feasible and
+relevant datasets, we also found some interesting graphics on NYC Health
+website. One of the main objectives of our project was to create
+informative trend visualizations and to improve some of the graphics
+using tools that we have learnt in class.</p>
+</div>
+<div id="initial-questions" class="section level2">
+<h2>Initial questions</h2>
+<ul>
+<li>What is the trend of cumulative vaccination counts in NYC?</li>
+<li>What is the trend amongst various vaccine types?</li>
+<li>What is the trend in infection/reinfection counts, and is there any
+interesting information we can recognize when comparing this to the
+abovementioned trends?</li>
+<li>Are vaccination rates influenced by demographic/race-based features?
+If so, what are the underlying trends?</li>
+<li>What should be the predictors for vaccination rate? Also, is there a
+significant association between vaccination rate and races / ages /
+gender / boroughs?</li>
+</ul>
+</div>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<div id="source" class="section level3">
+<h3>Source</h3>
+</div>
+<div id="scraping-method" class="section level3">
+<h3>Scraping Method</h3>
+<p>We used datasets in NYC Health’s Covid-Vaccine-Data Github
+repository. The datasets we are interested in are updated on a weekly
+basis and NYC health overwrites previous week’s data in each update.
+Therefore, there are no centralized files that contain all previous
+updates and we need to go through all their Github commit history to
+download previous versions. To do this in an efficient way, we want to
+use Github API to collect all links to previous versions of a file and
+then iterate all links to download and combine the corresponding csv
+file. We wrote an R function for this part. This function sends a query
+request with the file name to NYC Health’s Github repository and the
+results are commit history sorted by “author-date”, the date that the
+author modified the file. Then the function iterates through commit
+history to collect the final updates for each week, since there are
+cases when NYC Health updated a file multiple times during the week.
+Finally, this function constructs the raw.githubusercontent links to
+each file with time, date, sha code and file name.</p>
+</div>
+<div id="data-cleaning" class="section level3">
+<h3>Data Cleaning</h3>
+<p>Fortunately, the data on NYC Health’s Github repository are in a very
+clean format. We did not need to do any extra cleaning procedures. We
+only need to reformat the data to create the plot for our analysis.
+Since some of the data files have daily cumulative observations and some
+have weekly observations, we need to standardize our data to only
+include the datapoint for each Sunday as a summary measure for each
+week. This is used to make our Shiny app and heatmaps.</p>
+<p>Variant data is documented with variant lineage number. We tried our
+best to match each lineage number with SIG Variant classification and
+used CDC’s <a
+href="https://www.cdc.gov/coronavirus/2019-ncov/variants/variant-classifications.html">documentation</a>
+as a reference.</p>
+</div>
+<div id="limitation-of-estimated-vaccination-rates"
+class="section level3">
+<h3>Limitation of Estimated Vaccination Rates</h3>
+<p>NYC Health collect vaccination count for each location at various
+level of geographic resolution (eg. neighborhood, borough) and then
+calculate an estimated vaccination rate with corresponding population.
+As the area of location gets smaller, their estimate for population has
+more variability. As a result of this, some estimated vaccination rates
+are larger than 100%. This is a problem acknowledged by NYC Health and
+is documented on their GitHub readme file. It is beyond the scope of
+this project to find additional population sources to adjust their
+estimated vaccination rate. Therefore, we decided to use the same data
+as NYC Health.</p>
+</div>
+</div>
+<div id="exploratory-analysis" class="section level2">
+<h2>Exploratory Analysis</h2>
+<div id="variant-plot" class="section level3">
+<h3><a
+href="https://serena-wang.github.io/p8105_covid_vaccinations/exploratory_analysis.html#COVID-19_Variant">Variant
+Plot</a></h3>
+<p>This figure aims to visualize the overall trend of variant sequencing
+during the pandemic. We hope this plot could be a reference for people’s
+choice of dates in the Shiny app. Our dataset includes information of a
+COVID-19 test sample sent to the lab. The data include dates, the
+specific variant name of positive tests, and number of positive tests
+for each variant. This figure plots the proportion of occurrence for
+each variant throughout the pandemic.</p>
+<p>Observations:</p>
+<ul>
+<li><p>We can see a clear trend for each wave: when they started and
+when they ended. An additional important piece of information is the
+relative change in occurrence with respect to each variant.</p></li>
+<li><p>Key time period:</p>
+<ul>
+<li>Delta wave: July 3rd 2021 - December 11th 2021</li>
+<li>Omicron wave: December 18th 2021 - now. This includes multiple
+sub-lineages of omicron variant.</li>
+</ul></li>
+</ul>
+</div>
+<div id="overall-vaccines-infectionreinfection-trends"
+class="section level3">
+<h3><a href="https://tvishad.shinyapps.io/shiny/">Overall Vaccines,
+Infection/Reinfection Trends</a></h3>
+<p>This information was presented in the format of a shiny
+flexdashboard. Here, the user gets the chance to explore trends amongst
+different vaccine coverage and the simultaneous trends in COVID first
+infections and re-infections. The different coverages include:</p>
+<ul>
+<li>All primary doses - This is the sum of dose 1 &amp; dose 2 of a
+2-dose series, and a single dose of a 1 dose series.</li>
+<li>All boosters - This is the sum of 1st and 2nd booster doses as well
+as additional doses for immunocompromised individuals.</li>
+<li>All the above-mentioned dose types individually.</li>
+</ul>
+<p>As the dose-by-date data from the NYC Dept. of Health and Mental
+Hygiene spans from Dec-2020 to Nov 2022, we have created a date range
+input feature that allows the user to explore weekly and cumulative
+vaccine count data across a time range of interest.</p>
+<p>For the weekly vaccines - infection - reinfection counts plot, a left
+join was performed (reinfection data onto dose-by-day data) using date
+as the shared ID. In this process, it was mainly challenging to figure
+out the process of passing reactive input into plotly and to identify
+the most effective way for grouping data by weeks to generate the weekly
+counts. The plot on the bottom reveals simultaneous trends in
+COVID-related deaths and hospitalizations in a weekly manner. As the
+scales for these counts were widely different from the weekly counts of
+the vaccinations, infections, and reinfections, we have decided to
+visualize them individually on a separate plot. As they are all
+positioned on the same page, it is convenient for the user to look at
+several different levels of information at a single glance.</p>
+<p>Observations:</p>
+<ul>
+<li>There were two main peaks in vaccinations: between March to May 2021
+(mainly consisting of primary doses) and between November 2021 and
+January 2022 (consisting of booster doses).</li>
+<li>Infection and reinfection cases peaked around December 2021 -
+January 2022 (coinciding with the holidays when people started traveling
+again). However, another reason for this seasonal spike to particularly
+stand out could be the fact that this segment in time is after testing
+was made highly commonplace. That is, earlier spikes in counts of
+infection could be missing simply due to the lack of data from those
+points in time. This peak also coincides with a rise in hospitalizations
+and death counts.</li>
+<li>During the period that Delta variant was dominant in lab sample
+sequences, cumulative vaccination rate climbed steadily reaching to the
+peaks.</li>
+<li>Most COVID related hospitalizations and deaths occurred between
+March and April 2020. This was considerably prior to the vaccine
+rollouts.</li>
+</ul>
+</div>
+<div id="heatmaps" class="section level3">
+<h3><a
+href="https://serena-wang.github.io/p8105_covid_vaccinations/exploratory_analysis.html#Vaccination_Rate_-_Demographic_Features">Heatmaps</a></h3>
+<p>We did an exploratory analysis of the relationship among vaccination
+rate and different demographic features. In this section, we focused on
+2 vaccination statuses: complete primary series vaccination and booster
+vaccination. The definition of each vaccination status is outlined in
+our section. For each vaccination status and a demographic feature, we
+plotted a line plot for overall weekly progress for vaccination rate
+colored by each level of the demographic feature, and a heatmap for the
+latest status of vaccination rates.</p>
+<p>Observations:</p>
+<ul>
+<li>Primary series vaccination rate is steadily increasing for all
+boroughs and all-age group, with Queens having the highest vaccination
+rate and Brooklyn having the lowest vaccination rate. Specifically by
+age group and borough, until November 29th, age groups from children
+(13-17) to (adults 18+) have higher vaccination rates across all
+boroughs, compared with lower age groups.</li>
+<li>Booster vaccination rate is also steadily increasing for all
+boroughs with Manhattan having the highest and Bronx having the lowest.
+Approximately, primary series vaccination rates are at least 1.5 times
+of booster vaccination rate across boroughs for all-age group. Taking
+age groups into account, until November 29th, adults (18+) have higher
+vaccination rates across all boroughs, compared with lower age
+groups.</li>
+<li>From the race/ethnicity perspective, primary series vaccination rate
+does not have too much variability for most race groups, except
+Aisan/NHPI. Based on the heatmap, native american and asian population
+has higher vaccination rate across all age group, compared with other
+race groups. Overall, there is not much difference in terms of
+vaccination rate across age groups, if stratified by race.</li>
+<li>From the race/ethnicity perspective, booster vaccination rate has a
+similar trend, with native american and asian population having the top
+2 highest vaccination rate. Booster vaccination rate is much lower than
+primary vaccination rate. However, adults have higher booster
+vaccination rates than children for all race groups. Among the children
+population, Asian children (13-17) have the highest booster vaccination
+rate.</li>
+<li>Female primary series vaccination rate and male primary series
+vaccination rate are very similar. Until November 29th, age groups from
+children (13-17) to (adults 18+) have higher vaccination rates for all
+sexes, compared with lower age groups.</li>
+<li>Similarly, booster vaccination rates by sex are very close. Until
+November 29th, adults have higher booster vaccination rates than
+children for all sexes.</li>
+</ul>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

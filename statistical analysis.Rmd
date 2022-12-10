@@ -154,7 +154,7 @@ Interpretation: The result of chi-square shows that χ2<χcrit, at significant l
 
 ### Age
 
-We predicted that there is no difference in vaccination rate in NYC across differenc age groups. We will perform the chi-square test to verify our assumption.
+We predicted that there is no difference in vaccination rate in NYC across different age groups. We will perform the chi-square test to verify our assumption.
 
 H0: the mean vaccination rates are the same across age groups.
 

@@ -100,3 +100,11 @@ nyc_variant_data <- read_csv(
   file = "https://github.com/nychealth/coronavirus-data/blob/dc3547bf87c25738dc230906d302a1915a8a0d93/variants/variant-epi-data.csv")
 
 write_csv(nyc_variant_data, "./Data/nyc_variant_data.csv")
+
+coverage_modzcta_full_links <- get_links("people/coverage-by-modzcta-allages.csv") %>%
+  filter(date < "2022-12-01")
+
+coverage_modzcta_full <- map_dfr(
+  coverage_modzcta_full_links$file_link, read_csv)
+
+
