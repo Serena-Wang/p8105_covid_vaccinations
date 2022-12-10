@@ -1,5 +1,5 @@
 ---
-title: "Vaccination Rate - Demographic Features"
+title: "Exploratory Analysis"
 output: 
   html_document:
     code_folding: hide
@@ -19,9 +19,61 @@ library(tidyverse)
 library(lubridate)
 ```
 
+## COVID-19 Variant
+
+We want visualize the overall trend of variant sequencing during the pandemic. We hope this plot could be a reference for people’s choice of dates in the Shiny  app. Our dataset includes information of a COVID-19 test sample sent to the lab. The data include dates, the specific variant name of positive tests, and number of positive tests for each variant. This figure plots the proportion of occurrence for each variant throughout the pandemic. 
+
+```{r, message = FALSE, echo=FALSE}
+nyc_variant_data <- read_csv("./Data/nyc_variant_data.csv") %>%
+  clean_names() 
+
+nyc_variant_percent <- nyc_variant_data %>%
+  pivot_longer(cols = ends_with("_percent"),
+               names_to = "variant",
+               names_pattern = "(.*)_percent",
+               values_to = "percent") %>%
+  select(sequence_week, variant, percent) %>%
+  mutate(sequence_week = as.Date(sequence_week,"%m/%d/%Y"),
+         variant = case_when(
+           variant %in% c("b_1_1_7") ~ "Alpha",
+           variant %in% c("b_1_351") ~ "Beta",
+           variant %in% c("p_1") ~ "Gamma",
+           variant %in% c("b_1_617_2") ~ "Delta",
+           variant %in% c("b_1_429", "b_1_427") ~ "Epsilon",
+           variant %in% c("b_1_525") ~ "Eta",
+           str_detect(variant, "b_1_526_") ~ "Iota",
+           str_detect(variant, "ba_")  ~ "Omicron",
+           str_detect(variant, "bf_") ~ "Omicron",
+           str_detect(variant, "bq_") ~ "Omicron",
+           str_detect(variant, "b_1_621") ~ "Mu",
+           TRUE ~ variant
+        )) %>%
+  group_by(sequence_week, variant) %>%
+  summarise(percent = sum(percent))
+
+```
+
+```{r}
+percent_ml <- data.table::melt(nyc_variant_percent, id.vars =  c("sequence_week","variant")) 
+
+percent_ml %>%
+  plot_ly(x = ~sequence_week, 
+          y = ~value, 
+          type = "bar",
+          name = ~variant, 
+          color = ~variant
+          ) %>%
+  layout(yaxis = list(title= "Proportion of sequences"),
+         xaxis = list(title = "sequence time"),
+         title = "Sequencing Trend By Variant",
+         barmode = "stack") 
+
+```
 
 
-## Introduction 
+
+## Vaccination Rate - Demographic Features
+
 
 We are interested in comparing COVID-19 vaccination rates of different demographic groups in NYC. In this section, we are analyzing COVID-19 vaccination rates with data from NYC Health. NYC Health curates daily COVID-19 vaccination data stratified by a handful of demographic features such as age, race/ethnicity, sex and boroughs. It also  include granular vaccination information such as primary does, booster doses, at least 1 dose. 
 
@@ -47,7 +99,7 @@ coverage_by_demo_full <- read_csv("./Data/coverage_by_demo_full.csv") %>%
   drop_na()
 ```
 
-## Estimated fully vaccinatd rate: Weekly progress for each borough
+### Primary series: weekly progress for each borough
 ```{r, message = FALSE, echo=FALSE}
 selected_group <- "Borough"
 borough_data <- coverage_by_demo_full %>%
@@ -73,7 +125,7 @@ borough_data %>%
     yaxis = list(title = "Vaccination Rate",showgrid = TRUE))
 ```
 
-## Estimated fully vaccination rate: Borough and Age groups as of November 29th, 2022.
+### Primary series: borough and age groups as of November 29th, 2022.
 ```{r}
 borough_data %>%
   filter(week_end == max(week_end)) %>%
@@ -100,8 +152,7 @@ borough_data %>%
                       categoryorder = "total descending"))
 
 ```
-##  Estimated additional/booster vaccination rate: Weekly progress for each borough
-
+###  Booster: weekly progress for each borough
 ```{r, message = FALSE}
 borough_data %>%
   filter(population == "All ages") %>%
@@ -119,7 +170,7 @@ borough_data %>%
     xaxis = list(title = "Week", showgrid = TRUE),
     yaxis = list(title = "Vaccination Rate",showgrid = TRUE))
 ```
-## Estimated additional/booster vaccination rate:  Borough and Age groups as of November 29th, 2022.
+### Booster: borough and age groups as of November 29th, 2022.
 
 ```{r}
 borough_data %>%
@@ -147,7 +198,7 @@ borough_data %>%
 ```
 
 
-## Estimated fully vaccinatd rate: Weekly progress for each race
+### Primary series: weekly progress for each race
 ```{r, message = FALSE, echo=FALSE}
 selected_group <- "Race/ethnicity"
 race_data <- coverage_by_demo_full %>%
@@ -171,7 +222,7 @@ race_data %>%
     xaxis = list(title = "Week", showgrid = TRUE),
     yaxis = list(title = "Vaccination Rate",showgrid = TRUE))
 ```
-## Estimated fully vaccination rate: Race and Age groups as of November 29th, 2022.
+### Primary series: race and age groups as of November 29th, 2022.
 
 We noticed that some estimated vaccination rate is above 100%. This is a known problem acknowledged by NYC Health. Multi race is misreport under a single race.
 
@@ -199,7 +250,7 @@ race_data %>%
          yaxis = list(title = "Race",
                       categoryorder = "total descending"))
 ```
-## Estimated additional/booster vaccination rate: Weekly progress for each race
+### Booster: weekly progress for each race
 
 ```{r, message = FALSE}
 race_data %>%
@@ -218,7 +269,7 @@ race_data %>%
     xaxis = list(title = "Week", showgrid = TRUE),
     yaxis = list(title = "Vaccination Rate",showgrid = TRUE))
 ```
-## Estimated additional/booster vaccination rate:  Race and Age groups as of November 29th, 2022.
+### Booster:  race and age groups as of November 29th, 2022.
 
 ```{r}
 race_data %>%
@@ -244,7 +295,7 @@ race_data %>%
          yaxis = list(title = "Race",
                       categoryorder = "total descending"))
 ```
-## Estimated fully vaccinatd rate: Weekly progress for each race
+### Primary series: weekly progress for each race
 ```{r, message = FALSE, echo=FALSE}
 selected_group <- "Sex"
 sex_data <- coverage_by_demo_full %>%
@@ -269,7 +320,7 @@ sex_data %>%
     yaxis = list(title = "Vaccination Rate",showgrid = TRUE))
 ```
 
-## Estimated fully vaccination rate: Sex and Age groups as of November 29th, 2022.
+### Primary series: sex and age groups as of November 29th, 2022.
 ```{r}
 sex_data %>%
   filter(week_end == max(week_end)) %>%
@@ -295,7 +346,7 @@ sex_data %>%
                       categoryorder = "total descending"))
 ```
 
-## Estimated additional/booster vaccination rate: Weekly progress for each sex
+### Booster: weekly progress for each sex
 ```{r, message = FALSE}
 sex_data %>%
   filter(population == "All ages") %>%
@@ -313,7 +364,7 @@ sex_data %>%
     xaxis = list(title = "Week", showgrid = TRUE),
     yaxis = list(title = "Vaccination Rate",showgrid = TRUE))
 ```
-## Estimated additional/booster vaccination rate:  Sex and Age groups as of November 29th, 2022.
+### Booster: sex and age groups as of November 29th, 2022.
 ```{r}
 sex_data %>%
   filter(week_end == max(week_end)) %>%
