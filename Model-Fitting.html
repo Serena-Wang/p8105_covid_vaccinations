@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Qingyue Zhuo qz2493" />
+
+<meta name="date" content="2022-12-10" />
+
+<title>Model Fitting</title>
+
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    About
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="project_report.html">Our Project</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="PRE_PROCESSING.html">Data Pre-Processing</a>
+</li>
+<li>
+  <a href="demographic_features.html">Exploratory Analysis</a>
+</li>
+<li>
+  <a href="demographic_features.html">Statistical Analysis</a>
+</li>
+<li>
+  <a href="demographic_features.html">Model Prediction</a>
+</li>
+<li>
+  <a href="https://tvishad.shinyapps.io/shiny/">Overall Vaccination Trends</a>
+</li>
+<li>
+  <a href="https://github.com/Serena-Wang/p8105_covid_vaccinations">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Model Fitting</h1>
+<h4 class="author">Qingyue Zhuo qz2493</h4>
+<h4 class="date">2022-12-10</h4>
+
+</div>
+
+
+<div id="model-fitting" class="section level3">
+<h3>Model Fitting</h3>
+<p>We propose 3 models for prediction:</p>
+<ol style="list-style-type: decimal">
+<li><p>Linear Model of city_perc_fully ~ age_group</p></li>
+<li><p>Linear Model of city_perc_fully ~ age_group +
+race_ethnicity</p></li>
+<li><p>Linear Model of city_perc_fully ~ age_group + race_ethnicity +
+age_group * race_ethnicity, assuming that there are interaction</p></li>
+</ol>
+<ul>
+<li>Age Group Model</li>
+</ul>
+<pre class="r"><code>fit_lm_age = lm(city_perc_fully ~ age_group, data = unstratified  )
+fit_lm_age  %&gt;% broom::tidy() %&gt;% knitr::kable(digits = 2)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">2.50</td>
+<td align="right">1.77</td>
+<td align="right">1.41</td>
+<td align="right">0.16</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’13-17</td>
+<td align="right">73.06</td>
+<td align="right">1.88</td>
+<td align="right">38.76</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’18-44</td>
+<td align="right">74.81</td>
+<td align="right">1.88</td>
+<td align="right">39.70</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’45-64</td>
+<td align="right">79.41</td>
+<td align="right">1.88</td>
+<td align="right">42.14</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’5-12</td>
+<td align="right">42.17</td>
+<td align="right">1.88</td>
+<td align="right">22.37</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’65+</td>
+<td align="right">73.94</td>
+<td align="right">1.88</td>
+<td align="right">39.23</td>
+<td align="right">0.00</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Main Effect Model</li>
+</ul>
+<pre class="r"><code>fit_lm_main = lm(city_perc_fully ~ age_group  +  race_ethnicity, 
+                 data = unstratified )
+fit_lm_main  %&gt;% broom::tidy() %&gt;% knitr::kable(digits = 2)</code></pre>
+<table>
+<colgroup>
+<col width="44%" />
+<col width="13%" />
+<col width="14%" />
+<col width="14%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">29.83</td>
+<td align="right">0.94</td>
+<td align="right">31.78</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’13-17</td>
+<td align="right">73.06</td>
+<td align="right">0.96</td>
+<td align="right">75.93</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’18-44</td>
+<td align="right">74.81</td>
+<td align="right">0.96</td>
+<td align="right">77.76</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’45-64</td>
+<td align="right">79.41</td>
+<td align="right">0.96</td>
+<td align="right">82.54</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’5-12</td>
+<td align="right">42.17</td>
+<td align="right">0.96</td>
+<td align="right">43.83</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’65+</td>
+<td align="right">73.94</td>
+<td align="right">0.96</td>
+<td align="right">76.85</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">race_ethnicityBlack</td>
+<td align="right">-41.28</td>
+<td align="right">0.41</td>
+<td align="right">-100.96</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">race_ethnicityHispanic/Latino</td>
+<td align="right">-27.57</td>
+<td align="right">0.41</td>
+<td align="right">-67.43</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">race_ethnicityWhite</td>
+<td align="right">-40.44</td>
+<td align="right">0.41</td>
+<td align="right">-98.91</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Interaction Model</li>
+</ul>
+<pre class="r"><code>fit_lm_interaction = lm(city_perc_fully ~ age_group  +  race_ethnicity +
+                        age_group * race_ethnicity, 
+                        data = unstratified )
+fit_lm_interaction  %&gt;% broom::tidy() %&gt;% knitr::kable(digits = 2)</code></pre>
+<table style="width:100%;">
+<colgroup>
+<col width="55%" />
+<col width="10%" />
+<col width="12%" />
+<col width="12%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">4.32</td>
+<td align="right">1.33</td>
+<td align="right">3.25</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’13-17</td>
+<td align="right">110.21</td>
+<td align="right">1.41</td>
+<td align="right">78.04</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’18-44</td>
+<td align="right">97.70</td>
+<td align="right">1.41</td>
+<td align="right">69.18</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’45-64</td>
+<td align="right">96.80</td>
+<td align="right">1.41</td>
+<td align="right">68.55</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’5-12</td>
+<td align="right">79.58</td>
+<td align="right">1.41</td>
+<td align="right">56.35</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’65+</td>
+<td align="right">89.97</td>
+<td align="right">1.41</td>
+<td align="right">63.71</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">race_ethnicityBlack</td>
+<td align="right">-3.87</td>
+<td align="right">1.88</td>
+<td align="right">-2.06</td>
+<td align="right">0.04</td>
+</tr>
+<tr class="even">
+<td align="left">race_ethnicityHispanic/Latino</td>
+<td align="right">-3.77</td>
+<td align="right">1.88</td>
+<td align="right">-2.01</td>
+<td align="right">0.04</td>
+</tr>
+<tr class="odd">
+<td align="left">race_ethnicityWhite</td>
+<td align="right">0.38</td>
+<td align="right">1.88</td>
+<td align="right">0.20</td>
+<td align="right">0.84</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’13-17:race_ethnicityBlack</td>
+<td align="right">-51.50</td>
+<td align="right">2.00</td>
+<td align="right">-25.79</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’18-44:race_ethnicityBlack</td>
+<td align="right">-38.98</td>
+<td align="right">2.00</td>
+<td align="right">-19.52</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’45-64:race_ethnicityBlack</td>
+<td align="right">-27.07</td>
+<td align="right">2.00</td>
+<td align="right">-13.55</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’5-12:race_ethnicityBlack</td>
+<td align="right">-51.53</td>
+<td align="right">2.00</td>
+<td align="right">-25.80</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’65+:race_ethnicityBlack</td>
+<td align="right">-22.87</td>
+<td align="right">2.00</td>
+<td align="right">-11.45</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’13-17:race_ethnicityHispanic/Latino</td>
+<td align="right">-33.06</td>
+<td align="right">2.00</td>
+<td align="right">-16.55</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’18-44:race_ethnicityHispanic/Latino</td>
+<td align="right">-17.36</td>
+<td align="right">2.00</td>
+<td align="right">-8.69</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’45-64:race_ethnicityHispanic/Latino</td>
+<td align="right">-11.50</td>
+<td align="right">2.00</td>
+<td align="right">-5.76</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’5-12:race_ethnicityHispanic/Latino</td>
+<td align="right">-44.51</td>
+<td align="right">2.00</td>
+<td align="right">-22.29</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’65+:race_ethnicityHispanic/Latino</td>
+<td align="right">-15.71</td>
+<td align="right">2.00</td>
+<td align="right">-7.87</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’13-17:race_ethnicityWhite</td>
+<td align="right">-64.06</td>
+<td align="right">2.00</td>
+<td align="right">-32.08</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’18-44:race_ethnicityWhite</td>
+<td align="right">-35.23</td>
+<td align="right">2.00</td>
+<td align="right">-17.64</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’45-64:race_ethnicityWhite</td>
+<td align="right">-30.99</td>
+<td align="right">2.00</td>
+<td align="right">-15.52</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’5-12:race_ethnicityWhite</td>
+<td align="right">-53.63</td>
+<td align="right">2.00</td>
+<td align="right">-26.85</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’65+:race_ethnicityWhite</td>
+<td align="right">-25.55</td>
+<td align="right">2.00</td>
+<td align="right">-12.79</td>
+<td align="right">0.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="cross-validation" class="section level3">
+<h3>Cross Validation</h3>
+<p>Although race is not statistically significant under the critical
+value alpha = 0.05, it increases the prediction ability of the simple
+linear model : lm(city_perc_fully ~ age_group). What’s more, we notice
+that interaction term is contributing to model predictability as well.
+We would say the interaction model will be better than the other one
+because its root means square error seems to be smaller. Therefore,
+interaction model could be useful for predicting the fully vaccinated
+rate in NYC.</p>
+<pre class="r"><code>cv_df =
+  crossv_mc(unstratified, 100) %&gt;% 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble))</code></pre>
+<pre class="r"><code>cv_df = 
+  cv_df %&gt;% 
+  mutate(
+    age_mod = map(train, ~lm(city_perc_fully ~ age_group, data = .x)),
+    main_mod  = map(train, ~lm(city_perc_fully ~ age_group  +  race_ethnicity, data = .x)),
+    interaction_mod = map(train, ~lm(city_perc_fully ~ age_group  +  race_ethnicity + age_group * race_ethnicity, data = .x))) %&gt;% 
+  mutate(
+    rmse_age = map2_dbl(age_mod, test, ~rmse(model = .x, data = .y)),
+    rmse_main = map2_dbl(main_mod, test, ~rmse(model = .x, data = .y)),
+    rmse_interaction = map2_dbl(interaction_mod, test, ~rmse(model = .x, data = .y)))</code></pre>
+<pre class="r"><code>cv_df %&gt;% 
+  select(starts_with(&quot;rmse&quot;)) %&gt;% 
+  pivot_longer(
+    everything(),
+    names_to = &quot;model&quot;, 
+    values_to = &quot;rmse&quot;,
+    names_prefix = &quot;rmse_&quot;) %&gt;% 
+  mutate(model = fct_inorder(model)) %&gt;% 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()</code></pre>
+<p><img src="Model-Fitting_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="model-conclusion" class="section level3">
+<h3>Model Conclusion</h3>
+<p>Age, race and their interaction term are good predictors for
+anticipating the Covid vaccination rate in NYC.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
