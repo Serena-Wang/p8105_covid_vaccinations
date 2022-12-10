@@ -42,15 +42,110 @@ We should notice:
 * Only pulled data related to New York State, organized by a specific time frame of specimen collection.
 
 * Specimens from CDC’s program may also upload into GISAID.
- 
+    
 
 **New York State Statewide COVID-19 Reinfection Data** [(Source)](https://health.data.ny.gov/Health/New-York-State-Statewide-COVID-19-Reinfection-Data/7aaj-cdtu)
 
 This dataset reports the number of first infections and reinfections in New York State since January 2021, broken down by week. With the aim to show the trends in Reinfections (first infections and reinfections) in New York City, we only used the data from New York City. *Created by the New York State Department of Health from data reported to Electronica Clinical Laboratory Reporting System (ECLRS)*. And we defined reinfection as the test turning positive again within 90 days or more after the first positive test.
  
 
-### NYC OpenData [(NYC OD)](https://data.cityofnewyork.us/Health/COVID-19-Daily-Counts-of-Cases-Hospitalizations-an/rc75-m7u3)
+### NYC OpenData [(NYC OD)](https://opendata.cityofnewyork.us/)
+
+**Hospitalization and Death Data**[(Source)](https://data.cityofnewyork.us/Health/COVID-19-Daily-Counts-of-Cases-Hospitalizations-an/rc75-m7u3)
 
 This dataset collected daily counts of New York City residents who tested positive of COVID-19, hospitalizations for COVID-19, and deaths with COVID-19. We focus on the counts of hospitalizations and deaths to compare the trends of these health outcomes. *Notice: this dataset is actually provided by NYC DOHMH*
 
 ## Data Cleaning
+
+Fortunately, the data on NYC Health’s Github repository are in a very clean format. We did not need to do any extra cleaning procedures. We only need to reformat the data to create the plot for our analysis. Since some of the data files have daily cumulative observations and some have weekly observations, we need to standardize our data to only include the datapoint for each Sunday as a summary measure for each week. This is used to make our Shiny app and heatmaps. 
+ 
+
+**Doses**
+
+Name | Definition
+-------|-----------
+date | Date 
+admin_dose1_daily | Daily count of first doses administered of a two-dose COVID-19 vaccine series (i.e. Pfizer or Moderna)
+admin_dose1_cumulative | Cumulative count of first doses administered of a two-dose COVID-19 vaccine series
+admin_dose2_daily| Daily count of second doses (out of 2)
+admin_dose2_cumulative| Cumulative count of second doses (out of 2)
+admin_single_daily | Daily count of single-dose COVID-19 vaccine administered (i.e. Johnson&Johnson)
+admin_single_cumulative| Cumulative count of single-dose COVID-19 vaccine administered
+admin_additional1_daily| Daily count of first booster doses or third doses administered for immunocompromised
+admin_additional1_cumulative| Cumulative count of first booster doses or third doses administered for immunocompromised
+admin_additional2_daily| Daily count of second booster doses and the first booster dose for immunocompromised
+admin_additional2_cumulative| Cumulative count of second booster doses and the first booster dose for immunocompromised
+admin_additional_daily| Daily count of additional1 and 2
+admin_additional_cumulative| Cumulative count of additional1 and 2
+admin_alldoses_daily| Daily count of all COVID-19 vaccine doses
+admin_alldoses_cumulative| Cumulative count of all COVID-19 vaccine doses
+
+**People**
+
+Scraping method: We used datasets in NYC Health’s Covid-Vaccine-Data Github repository. The datasets we are interested in are updated on a weekly basis and NYC health overwrites previous week’s data in each update. Therefore, there are no centralized files that contain all previous updates and we need to go through all their Github commit history to download previous versions.  To do this in an efficient way,  we want to use Github API to collect all links to previous versions of a file and then iterate all links to download and combine the corresponding csv file.  We wrote an R function for this part. This function sends a query request with the file name to NYC Health’s Github repository and the results are commit history sorted by “author-date”, the date that the author modified the file. Then the function iterates through commit history to collect the final updates for each week, since there are cases when NYC Health updated a file multiple times during the week. Finally, this function constructs the raw.githubusercontent links to each file with time, date, sha code and file name
+
+  - *Limitation of Estimated Vaccination Rates*
+ 
+NYC Health collect vaccination count for each location at various level of geographic resolution (eg. neighborhood, borough) and then calculate an estimated vaccination rate with corresponding population. As the area of location gets smaller, their estimate for population has more variability. As a result of this, some estimated vaccination rates are larger than 100%. This is a problem acknowledged by NYC Health and is documented on their GitHub readme file. It is beyond the scope of this project to find additional  population sources to adjust their estimated vaccination rate. Therefore, we decided to use the same data as NYC Health. 
+
+**COVID-19 Variant Data**
+
+Variant data is documented with variant lineage number. We tried our best to match each lineage number with SIG Variant classification and used CDC’s documentation as a [reference](https://www.cdc.gov/coronavirus/2019-ncov/variants/variant-classifications.html)
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+nyc_variant_data <- read_csv("./Data/nyc_variant_data.csv") %>%
+  clean_names() 
+
+nyc_variant_percent <- nyc_variant_data %>%
+  pivot_longer(cols = ends_with("_percent"),
+               names_to = "variant",
+               names_pattern = "(.*)_percent",
+               values_to = "percent") %>%
+  select(sequence_week, variant, percent) %>%
+  mutate(sequence_week = as.Date(sequence_week,"%m/%d/%Y"),
+         variant = case_when(
+           variant %in% c("b_1_1_7") ~ "Alpha",
+           variant %in% c("b_1_351") ~ "Beta",
+           variant %in% c("p_1") ~ "Gamma",
+           variant %in% c("b_1_617_2") ~ "Delta",
+           variant %in% c("b_1_429", "b_1_427") ~ "Epsilon",
+           variant %in% c("b_1_525") ~ "Eta",
+           str_detect(variant, "b_1_526_") ~ "Iota",
+           str_detect(variant, "ba_")  ~ "Omicron",
+           str_detect(variant, "bf_") ~ "Omicron",
+           str_detect(variant, "bq_") ~ "Omicron",
+           str_detect(variant, "b_1_621") ~ "Mu",
+           TRUE ~ variant
+        )) %>%
+  group_by(sequence_week, variant) %>%
+  summarise(percent = sum(percent))
+```
+
+Name | Definition
+-------|-----------
+sequence_week | The date of the first day in the sequencing week 
+variant | The common classification of the variant(i.e. Alpha)
+percent | The percentages of every variant type/classification in a specific sequencing week
+*For nyc_variant_percent dataframe*
+               
+
+**New York State Statewide COVID-19 Reinfection Data**
+
+Since we aim to characterize the trends of first infections and reinfections in NYC, we filter "New York City" in redc_region column. And here are the defination of major variables.
+
+Name | Definition
+-------|-----------
+date | The date (Monday) of 7-days for reinfection data was collected 
+first_infections_count | Count of positive results for the first time identified
+reinfections_count | Count of reinfection positive results
+
+ 
+**Hospitalization and Death Data**
+
+To better compare the trends of these health outcomes(reinfections/hospitalizations/deaths), we broke down days by weeks. After that, we combined 2 datasets (Hospitalization and Death Data/Reinfection Data) 
+
+Name | Definition
+-------|-----------
+week | The date of the first day in a week
+deaths | Total count of deaths among COVID-19 cases in a week
+hospitalizations | Total count of COVID-19 patients who were hospitalized in a week

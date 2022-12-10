@@ -342,7 +342,7 @@ div.tocify {
   <a href="PRE_PROCESSING.html">Data Pre-Processing</a>
 </li>
 <li>
-  <a href="demographic_features.html">Exploratory Analysis</a>
+  <a href="exploratory_analysis.html">Exploratory Analysis</a>
 </li>
 <li>
   <a href="demographic_features.html">Statistical Analysis</a>
@@ -466,9 +466,10 @@ defined reinfection as the test turning positive again within 90 days or
 more after the first positive test.</p>
 </div>
 <div id="nyc-opendata-nyc-od" class="section level3">
-<h3>NYC OpenData <a
-href="https://data.cityofnewyork.us/Health/COVID-19-Daily-Counts-of-Cases-Hospitalizations-an/rc75-m7u3">(NYC
+<h3>NYC OpenData <a href="https://opendata.cityofnewyork.us/">(NYC
 OD)</a></h3>
+<p><strong>Hospitalization and Death Data</strong><a
+href="https://data.cityofnewyork.us/Health/COVID-19-Daily-Counts-of-Cases-Hospitalizations-an/rc75-m7u3">(Source)</a></p>
 <p>This dataset collected daily counts of New York City residents who
 tested positive of COVID-19, hospitalizations for COVID-19, and deaths
 with COVID-19. We focus on the counts of hospitalizations and deaths to
@@ -478,6 +479,247 @@ actually provided by NYC DOHMH</em></p>
 </div>
 <div id="data-cleaning" class="section level2">
 <h2>Data Cleaning</h2>
+<p>Fortunately, the data on NYC Health’s Github repository are in a very
+clean format. We did not need to do any extra cleaning procedures. We
+only need to reformat the data to create the plot for our analysis.
+Since some of the data files have daily cumulative observations and some
+have weekly observations, we need to standardize our data to only
+include the datapoint for each Sunday as a summary measure for each
+week. This is used to make our Shiny app and heatmaps.</p>
+<p><strong>Doses</strong></p>
+<table>
+<colgroup>
+<col width="38%" />
+<col width="61%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>date</td>
+<td>Date</td>
+</tr>
+<tr class="even">
+<td>admin_dose1_daily</td>
+<td>Daily count of first doses administered of a two-dose COVID-19
+vaccine series (i.e. Pfizer or Moderna)</td>
+</tr>
+<tr class="odd">
+<td>admin_dose1_cumulative</td>
+<td>Cumulative count of first doses administered of a two-dose COVID-19
+vaccine series</td>
+</tr>
+<tr class="even">
+<td>admin_dose2_daily</td>
+<td>Daily count of second doses (out of 2)</td>
+</tr>
+<tr class="odd">
+<td>admin_dose2_cumulative</td>
+<td>Cumulative count of second doses (out of 2)</td>
+</tr>
+<tr class="even">
+<td>admin_single_daily</td>
+<td>Daily count of single-dose COVID-19 vaccine administered
+(i.e. Johnson&amp;Johnson)</td>
+</tr>
+<tr class="odd">
+<td>admin_single_cumulative</td>
+<td>Cumulative count of single-dose COVID-19 vaccine administered</td>
+</tr>
+<tr class="even">
+<td>admin_additional1_daily</td>
+<td>Daily count of first booster doses or third doses administered for
+immunocompromised</td>
+</tr>
+<tr class="odd">
+<td>admin_additional1_cumulative</td>
+<td>Cumulative count of first booster doses or third doses administered
+for immunocompromised</td>
+</tr>
+<tr class="even">
+<td>admin_additional2_daily</td>
+<td>Daily count of second booster doses and the first booster dose for
+immunocompromised</td>
+</tr>
+<tr class="odd">
+<td>admin_additional2_cumulative</td>
+<td>Cumulative count of second booster doses and the first booster dose
+for immunocompromised</td>
+</tr>
+<tr class="even">
+<td>admin_additional_daily</td>
+<td>Daily count of additional1 and 2</td>
+</tr>
+<tr class="odd">
+<td>admin_additional_cumulative</td>
+<td>Cumulative count of additional1 and 2</td>
+</tr>
+<tr class="even">
+<td>admin_alldoses_daily</td>
+<td>Daily count of all COVID-19 vaccine doses</td>
+</tr>
+<tr class="odd">
+<td>admin_alldoses_cumulative</td>
+<td>Cumulative count of all COVID-19 vaccine doses</td>
+</tr>
+</tbody>
+</table>
+<p><strong>People</strong></p>
+<p>Scraping method: We used datasets in NYC Health’s Covid-Vaccine-Data
+Github repository. The datasets we are interested in are updated on a
+weekly basis and NYC health overwrites previous week’s data in each
+update. Therefore, there are no centralized files that contain all
+previous updates and we need to go through all their Github commit
+history to download previous versions. To do this in an efficient way,
+we want to use Github API to collect all links to previous versions of a
+file and then iterate all links to download and combine the
+corresponding csv file. We wrote an R function for this part. This
+function sends a query request with the file name to NYC Health’s Github
+repository and the results are commit history sorted by “author-date”,
+the date that the author modified the file. Then the function iterates
+through commit history to collect the final updates for each week, since
+there are cases when NYC Health updated a file multiple times during the
+week. Finally, this function constructs the raw.githubusercontent links
+to each file with time, date, sha code and file name</p>
+<ul>
+<li><em>Limitation of Estimated Vaccination Rates</em></li>
+</ul>
+<p>NYC Health collect vaccination count for each location at various
+level of geographic resolution (eg. neighborhood, borough) and then
+calculate an estimated vaccination rate with corresponding population.
+As the area of location gets smaller, their estimate for population has
+more variability. As a result of this, some estimated vaccination rates
+are larger than 100%. This is a problem acknowledged by NYC Health and
+is documented on their GitHub readme file. It is beyond the scope of
+this project to find additional population sources to adjust their
+estimated vaccination rate. Therefore, we decided to use the same data
+as NYC Health.</p>
+<p><strong>COVID-19 Variant Data</strong></p>
+<p>Variant data is documented with variant lineage number. We tried our
+best to match each lineage number with SIG Variant classification and
+used CDC’s documentation as a <a
+href="https://www.cdc.gov/coronavirus/2019-ncov/variants/variant-classifications.html">reference</a></p>
+<pre class="r"><code>nyc_variant_data &lt;- read_csv(&quot;./Data/nyc_variant_data.csv&quot;) %&gt;%
+  clean_names() 
+
+nyc_variant_percent &lt;- nyc_variant_data %&gt;%
+  pivot_longer(cols = ends_with(&quot;_percent&quot;),
+               names_to = &quot;variant&quot;,
+               names_pattern = &quot;(.*)_percent&quot;,
+               values_to = &quot;percent&quot;) %&gt;%
+  select(sequence_week, variant, percent) %&gt;%
+  mutate(sequence_week = as.Date(sequence_week,&quot;%m/%d/%Y&quot;),
+         variant = case_when(
+           variant %in% c(&quot;b_1_1_7&quot;) ~ &quot;Alpha&quot;,
+           variant %in% c(&quot;b_1_351&quot;) ~ &quot;Beta&quot;,
+           variant %in% c(&quot;p_1&quot;) ~ &quot;Gamma&quot;,
+           variant %in% c(&quot;b_1_617_2&quot;) ~ &quot;Delta&quot;,
+           variant %in% c(&quot;b_1_429&quot;, &quot;b_1_427&quot;) ~ &quot;Epsilon&quot;,
+           variant %in% c(&quot;b_1_525&quot;) ~ &quot;Eta&quot;,
+           str_detect(variant, &quot;b_1_526_&quot;) ~ &quot;Iota&quot;,
+           str_detect(variant, &quot;ba_&quot;)  ~ &quot;Omicron&quot;,
+           str_detect(variant, &quot;bf_&quot;) ~ &quot;Omicron&quot;,
+           str_detect(variant, &quot;bq_&quot;) ~ &quot;Omicron&quot;,
+           str_detect(variant, &quot;b_1_621&quot;) ~ &quot;Mu&quot;,
+           TRUE ~ variant
+        )) %&gt;%
+  group_by(sequence_week, variant) %&gt;%
+  summarise(percent = sum(percent))</code></pre>
+<table>
+<colgroup>
+<col width="38%" />
+<col width="61%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>sequence_week</td>
+<td>The date of the first day in the sequencing week</td>
+</tr>
+<tr class="even">
+<td>variant</td>
+<td>The common classification of the variant(i.e. Alpha)</td>
+</tr>
+<tr class="odd">
+<td>percent</td>
+<td>The percentages of every variant type/classification in a specific
+sequencing week</td>
+</tr>
+</tbody>
+</table>
+<p><em>For nyc_variant_percent dataframe</em></p>
+<p><strong>New York State Statewide COVID-19 Reinfection
+Data</strong></p>
+<p>Since we aim to characterize the trends of first infections and
+reinfections in NYC, we filter “New York City” in redc_region column.
+And here are the defination of major variables.</p>
+<table>
+<colgroup>
+<col width="38%" />
+<col width="61%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>date</td>
+<td>The date (Monday) of 7-days for reinfection data was collected</td>
+</tr>
+<tr class="even">
+<td>first_infections_count</td>
+<td>Count of positive results for the first time identified</td>
+</tr>
+<tr class="odd">
+<td>reinfections_count</td>
+<td>Count of reinfection positive results</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hospitalization and Death Data</strong></p>
+<p>To better compare the trends of these health
+outcomes(reinfections/hospitalizations/deaths), we broke down days by
+weeks. After that, we combined 2 datasets (Hospitalization and Death
+Data/Reinfection Data)</p>
+<table>
+<colgroup>
+<col width="38%" />
+<col width="61%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>week</td>
+<td>The date of the first day in a week</td>
+</tr>
+<tr class="even">
+<td>deaths</td>
+<td>Total count of deaths among COVID-19 cases in a week</td>
+</tr>
+<tr class="odd">
+<td>hospitalizations</td>
+<td>Total count of COVID-19 patients who were hospitalized in a
+week</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
