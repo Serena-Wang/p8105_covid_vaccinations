@@ -1,0 +1,94 @@
+---
+title: "Report"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+  always_allow_html: true
+---
+
+## Motivation
+
+Over the past three years of the COVID-19 pandemic, vaccines and booster doses have been instrumental in reducing the impact of the virus by controlling the number of infections. Taking the population in NYC as a whole, we aim to identify and compare the trend in three health outcomes: a) infection rate (first infection & reinfection), b)death, c) hospitalization over the course of February 2020 to November 2022. Additionally, taking into context the systematic disparities in access to health resources, we wanted to explore whether there exist disparities in vaccination rates across different races, ages, and geographies. Lastly, we also want to examine the possible associations between vaccination rate and a range of demographic & geographic predictors with the help of statistical tests.
+
+## Related work
+
+With travel and tourism almost back in full swing, news of new infections and reinfections across NYC became more common over the past year. Due to this and the release of the new bivalent booster that was being suggested as an additional protective measure, we were interested in comprehending the current situation of vaccination trends in New York City in order to gain insight into existing patterns.
+In terms of content, there are many resources about the COVID-19 vaccination rate and coverage scopes in regards to New York City. In particular, we were inspired by [this post](https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html) by NYTimes and wanted to analyze vaccination rates in NYC at a demographic level. Over the course of  our search for feasible and relevant datasets, we also found some interesting graphics on NYC Health website. One of the main objectives of our project was to create informative trend visualizations and to improve some of the graphics using  tools that  we have learnt in class. 
+
+## Initial questions
+
+* What is the trend of cumulative vaccination counts in NYC?
+* What is the trend amongst various vaccine types?
+* What is the trend in infection/reinfection counts, and is there any interesting information we can recognize when comparing this to the abovementioned trends?
+* Are vaccination rates influenced by demographic/race-based features? If so, what are the underlying trends? 
+* What should be the predictors for vaccination rate? Also, is there a significant association between vaccination rate and races / ages / gender / boroughs?
+
+
+## Data
+
+### Source
+
+### Scraping Method
+
+We used datasets in NYC Health’s Covid-Vaccine-Data Github repository. The datasets we are interested in are updated on a weekly basis and NYC health overwrites previous week’s data in each update. Therefore, there are no centralized files that contain all previous updates and we need to go through all their Github commit history to download previous versions.  To do this in an efficient way,  we want to use Github API to collect all links to previous versions of a file and then iterate all links to download and combine the corresponding csv file.  We wrote an R function for this part. This function sends a query request with the file name to NYC Health’s Github repository and the results are commit history sorted by “author-date”, the date that the author modified the file. Then the function iterates through commit history to collect the final updates for each week, since there are cases when NYC Health updated a file multiple times during the week. Finally, this function constructs the raw.githubusercontent links to each file with time, date, sha code and file name.
+
+### Data Cleaning
+
+Fortunately, the data on NYC Health’s Github repository are in a very clean format. We did not need to do any extra cleaning procedures. We only need to reformat the data to create the plot for our analysis. Since some of the data files have daily cumulative observations and some have weekly observations, we need to standardize our data to only include the datapoint for each Sunday as a summary measure for each week. This is used to make our Shiny app and heatmaps. 
+
+Variant data is documented with variant lineage number. We tried our best to match each lineage number with SIG Variant classification and used CDC’s [documentation](https://www.cdc.gov/coronavirus/2019-ncov/variants/variant-classifications.html) as a reference.
+
+### Limitation of Estimated Vaccination Rates
+
+NYC Health collect vaccination count for each location at various level of geographic resolution (eg. neighborhood, borough) and then calculate an estimated vaccination rate with corresponding population. As the area of location gets smaller, their estimate for population has more variability. As a result of this, some estimated vaccination rates are larger than 100%. This is a problem acknowledged by NYC Health and is documented on their GitHub readme file. It is beyond the scope of this project to find additional  population sources to adjust their estimated vaccination rate. Therefore, we decided to use the same data as NYC Health. 
+
+
+## Exploratory Analysis 
+
+### [Variant Plot](https://serena-wang.github.io/p8105_covid_vaccinations/exploratory_analysis.html#COVID-19_Variant)
+
+This figure aims to visualize the overall trend of variant sequencing during the pandemic. We hope this plot could be a reference for people’s choice of dates in the Shiny  app. Our dataset includes information of a COVID-19 test sample sent to the lab. The data include dates, the specific variant name of positive tests, and number of positive tests for each variant. This figure plots the proportion of occurrence for each variant throughout the pandemic. 
+
+Observations: 
+
+* We can see a clear trend for each wave: when they started and when they ended. An additional important piece of information is the relative change in occurrence with respect to each variant. 
+
+* Key time period: 
+  - Delta wave: July 3rd 2021 - December 11th 2021
+  - Omicron wave: December 18th 2021 - now. This includes multiple sub-lineages of omicron variant. 
+
+### [Overall Vaccines, Infection/Reinfection Trends](https://tvishad.shinyapps.io/shiny/)
+
+This information was presented in the format of a shiny flexdashboard. Here, the user gets the chance to explore trends amongst different  vaccine coverage  and the simultaneous trends in COVID first infections and re-infections. The different coverages include: 
+
+* All primary doses - This is the sum of dose 1 & dose 2 of a 2-dose series, and a single dose of a 1 dose series. 
+* All boosters - This is the sum of 1st and 2nd booster doses as well as additional doses for immunocompromised individuals. 
+* All the above-mentioned dose types individually.
+
+As the dose-by-date data from the NYC Dept. of Health and Mental Hygiene spans from Dec-2020 to Nov 2022, we have created a date range input feature that allows the user to explore weekly and cumulative vaccine count data across a time range of interest. 
+
+For the weekly vaccines - infection - reinfection counts plot, a left join was performed (reinfection data onto dose-by-day data) using date as the shared ID. In this process, it was mainly challenging to figure out the process of passing reactive input into plotly and to identify the most effective way for grouping data by weeks to generate the weekly counts. 
+The plot on the bottom reveals simultaneous trends in COVID-related deaths and hospitalizations in a weekly manner. As the scales for these counts were widely different from the weekly counts of the vaccinations, infections, and reinfections, we have decided to visualize them individually on a separate plot. As they are all positioned on the same page, it is convenient for the user to look at several different levels of information at a single glance.
+
+Observations: 
+
+* There were two main peaks in vaccinations: between March to May 2021 (mainly consisting of primary doses) and between November 2021 and January 2022 (consisting of booster doses).
+* Infection and reinfection cases peaked around December 2021 - January 2022 (coinciding with the holidays when people started traveling again). However, another reason for this seasonal spike to particularly stand out could be the fact that this segment in time is after testing was made highly commonplace. That is, earlier spikes in counts of infection could be missing simply due to the lack of data from those points in time. This peak also coincides with a rise in hospitalizations and death counts. 
+* During the period that Delta variant was dominant in lab sample sequences, cumulative vaccination rate climbed steadily reaching to the peaks. 
+* Most COVID related hospitalizations and deaths occurred between March and April 2020. This was considerably prior to the vaccine rollouts. 
+
+### [Heatmaps](https://serena-wang.github.io/p8105_covid_vaccinations/exploratory_analysis.html#Vaccination_Rate_-_Demographic_Features)
+
+We did an exploratory analysis of the relationship among vaccination rate and different demographic features. In this section, we focused on 2 vaccination statuses: complete primary series vaccination and booster vaccination. The definition of each vaccination status is outlined in our section. For each vaccination status and a demographic feature, we plotted a line plot for overall weekly progress for vaccination rate colored by each level of the demographic feature, and a heatmap for the latest status of vaccination rates. 
+
+Observations: 
+
+* Primary series vaccination rate is steadily increasing for all boroughs and all-age group, with Queens having the highest vaccination rate and Brooklyn having the lowest vaccination rate. Specifically by age group and borough, until November 29th, age groups from children (13-17) to (adults 18+)  have higher vaccination rates across all boroughs, compared with lower age groups. 
+* Booster vaccination rate is also steadily increasing for all boroughs with Manhattan having the highest and Bronx having the lowest. Approximately, primary series vaccination rates are at least 1.5 times of booster vaccination rate across boroughs for all-age group. Taking age groups into account, until  November 29th, adults (18+)  have higher vaccination rates across all boroughs, compared with lower age groups. 
+* From the race/ethnicity perspective, primary series vaccination rate does not have too much variability for most race groups, except Aisan/NHPI. Based on the heatmap, native american and asian population has higher vaccination rate across all age group, compared with other race groups. Overall, there is not much difference in terms of vaccination rate across age groups, if stratified by race. 
+* From the race/ethnicity perspective, booster vaccination rate has a similar trend, with native american and asian population having the top 2 highest vaccination rate. Booster vaccination rate is much lower than primary vaccination rate. However, adults have higher booster vaccination rates than children for all race groups. Among the children population, Asian children (13-17) have the highest booster vaccination rate. 
+* Female primary series vaccination rate and male primary series vaccination rate are very similar. Until November 29th, age groups from children (13-17) to (adults 18+)  have higher vaccination rates for all sexes, compared with lower age groups. 
+* Similarly, booster vaccination rates by sex are very close. Until November 29th, adults have higher booster vaccination rates than children for all sexes.  
+
+

@@ -5,22 +5,23 @@ navbar:
   left:
   - text: About
     menu:
-    - text: "Our Project"
-      href: project_report.html
+    - text: "Report"
+      href: report.html
    
   right:
     - text: "Data Pre-Processing"
       href: PRE_PROCESSING.html
+    - text: "Overall Vaccination Trends"
+      href: https://tvishad.shinyapps.io/shiny/
     - text: "Exploratory Analysis"
       href: exploratory_analysis.html
     - text: "Statistical Analysis"
-      href: demographic_features.html
-    - text: "Model Prediction"
-      href: demographic_features.html
-    - text: "Overall Vaccination Trends"
-      href: https://tvishad.shinyapps.io/shiny/
+      href: statistical-analysis.html
+    - text: "Model Fitting"
+      href: Model-Fitting.html
     - icon: fa-github fa-lg
       href: https://github.com/Serena-Wang/p8105_covid_vaccinations
+
 output:
   html_document:
     theme: journal
