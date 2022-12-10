@@ -381,14 +381,14 @@ div.tocify {
 </div>
 
 
-<div id="data-sources" class="section level3">
-<h3>Data Sources</h3>
+<div id="data-sources" class="section level2">
+<h2>Data Sources</h2>
 <div
 id="new-york-city-department-of-health-and-mental-hygiene-nyc-dohmh"
-class="section level4">
-<h4>New York City Department of Health and Mental Hygiene <a
+class="section level3">
+<h3>New York City Department of Health and Mental Hygiene <a
 href="https://www.nyc.gov/site/doh/data/data-home.page">(NYC
-DOHMH)</a></h4>
+DOHMH)</a></h3>
 <p><strong>Doses</strong> <a
 href="https://github.com/nychealth/covid-vaccine-data/blob/main/doses/doses-by-day.csv">(Source)</a></p>
 <p>This GitHub folder contains data on the COVID-19 vaccine administered
@@ -403,7 +403,8 @@ href="https://github.com/nychealth/covid-vaccine-data/tree/main/people">(Source)
 vaccinated for COVID-19 in NYC, NYS, NJ or elsewhere and reported to the
 CIR by NYC providers. We merged all the data related to “coverage by
 demo” to <code>coverage by demo full data</code> and “coverage by boro
-demo” to <code>coverage boro demo full data</code> from history.
+demo” to <code>coverage boro demo full data</code> from history.(See
+<code>get_coverage_by_demo_full.R</code> file in out github website)
 “coverage by demo” files contain information about the cumulative counts
 and estimated percentage of people who received COVID-19 vaccine
 stratified by age, race/ethnicity, and gender. “coverage by boro demo”
@@ -428,39 +429,55 @@ race/ethnicity or sex are available.</p></li>
 </ul>
 </div>
 <div id="new-york-state-department-of-health-nys-dh"
-class="section level4">
-<h4>New York State Department of Health <a
+class="section level3">
+<h3>New York State Department of Health <a
 href="https://coronavirus.health.ny.gov/covid-19-data-new-york">(NYS
-DH)</a></h4>
+DH)</a></h3>
+<p><strong>COVID-19 Variant Data</strong> <a
+href="https://coronavirus.health.ny.gov/covid-19-variant-data">(Source)</a></p>
+<p>After the original virus has one or more mutations, we call it a
+variant. While COVID-19 virus (SARS-CoV-2) has hundreds of variants
+identified and described. We are more interested in the number and
+distribution of variants defined as of concern or of interest. This
+variant data is collected from the Global Initiative on Sharing Avian
+Influenza Data (GISAID) database – the world’s largest SARS-CoV-2
+sequence data and pulled from the CDC data of general surveillance data
+on a sample of SARS-CoV-2 specimens from around the United States.</p>
+<p>We should notice:</p>
+<ul>
+<li><p>Because uploading specimens to the database can be delayed, we
+should carefully interpret the data for the most recent time
+interval.</p></li>
+<li><p>Only pulled data related to New York State, organized by a
+specific time frame of specimen collection.</p></li>
+<li><p>Specimens from CDC’s program may also upload into
+GISAID.</p></li>
+</ul>
 <p><strong>New York State Statewide COVID-19 Reinfection Data</strong>
 <a
 href="https://health.data.ny.gov/Health/New-York-State-Statewide-COVID-19-Reinfection-Data/7aaj-cdtu">(Source)</a></p>
-<p>This dataset reports the number of reinfections in New York State
-since January 2021. A reinfection is when a person becomes infected with
-COVID and later becomes infected again. A person is considered a
-reinfection if they test positive again 90 days or more after their
-first positive test. The goal of this dataset is to provide users timely
-information about the trends in reinfections in New York State. This
-dataset is created by the New York State Department of Health from data
-reported to Electronica Clinical Laboratory Reporting System
-(ECLRS).</p>
-<p><strong>COVID-19 Variant Data</strong> <a
-href="https://coronavirus.health.ny.gov/covid-19-variant-data">(Source)</a></p>
-<p>We called it a variant after the original virus had one or more
-mutations. And the COVID-19 virus (SARS-CoV-2) has hundreds of variants
-identified and described.</p>
+<p>This dataset reports the number of first infections and reinfections
+in New York State since January 2021, broken down by week. With the aim
+to show the trends in Reinfections (first infections and reinfections)
+in New York City, we only used the data from New York City. <em>Created
+by the New York State Department of Health from data reported to
+Electronica Clinical Laboratory Reporting System (ECLRS)</em>. And we
+defined reinfection as the test turning positive again within 90 days or
+more after the first positive test.</p>
 </div>
-<div id="nyc-opendata-nyc-od" class="section level4">
-<h4>NYC OpenData <a
+<div id="nyc-opendata-nyc-od" class="section level3">
+<h3>NYC OpenData <a
 href="https://data.cityofnewyork.us/Health/COVID-19-Daily-Counts-of-Cases-Hospitalizations-an/rc75-m7u3">(NYC
-OD)</a></h4>
-<p>Daily count of NYC residents who tested positive for SARS-CoV-2, who
-were hospitalized with COVID-19, and deaths among COVID-19 patients.
-<em>Notice: this dataset is actually provided by NYC DOHMH</em></p>
+OD)</a></h3>
+<p>This dataset collected daily counts of New York City residents who
+tested positive of COVID-19, hospitalizations for COVID-19, and deaths
+with COVID-19. We focus on the counts of hospitalizations and deaths to
+compare the trends of these health outcomes. <em>Notice: this dataset is
+actually provided by NYC DOHMH</em></p>
 </div>
 </div>
-<div id="data-cleaning" class="section level3">
-<h3>Data Cleaning</h3>
+<div id="data-cleaning" class="section level2">
+<h2>Data Cleaning</h2>
 </div>
 
 
