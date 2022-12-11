@@ -16,7 +16,7 @@ navbar:
     - text: "Exploratory Analysis"
       href: exploratory_analysis.html
     - text: "Statistical Analysis"
-      href: proprtion-test.html
+      href: proportion-test.html
     - text: "Model Fitting"
       href: Model-Fitting.html
     - icon: fa-github fa-lg
