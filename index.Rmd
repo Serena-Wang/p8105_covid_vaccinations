@@ -15,6 +15,13 @@ library(tidyverse)
 
 <h6 style="text-align: left;" markdown="1">By: Qingyue Zhuo |  Baoyi Feng |  Yijin Wang |  Tvisha Devavarapu </h6>
 
+<br></br>
+
+<left>
+<iframe width="840" height="472" src="https://youtu.be/_D236NektxM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</left>
+
+
 ## Background
 
 Since the discovery of multiple cases of COVID-19 in December 2019, the outbreak has spread rapidly across the globe, resulting in many infections and deaths and posing a significant threat to global public health security. Because no targeted drug is available, a vaccine for the coronavirus is critical to contain the spread of COVID-19. We currently have several major vaccines and booster vaccines available from Pfizer, Moderna, and Johnson & Johnson in NYC, which have shown promising results in reducing the overall infection rate.
