@@ -12,6 +12,18 @@ library(modelr)
 library(mgcv)
 ```
 
+From the previous data exploration, visualization and analysis process, we notice that several geographical and demographic factors may have a direct influence on the overall vaccination rate in NYC. Here we want to dig deeper into the data set and form the statistical relationship between vaccination rate and the spatial & social indicators. We conducted proportion test to examine the significant predictors among borough, race, age, and gender in determining the vaccination rate in NYC. 
+
+### Description of Dataset:
+
+* The Coverage_by_Boro dataset contains the absolute counts and estimated percentage of NYC residents vaccinated for COVID-19. People are stratified by age, race/ethnicity, gender, or geographical locations.  For each group, the observations were further divided into subgroups. Vaccination results by specific demographic category or geographical areas were recorded by day. We selected vaccination counts rather than estimated rates as our response variable, mainly because it provides the first-hand information of people's vaccination status. We used this dataset to test the significance of predictors. 
+  - Target variable : counts of fully vaccinated -  the number of people in population who completed the major series of COVID vaccination in the subgroup
+
+* The Coverage_demo_full data set contains the number and percentage of NYC residents vaccinated for COVID-19. People are categorized by both age and race/ethnicity. We selected the percentage of fully vaccinated people as our target variable adjusting for different group sizes. We used this dataset to fit the model.
+  - Target Variable in model fitting : percentage of fully vaccinated -  the estimated percentage of the population who completed the major series of COVID vaccination in the subgroup
+
+
+
 ### Selection of Predictors
 
 * Data Cleaning
@@ -72,8 +84,8 @@ Conclusion: The p-value is much smaller than the critical value alpha = 0.5, so 
 
 Second, we want to examine whether the COVID vaccination rate is the same across different race group in NYC so we stratified people by their races. We predicted that there is no difference in vaccination rate in NYC across the races.
 
-H0: the fully vaccination rate is the same across all boroughs.
-H1: the fully vaccination rate is not same across all boroughs.
+H0: the fully vaccination rate is the same across all races
+H1: the fully vaccination rate is not same across all races.
 
 ```{r}
 demo_race = 
@@ -100,8 +112,14 @@ knitr::kable(demo_race, digit = 3)
 prop.test(as.data.frame(demo_race)$x, as.data.frame(demo_race)$n)
 ```
 
+Conclusion: The p-value is much smaller than the critical value alpha = 0.5, so we could reject the null hypothesis and conclude that the fully vaccinated rate is different by races in NYC.
 
 * Sex
+
+Then, we want to test whether the COVID vaccination rate is constant between male and female population in NYC so we grouped people by their gender. We predicted that there is no difference in vaccination rate in NYC across the gender.
+
+H0: the fully vaccination rate is the same for male and female.
+H1: the fully vaccination rate is not same for male and female.
 
 ```{r}
 demo_sex = 
@@ -127,7 +145,14 @@ knitr::kable(demo_sex, digit = 3)
 prop.test(as.data.frame(demo_sex)$x, as.data.frame(demo_sex)$n)
 ```
 
+Conclusion: The p-value is much smaller than the critical value alpha = 0.5, so we could reject the null hypothesis and conclude that the fully vaccinated rate is different by gender in NYC.
+
 * age
+
+Last, we want to test whether the COVID vaccination rate is the same across different age groups in NYC so we grouped people by their ages. We predicted that there is no difference in vaccination rate in NYC across their ages.
+
+H0: the fully vaccination rate is the same for different age groups.
+H1: the fully vaccination rate is not same for different age groups.
 
 ```{r}
 demo_age = 
@@ -153,4 +178,7 @@ knitr::kable(demo_age, digits = 3)
 ```{r}
 prop.test(as.data.frame(demo_age)$x, as.data.frame(demo_age)$n)
 ```
+
+Conclusion: The p-value is much smaller than the critical value alpha = 0.5, so we could reject the null hypothesis and conclude that the fully vaccinated rate is different by age groups in NYC.
+
 

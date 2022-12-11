@@ -14,12 +14,6 @@ library(tidyverse)
 library(modelr)
 library(mgcv)
 
-stratified = 
-  read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv") %>%
-  janitor::clean_names() %>%
-  select(group, subgroup, perc_partially, perc_fully, perc_additional) %>%
-  drop_na()
-
 unstratified = 
   read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_boro_demo_full.csv") %>%
   janitor::clean_names() %>%
@@ -31,7 +25,7 @@ unstratified =
 
 ## Model Fitting
 
-We propose 3 models for prediction based on previous analysis: 
+We propose 3 models for prediction based on previous analysis & data availability: 
 
  1. Linear Model of city_perc_fully ~ age_group  
 
