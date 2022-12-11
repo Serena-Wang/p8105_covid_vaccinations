@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Qingyue Zhuo qz2493" />
+
+<meta name="date" content="2022-12-11" />
+
+<title>prop_test</title>
+
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    About
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="project_report.html">Our Project</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="PRE_PROCESSING.html">Data Pre-Processing</a>
+</li>
+<li>
+  <a href="exploratory_analysis.html">Exploratory Analysis</a>
+</li>
+<li>
+  <a href="demographic_features.html">Statistical Analysis</a>
+</li>
+<li>
+  <a href="Model-Fitting.html">Model Prediction</a>
+</li>
+<li>
+  <a href="https://tvishad.shinyapps.io/shiny/">Overall Vaccination Trends</a>
+</li>
+<li>
+  <a href="https://github.com/Serena-Wang/p8105_covid_vaccinations">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">prop_test</h1>
+<h4 class="author">Qingyue Zhuo qz2493</h4>
+<h4 class="date">2022-12-11</h4>
+
+</div>
+
+
+<div id="selection-of-predictors" class="section level3">
+<h3>Selection of Predictors</h3>
+<ul>
+<li>Data Cleaning The first dataset is stratified by age,
+race/ethnicity, gender, or geographical locations.</li>
+</ul>
+<pre class="r"><code>stratified = 
+  read_csv(&quot;https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv&quot;) %&gt;%
+  janitor::clean_names() %&gt;%
+  select(group, subgroup, count_fully_cumulative, pop_denominator ) %&gt;%
+  drop_na()</code></pre>
+<pre><code>## Rows: 30352 Columns: 13
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (3): POPULATION, GROUP, SUBGROUP
+## dbl  (9): POP_DENOMINATOR, COUNT_PARTIALLY_CUMULATIVE, COUNT_FULLY_CUMULATIV...
+## date (1): DATE
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>The second dataset categorizes observations by their age group and
+race/ethnicity.</p>
+<pre class="r"><code>unstratified = 
+  read_csv(&quot;https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_boro_demo_full.csv&quot;) %&gt;%
+  janitor::clean_names() %&gt;%
+  select(age_group, race_ethnicity, city_count_fully_cumulative) %&gt;%
+  filter(
+    !age_group %in% c(&quot;Boroughwide&quot;, &quot;All ages&quot;, &quot;65+&quot;, &quot;13-17&quot;, &quot;18-44&quot;, &quot;45-64&quot;) 
+)</code></pre>
+<pre><code>## Rows: 9233 Columns: 15
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr   (2): AGE_GROUP, RACE_ETHNICITY
+## dbl  (12): CITY_COUNT_FULLY_CUMULATIVE, BX_COUNT_FULLY_CUMULATIVE, BK_COUNT_...
+## date  (1): DATE
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<ul>
+<li>Borough</li>
+</ul>
+<pre class="r"><code>demo_boro = 
+  stratified %&gt;%
+  filter(group == &quot;Borough&quot;) %&gt;% 
+  select(-group) %&gt;%
+  group_by(subgroup) %&gt;%
+  summarise(
+    x = sum(count_fully_cumulative),
+    n = sum(pop_denominator)) %&gt;%
+  filter(subgroup != &quot;Citywide&quot;) %&gt;%
+  select(-subgroup) %&gt;%
+  data.matrix()
+
+rownames(demo_boro) = c(&quot;Bronx&quot;, &quot;Brooklyn&quot;, &quot;Manhattan&quot;, &quot;Queens&quot;, &quot;Staten Island&quot;)
+
+knitr::kable(demo_boro, digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">x</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Bronx</td>
+<td align="right">722298779</td>
+<td align="right">1088999695</td>
+</tr>
+<tr class="even">
+<td align="left">Brooklyn</td>
+<td align="right">1286110295</td>
+<td align="right">1967855396</td>
+</tr>
+<tr class="odd">
+<td align="left">Manhattan</td>
+<td align="right">996388120</td>
+<td align="right">1270650399</td>
+</tr>
+<tr class="even">
+<td align="left">Queens</td>
+<td align="right">1374882286</td>
+<td align="right">1750234553</td>
+</tr>
+<tr class="odd">
+<td align="left">Staten Island</td>
+<td align="right">250641732</td>
+<td align="right">368678103</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>prop.test(as.data.frame(demo_boro)$x, as.data.frame(demo_boro)$n)</code></pre>
+<pre><code>## 
+##  5-sample test for equality of proportions without continuity correction
+## 
+## data:  as.data.frame(demo_boro)$x out of as.data.frame(demo_boro)$n
+## X-squared = 126094494, df = 4, p-value &lt; 2.2e-16
+## alternative hypothesis: two.sided
+## sample estimates:
+##    prop 1    prop 2    prop 3    prop 4    prop 5 
+## 0.6632681 0.6535594 0.7841560 0.7855417 0.6798389</code></pre>
+<ul>
+<li>Race</li>
+</ul>
+<pre class="r"><code>demo_race = 
+  stratified %&gt;%
+  filter(group == &quot;Race/ethnicity&quot;) %&gt;%
+
+  select(-group) %&gt;%
+  group_by(subgroup) %&gt;%
+  summarise(
+    x = sum(count_fully_cumulative),
+    n = sum(pop_denominator)) %&gt;%
+  filter(!subgroup %in% c( &quot;Native American/Alaska Native&quot;, &quot;Other&quot;, &quot;Unknown&quot;)) %&gt;%
+  select(-subgroup) %&gt;%
+  data.matrix()
+
+rownames(demo_race) = c(&quot;Asian&quot;, &quot;Black&quot;, &quot;Hispanic/Latino&quot;, &quot;Multiracial&quot;,&quot;White&quot;)
+
+knitr::kable(demo_race, digit = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">x</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Asian</td>
+<td align="right">847727388</td>
+<td align="right">960247461</td>
+</tr>
+<tr class="even">
+<td align="left">Black</td>
+<td align="right">707517792</td>
+<td align="right">1415073553</td>
+</tr>
+<tr class="odd">
+<td align="left">Hispanic/Latino</td>
+<td align="right">1178475578</td>
+<td align="right">1857816198</td>
+</tr>
+<tr class="even">
+<td align="left">Multiracial</td>
+<td align="right">4779670</td>
+<td align="right">112159215</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">1198886993</td>
+<td align="right">2086335135</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>prop.test(as.data.frame(demo_race)$x, as.data.frame(demo_race)$n)</code></pre>
+<pre><code>## 
+##  5-sample test for equality of proportions without continuity correction
+## 
+## data:  as.data.frame(demo_race)$x out of as.data.frame(demo_race)$n
+## X-squared = 540764087, df = 4, p-value &lt; 2.2e-16
+## alternative hypothesis: two.sided
+## sample estimates:
+##     prop 1     prop 2     prop 3     prop 4     prop 5 
+## 0.88282180 0.49998658 0.63433378 0.04261504 0.57463778</code></pre>
+<ul>
+<li>Sex</li>
+</ul>
+<pre class="r"><code>demo_sex = 
+  stratified %&gt;%
+  filter(group == &quot;Sex&quot;) %&gt;%
+  select(-group) %&gt;%
+  group_by(subgroup) %&gt;%
+  summarise(
+    x = sum(count_fully_cumulative),
+    n = sum(pop_denominator)) %&gt;%
+  filter(!subgroup %in% c(&quot;Other&quot;, &quot;Prefer not to answer&quot;,&quot;Unknown&quot;)) %&gt;%
+  select(-subgroup) %&gt;%
+  data.matrix()
+
+rownames(demo_sex) = c(&quot;Female&quot;, &quot;Male&quot;)
+
+knitr::kable(demo_sex, digit = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">x</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="right">2432309180</td>
+<td align="right">3380636041</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="right">2154878514</td>
+<td align="right">3065782107</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>prop.test(as.data.frame(demo_sex)$x, as.data.frame(demo_sex)$n)</code></pre>
+<pre><code>## 
+##  2-sample test for equality of proportions with continuity correction
+## 
+## data:  as.data.frame(demo_sex)$x out of as.data.frame(demo_sex)$n
+## X-squared = 2159282, df = 1, p-value &lt; 2.2e-16
+## alternative hypothesis: two.sided
+## 95 percent confidence interval:
+##  0.01658003 0.01662435
+## sample estimates:
+##    prop 1    prop 2 
+## 0.7194827 0.7028805</code></pre>
+<ul>
+<li>age</li>
+</ul>
+<pre class="r"><code>demo_age = 
+  stratified %&gt;%
+  filter(
+    group == &quot;Age&quot;,
+    ! subgroup %in% c( &quot;&#39;5-12&quot;,&quot;&#39;0-4&quot;, &quot;&#39;13-17&quot;, &quot;&#39;0-17&quot;, &quot;&#39;18-24&quot;, &quot;&#39;25-34&quot;, &quot;&#39;35-44&quot;, &quot;&#39;45-54&quot;, &quot;&#39;55-64&quot;, &quot;&#39;65-74&quot;, &quot;&#39;75-84&quot;,&quot;&#39;85+&quot;))%&gt;%
+  select(-group) %&gt;% 
+  group_by(subgroup) %&gt;%
+  summarise(
+    x = sum(count_fully_cumulative),
+    n = sum(pop_denominator)) %&gt;%
+  select(-subgroup) %&gt;%
+  data.matrix() 
+
+rownames(demo_age) = c(&quot;0-17&quot;, &quot;18-24&quot;, &quot;25-34&quot;, &quot;35-44&quot;, &quot;45-54&quot;, &quot;55-64&quot;, &quot;65-74&quot;, &quot;75-84&quot;, &quot;85+&quot;)
+
+knitr::kable(demo_age, digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">x</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0-17</td>
+<td align="right">39958604</td>
+<td align="right">299925504</td>
+</tr>
+<tr class="even">
+<td align="left">18-24</td>
+<td align="right">142023582</td>
+<td align="right">248044129</td>
+</tr>
+<tr class="odd">
+<td align="left">25-34</td>
+<td align="right">312782940</td>
+<td align="right">522262048</td>
+</tr>
+<tr class="even">
+<td align="left">35-44</td>
+<td align="right">275466308</td>
+<td align="right">400190912</td>
+</tr>
+<tr class="odd">
+<td align="left">45-54</td>
+<td align="right">262406914</td>
+<td align="right">361886624</td>
+</tr>
+<tr class="even">
+<td align="left">55-64</td>
+<td align="right">271839758</td>
+<td align="right">351621396</td>
+</tr>
+<tr class="odd">
+<td align="left">65-74</td>
+<td align="right">199655338</td>
+<td align="right">253015840</td>
+</tr>
+<tr class="even">
+<td align="left">75-84</td>
+<td align="right">95008314</td>
+<td align="right">134701452</td>
+</tr>
+<tr class="odd">
+<td align="left">85+</td>
+<td align="right">35057576</td>
+<td align="right">62986176</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>prop.test(as.data.frame(demo_age)$x, as.data.frame(demo_age)$n)</code></pre>
+<pre><code>## 
+##  9-sample test for equality of proportions without continuity correction
+## 
+## data:  as.data.frame(demo_age)$x out of as.data.frame(demo_age)$n
+## X-squared = 400939241, df = 8, p-value &lt; 2.2e-16
+## alternative hypothesis: two.sided
+## sample estimates:
+##    prop 1    prop 2    prop 3    prop 4    prop 5    prop 6    prop 7    prop 8 
+## 0.1332284 0.5725739 0.5989004 0.6883372 0.7251081 0.7731036 0.7891021 0.7053251 
+##    prop 9 
+## 0.5565916</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
