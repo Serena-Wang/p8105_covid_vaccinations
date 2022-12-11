@@ -84,6 +84,8 @@ We followed our exploratory by some detailed questions:
 
 * Vaccination rate differs across age-groups and a larger group of adults (compared to children under 18) are vaccinated against COVID (at least primary series).
 
+* Vaccination rates differ by geography (borough level), race, gender, and age groups.
+
 
 ## Our team
 

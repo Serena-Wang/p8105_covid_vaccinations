@@ -13,7 +13,7 @@
 
 <title>Report</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
@@ -183,8 +183,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -192,16 +192,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -351,7 +344,7 @@ div.tocify {
   <a href="exploratory_analysis.html">Exploratory Analysis</a>
 </li>
 <li>
-  <a href="proprtion-test.html">Statistical Analysis</a>
+  <a href="proportion-test.html">Statistical Analysis</a>
 </li>
 <li>
   <a href="Model-Fitting.html">Model Fitting</a>
@@ -616,6 +609,105 @@ examine individual association of borough, race, age, and gender in
 determining the vaccination count in NYC. We then built statistical
 models between selected geographical and demographic factors and the
 primary series vaccination counts in NYC.</p>
+<div id="borough" class="section level3">
+<h3>Borough</h3>
+<p>First, we want to see whether the COVID vaccination rate is
+consistent across different parts of NYC. So we categorized people by
+borough. We predicted that there is no difference in vaccination rate in
+NYC across the six boroughs. We will perform the proportion test to
+verify our assumption.</p>
+<p>H0: the fully vaccination rate is the same across all boroughs.</p>
+<p>H1: the fully vaccination rate is not same across all boroughs.</p>
+<p>Conclusion: The p-value is much smaller than the critical value alpha
+= 0.5, so we could reject the null hypothesis and conclude that the
+fully vaccinated rate is different by geographical locations in NYC.</p>
+</div>
+<div id="race" class="section level3">
+<h3>Race</h3>
+<p>Second, we want to examine whether the COVID vaccination rate is the
+same across different race group in NYC so we stratified people by their
+races. We predicted that there is no difference in vaccination rate in
+NYC across the races.</p>
+<p>H0: the fully vaccination rate is the same across all races</p>
+<p>H1: the fully vaccination rate is not same across all races.</p>
+<p>Conclusion: The p-value is much smaller than the critical value alpha
+= 0.5, so we could reject the null hypothesis and conclude that the
+fully vaccinated rate is different by races in NYC.</p>
+</div>
+<div id="sex" class="section level3">
+<h3>Sex</h3>
+<p>Then, we want to test whether the COVID vaccination rate is constant
+between male and female population in NYC so we grouped people by their
+gender. We predicted that there is no difference in vaccination rate in
+NYC across the gender.</p>
+<p>H0: the fully vaccination rate is the same for male and female.</p>
+<p>H1: the fully vaccination rate is not same for male and female.</p>
+<p>Conclusion: The p-value is much smaller than the critical value alpha
+= 0.5, so we could reject the null hypothesis and conclude that the
+fully vaccinated rate is different by gender in NYC.</p>
+</div>
+<div id="age" class="section level3">
+<h3>age</h3>
+<p>Last, we want to test whether the COVID vaccination rate is the same
+across different age groups in NYC so we grouped people by their ages.
+We predicted that there is no difference in vaccination rate in NYC
+across their ages.</p>
+<p>H0: the fully vaccination rate is the same for different age
+groups.</p>
+<p>H1: the fully vaccination rate is not same for different age
+groups.</p>
+<p>Conclusion: The p-value is much smaller than the critical value alpha
+= 0.5, so we could reject the null hypothesis and conclude that the
+fully vaccinated rate is different by age groups in NYC.</p>
+</div>
+</div>
+<div id="model-fitting" class="section level2">
+<h2>Model Fitting</h2>
+<p>We propose 3 models for prediction based on previous analysis &amp;
+data availability:</p>
+<ol style="list-style-type: decimal">
+<li><p>Linear Model of city_perc_fully ~ age_group</p></li>
+<li><p>Linear Model of city_perc_fully ~ age_group +
+race_ethnicity</p></li>
+<li><p>Linear Model of city_perc_fully ~ age_group + race_ethnicity +
+age_group * race_ethnicity, assuming that there are interaction</p></li>
+</ol>
+<div id="age-group-model" class="section level3">
+<h3>Age Group Model</h3>
+<p>Age group model is a simple linear model that contains only the most
+significant predictor: age of the NYC residents. Age predictor has five
+levels: 5-12, 13-17, 18-44, 45-64 and 65+.</p>
+</div>
+<div id="main-effect-model" class="section level3">
+<h3>Main Effect Model</h3>
+<p>Main effect model contains is a multiple linear regression model with
+two predictors: age and race/ethnicity. Age predictor has five levels:
+5-12, 13-17, 18-44, 45-64 and 65+. And race group has three levels:
+Black, White, and Hispanic/Latino.</p>
+</div>
+<div id="interaction-model" class="section level3">
+<h3>Interaction Model</h3>
+<p>Interaction model is a multiple linear regression model with three
+predictiors: age, race, and age*race.</p>
+</div>
+<div id="cross-validation" class="section level3">
+<h3>Cross Validation</h3>
+<p>Although race is not statistically significant under the critical
+value alpha = 0.05, it increases the prediction ability of the simple
+linear model : lm(city_perc_fully ~ age_group). What’s more, we notice
+that interaction term is contributing to model predictability as well.
+We would say the interaction model will be better than the other one
+because its root means square error seems to be smaller. Therefore,
+interaction model could be useful for predicting the fully vaccinated
+rate in NYC.</p>
+</div>
+<div id="model-conclusion" class="section level3">
+<h3>Model Conclusion</h3>
+<p>We select the linear model of city_perc_fully ~ age_group +
+race_ethnicity + age_group * race_ethnicity</p>
+<p>Age, race and their interaction term are good predictors for
+anticipating the COVID vaccination rate in NYC.</p>
+</div>
 </div>
 <div id="discussion" class="section level2">
 <h2>Discussion:</h2>
@@ -641,6 +733,8 @@ series vaccination rate across the board.</li>
 <li>Vaccination rate differs across age-groups and a larger group of
 adults (compared to children under 18) are vaccinated against COVID (at
 least primary series).</li>
+<li>Vaccination rates differ by geography (borough level), race, gender,
+and age groups.</li>
 </ul>
 </div>
 <div id="products" class="section level3">

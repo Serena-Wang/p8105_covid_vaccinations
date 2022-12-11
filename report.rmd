@@ -93,8 +93,269 @@ Observations:
 
 ## Hypothesis Testing
 
+```{r include=FALSE}
+knitr::opts_chunk$set(include = FALSE)
+library(tidyverse)
+library(modelr)
+library(mgcv)
+```
+
 According to the tidy dataset, several geographical and demographic factors were measured across time, and may have a direct influence on the overall vaccination count in NYC. We conducted chi-square tests to examine individual association of borough, race, age, and gender in determining the vaccination count in NYC. We then built statistical models between selected geographical and demographic factors and the primary series vaccination counts in NYC. 
 
+```{r message=FALSE, warning=FALSE, include=FALSE}
+stratified = 
+  read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv") %>%
+  janitor::clean_names() %>%
+  select(date, population, group, subgroup, count_fully_cumulative, pop_denominator ) %>%
+  drop_na()
+
+knitr::kable(head(stratified), digits = 3)
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+unstratified = 
+  read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_boro_demo_full.csv") %>%
+  janitor::clean_names() %>%
+  select(age_group, race_ethnicity, city_count_fully_cumulative) %>%
+  filter(
+    !age_group %in% c("Boroughwide", "All ages", "65+", "13-17", "18-44", "45-64") 
+)
+
+knitr::kable(head(unstratified), digits = 3)
+```
+
+### Borough
+
+First, we want to see whether the COVID vaccination rate is consistent across different parts of NYC. So we categorized people by borough. We predicted that there is no difference in vaccination rate in NYC across the six boroughs. We will perform the proportion test to verify our assumption.
+
+H0: the fully vaccination rate is the same across all boroughs.
+
+H1: the fully vaccination rate is not same across all boroughs.
+
+```{r echo=TRUE}
+demo_boro = 
+  stratified %>%
+  filter(group == "Borough",
+         date == max(date),
+         population == "All ages") %>%
+  select(-group, -date, -population) %>%
+  group_by(subgroup) %>%
+  summarise(
+    x = count_fully_cumulative,
+    n = pop_denominator) %>%
+  filter(subgroup != "Citywide") %>%
+  select(-subgroup) %>%
+  data.matrix()
+
+rownames(demo_boro) = c("Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island")
+
+knitr::kable(demo_boro, digits = 3)
+```
+
+```{r echo=TRUE}
+prop.test(as.data.frame(demo_boro)$x, as.data.frame(demo_boro)$n)
+```
+
+Conclusion: The p-value is much smaller than the critical value alpha = 0.5, so we could reject the null hypothesis and conclude that the fully vaccinated rate is different by geographical locations in NYC.
+
+### Race
+
+Second, we want to examine whether the COVID vaccination rate is the same across different race group in NYC so we stratified people by their races. We predicted that there is no difference in vaccination rate in NYC across the races.
+
+H0: the fully vaccination rate is the same across all races
+
+H1: the fully vaccination rate is not same across all races.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+demo_race = 
+  stratified %>%
+  filter(group == "Race/ethnicity",
+         date == max(date),
+         population == "All ages") %>%
+
+  select(-group) %>%
+  group_by(subgroup) %>%
+  summarise(
+    x = count_fully_cumulative,
+    n = pop_denominator) %>%
+  filter(!subgroup %in% c( "Native American/Alaska Native", "Other", "Unknown")) %>%
+  select(-subgroup) %>%
+  data.matrix()
+
+rownames(demo_race) = c("Asian", "Black", "Hispanic/Latino", "Multiracial","White")
+
+knitr::kable(demo_race, digit = 3)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+prop.test(as.data.frame(demo_race)$x, as.data.frame(demo_race)$n)
+```
+
+Conclusion: The p-value is much smaller than the critical value alpha = 0.5, so we could reject the null hypothesis and conclude that the fully vaccinated rate is different by races in NYC.
+
+### Sex
+
+Then, we want to test whether the COVID vaccination rate is constant between male and female population in NYC so we grouped people by their gender. We predicted that there is no difference in vaccination rate in NYC across the gender.
+
+H0: the fully vaccination rate is the same for male and female.
+
+H1: the fully vaccination rate is not same for male and female.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+demo_sex = 
+  stratified %>%
+  filter(group == "Sex",
+         date == max(date),
+         population == "All ages") %>%
+  select(-group) %>%
+  group_by(subgroup) %>%
+  summarise(
+    x = count_fully_cumulative,
+    n = pop_denominator) %>%
+  filter(!subgroup %in% c("Other", "Prefer not to answer","Unknown")) %>%
+  select(-subgroup) %>%
+  data.matrix()
+
+rownames(demo_sex) = c("Female", "Male")
+
+knitr::kable(demo_sex, digit = 3)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+prop.test(as.data.frame(demo_sex)$x, as.data.frame(demo_sex)$n)
+```
+
+Conclusion: The p-value is much smaller than the critical value alpha = 0.5, so we could reject the null hypothesis and conclude that the fully vaccinated rate is different by gender in NYC.
+
+### age
+
+Last, we want to test whether the COVID vaccination rate is the same across different age groups in NYC so we grouped people by their ages. We predicted that there is no difference in vaccination rate in NYC across their ages.
+
+H0: the fully vaccination rate is the same for different age groups.
+
+H1: the fully vaccination rate is not same for different age groups.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+demo_age = 
+  stratified %>%
+  filter(
+    group == "Age",
+    date == max(date),
+    population == "All ages",
+    !subgroup %in% c("'0-4", "'5-12", "'13-17")) %>%
+  select(-group) %>% 
+  group_by(subgroup) %>%
+  summarise(
+    x = count_fully_cumulative,
+    n = pop_denominator) %>%
+  select(-subgroup) %>%
+  data.matrix() 
+
+rownames(demo_age) = c("0-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65-74", "75-84", "85+")
+
+knitr::kable(demo_age, digits = 3)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+prop.test(as.data.frame(demo_age)$x, as.data.frame(demo_age)$n)
+```
+
+Conclusion: The p-value is much smaller than the critical value alpha = 0.5, so we could reject the null hypothesis and conclude that the fully vaccinated rate is different by age groups in NYC.
+
+## Model Fitting
+
+```{r setup, include=FALSE}
+
+library(tidyverse)
+library(modelr)
+library(mgcv)
+
+unstratified = 
+  read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_boro_demo_full.csv") %>%
+  janitor::clean_names() %>%
+  select(age_group, race_ethnicity, city_perc_fully) %>%
+  filter(
+    !age_group %in% c("Boroughwide", "All ages", "65+", "13-17", "18-44", "45-64") 
+)
+```
+
+We propose 3 models for prediction based on previous analysis & data availability: 
+
+ 1. Linear Model of city_perc_fully ~ age_group  
+
+ 2. Linear Model of city_perc_fully ~ age_group  +  race_ethnicity
+
+ 3. Linear Model of city_perc_fully ~ age_group  +  race_ethnicity + age_group * race_ethnicity, assuming that there are interaction
+
+### Age Group Model
+
+Age group model is a simple linear model that contains only the most significant predictor: age of the NYC residents. Age predictor has five levels: 5-12, 13-17, 18-44, 45-64 and 65+.
+```{r echo=TRUE}
+fit_lm_age = lm(city_perc_fully ~ age_group, data = unstratified  )
+fit_lm_age  %>% broom::tidy() %>% knitr::kable(digits = 2)
+```
+
+### Main Effect Model
+
+Main effect model contains is a multiple linear regression model with two predictors: age and race/ethnicity. Age predictor has five levels: 5-12, 13-17, 18-44, 45-64 and 65+. And race group has three levels: Black, White, and Hispanic/Latino.
+```{r echo=TRUE}
+fit_lm_main = lm(city_perc_fully ~ age_group  +  race_ethnicity, 
+                 data = unstratified )
+fit_lm_main  %>% broom::tidy() %>% knitr::kable(digits = 2)
+```
+
+### Interaction Model
+
+Interaction model is a multiple linear regression model with three predictiors: age, race, and age*race. 
+```{r echo=TRUE}
+fit_lm_interaction = lm(city_perc_fully ~ age_group  +  race_ethnicity +
+                        age_group * race_ethnicity, 
+                        data = unstratified )
+fit_lm_interaction  %>% broom::tidy() %>% knitr::kable(digits = 2)
+```
+
+### Cross Validation 
+
+Although race is not statistically significant under the critical value alpha = 0.05, it increases the prediction ability of the simple linear model : lm(city_perc_fully ~ age_group). What's more, we notice that interaction term is contributing to model predictability as well. We would say the interaction model  will be better than the other one because its root means square error seems to be smaller. Therefore, interaction model could be useful for predicting the fully vaccinated rate in NYC.
+
+```{r echo=TRUE}
+cv_df =
+  crossv_mc(unstratified, 100) %>% 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble))
+```
+
+```{r echo=TRUE}
+cv_df = 
+  cv_df %>% 
+  mutate(
+    age_mod = map(train, ~lm(city_perc_fully ~ age_group, data = .x)),
+    main_mod  = map(train, ~lm(city_perc_fully ~ age_group  +  race_ethnicity, data = .x)),
+    interaction_mod = map(train, ~lm(city_perc_fully ~ age_group  +  race_ethnicity + age_group * race_ethnicity, data = .x))) %>% 
+  mutate(
+    rmse_age = map2_dbl(age_mod, test, ~rmse(model = .x, data = .y)),
+    rmse_main = map2_dbl(main_mod, test, ~rmse(model = .x, data = .y)),
+    rmse_interaction = map2_dbl(interaction_mod, test, ~rmse(model = .x, data = .y)))
+```
+
+```{r echo=TRUE}
+cv_df %>% 
+  select(starts_with("rmse")) %>% 
+  pivot_longer(
+    everything(),
+    names_to = "model", 
+    values_to = "rmse",
+    names_prefix = "rmse_") %>% 
+  mutate(model = fct_inorder(model)) %>% 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()
+```
+
+### Model Conclusion
+
+We select the linear model of city_perc_fully ~ age_group  +  race_ethnicity + age_group * race_ethnicity
+
+Age, race and their interaction term are good predictors for anticipating the COVID vaccination rate in NYC.
 
 ## Discussion:
 
@@ -109,6 +370,7 @@ According to the tidy dataset, several geographical and demographic factors were
 * There do exist demographic differences amongst vaccination trends in New York City.
 * In general, the booster vaccination rate is lower than the primary series vaccination rate across the board.
 *  Vaccination rate differs across age-groups and a larger group of adults (compared to children under 18) are vaccinated against COVID (at least primary series).
+* Vaccination rates differ by geography (borough level), race, gender, and age groups.
 
 ### Products: 
 
