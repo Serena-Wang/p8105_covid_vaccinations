@@ -13,7 +13,7 @@
 
 <title>COVID Vaccination Rate in NYC</title>
 
-<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
@@ -184,8 +184,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "\e259";
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -193,9 +193,16 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "\e258";
-  font-family: 'Glyphicons Halflings';
+  content: "&#xe258;";
   border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -348,7 +355,7 @@ div.tocify {
   <a href="exploratory_analysis.html">Exploratory Analysis</a>
 </li>
 <li>
-  <a href="statistical-analysis.html">Statistical Analysis</a>
+  <a href="proprtion-test.html">Statistical Analysis</a>
 </li>
 <li>
   <a href="Model-Fitting.html">Model Fitting</a>
@@ -386,10 +393,6 @@ Dec.2020 - Nov.2022</h3>
 <h6 style="text-align: left;">
 By: Qingyue Zhuo | Baoyi Feng | Yijin Wang | Tvisha Devavarapu
 </h6>
-<p><br></br></p>
-<p><left>
-<iframe width="840" height="472" src="https://www.youtube.com/embed/13lw6hl3EJ4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</left></p>
 <div id="background" class="section level2">
 <h2>Background</h2>
 <p>Since the discovery of multiple cases of COVID-19 in December 2019,

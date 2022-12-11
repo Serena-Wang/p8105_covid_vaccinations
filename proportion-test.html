@@ -9,13 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Qingyue Zhuo qz2493" />
 
-<meta name="date" content="2022-12-11" />
 
-<title>prop_test</title>
+<title>Statistical Analysis</title>
 
-<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
@@ -31,7 +29,11 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -182,8 +184,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "\e259";
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -191,9 +193,16 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "\e258";
-  font-family: 'Glyphicons Halflings';
+  content: "&#xe258;";
   border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -220,7 +229,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -230,6 +305,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -288,11 +373,17 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
-<h1 class="title toc-ignore">prop_test</h1>
-<h4 class="author">Qingyue Zhuo qz2493</h4>
-<h4 class="date">2022-12-11</h4>
+
+<h1 class="title toc-ignore">Statistical Analysis</h1>
 
 </div>
 
@@ -305,8 +396,8 @@ relationship between vaccination rate and the spatial &amp; social
 indicators. We conducted proportion test to examine the significant
 predictors among borough, race, age, and gender in determining the
 vaccination rate in NYC.</p>
-<div id="description-of-dataset" class="section level3">
-<h3>Description of Dataset:</h3>
+<div id="description-of-dataset" class="section level2">
+<h2>Description of Dataset:</h2>
 <ul>
 <li>The Coverage_by_Boro dataset contains the absolute counts and
 estimated percentage of NYC residents vaccinated for COVID-19. People
@@ -334,26 +425,88 @@ series of COVID vaccination in the subgroup</li>
 </ul></li>
 </ul>
 </div>
-<div id="selection-of-predictors" class="section level3">
-<h3>Selection of Predictors</h3>
-<ul>
-<li>Data Cleaning The first dataset is stratified by age,
-race/ethnicity, gender, or geographical locations.</li>
-</ul>
+<div id="selection-of-predictors-and-data-cleaning"
+class="section level2">
+<h2>Selection of Predictors and Data Cleaning</h2>
+<p>The first dataset is stratified by age, race/ethnicity, gender, or
+geographical locations.</p>
 <pre class="r"><code>stratified = 
   read_csv(&quot;https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv&quot;) %&gt;%
   janitor::clean_names() %&gt;%
   select(date, population, group, subgroup, count_fully_cumulative, pop_denominator ) %&gt;%
-  drop_na()</code></pre>
-<pre><code>## Rows: 30352 Columns: 13
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr  (3): POPULATION, GROUP, SUBGROUP
-## dbl  (9): POP_DENOMINATOR, COUNT_PARTIALLY_CUMULATIVE, COUNT_FULLY_CUMULATIV...
-## date (1): DATE
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+  drop_na()
+
+knitr::kable(head(stratified), digits = 3)</code></pre>
+<table>
+<colgroup>
+<col width="13%" />
+<col width="19%" />
+<col width="9%" />
+<col width="10%" />
+<col width="27%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">date</th>
+<th align="left">population</th>
+<th align="left">group</th>
+<th align="left">subgroup</th>
+<th align="right">count_fully_cumulative</th>
+<th align="right">pop_denominator</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2022-11-10</td>
+<td align="left">Children (0-17)</td>
+<td align="left">Age</td>
+<td align="left">’0-4</td>
+<td align="right">23081</td>
+<td align="right">523718</td>
+</tr>
+<tr class="even">
+<td align="left">2022-11-10</td>
+<td align="left">Children (0-17)</td>
+<td align="left">Age</td>
+<td align="left">’5-12</td>
+<td align="right">375933</td>
+<td align="right">747560</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-11-10</td>
+<td align="left">Children (0-17)</td>
+<td align="left">Age</td>
+<td align="left">’13-17</td>
+<td align="right">356982</td>
+<td align="right">432840</td>
+</tr>
+<tr class="even">
+<td align="left">2022-11-10</td>
+<td align="left">Children (0-17)</td>
+<td align="left">Borough</td>
+<td align="left">Citywide</td>
+<td align="right">755996</td>
+<td align="right">1704118</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-11-10</td>
+<td align="left">Children (0-17)</td>
+<td align="left">Borough</td>
+<td align="left">Bronx</td>
+<td align="right">146761</td>
+<td align="right">347020</td>
+</tr>
+<tr class="even">
+<td align="left">2022-11-10</td>
+<td align="left">Children (0-17)</td>
+<td align="left">Borough</td>
+<td align="left">Brooklyn</td>
+<td align="right">212484</td>
+<td align="right">575063</td>
+</tr>
+</tbody>
+</table>
 <p>The second dataset categorizes observations by their age group and
 race/ethnicity.</p>
 <pre class="r"><code>unstratified = 
@@ -362,26 +515,62 @@ race/ethnicity.</p>
   select(age_group, race_ethnicity, city_count_fully_cumulative) %&gt;%
   filter(
     !age_group %in% c(&quot;Boroughwide&quot;, &quot;All ages&quot;, &quot;65+&quot;, &quot;13-17&quot;, &quot;18-44&quot;, &quot;45-64&quot;) 
-)</code></pre>
-<pre><code>## Rows: 9233 Columns: 15
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr   (2): AGE_GROUP, RACE_ETHNICITY
-## dbl  (12): CITY_COUNT_FULLY_CUMULATIVE, BX_COUNT_FULLY_CUMULATIVE, BK_COUNT_...
-## date  (1): DATE
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<ul>
-<li>Borough</li>
-</ul>
+)
+
+knitr::kable(head(unstratified), digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">age_group</th>
+<th align="left">race_ethnicity</th>
+<th align="right">city_count_fully_cumulative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">’0-4</td>
+<td align="left">Asian/NHPI</td>
+<td align="right">5847</td>
+</tr>
+<tr class="even">
+<td align="left">’0-4</td>
+<td align="left">Black</td>
+<td align="right">1079</td>
+</tr>
+<tr class="odd">
+<td align="left">’0-4</td>
+<td align="left">Hispanic/Latino</td>
+<td align="right">2147</td>
+</tr>
+<tr class="even">
+<td align="left">’0-4</td>
+<td align="left">White</td>
+<td align="right">12491</td>
+</tr>
+<tr class="odd">
+<td align="left">’5-12</td>
+<td align="left">Asian/NHPI</td>
+<td align="right">96874</td>
+</tr>
+<tr class="even">
+<td align="left">’5-12</td>
+<td align="left">Black</td>
+<td align="right">61858</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="proportion-test" class="section level2">
+<h2>Proportion Test</h2>
+<div id="borough" class="section level3">
+<h3>Borough</h3>
 <p>First, we want to see whether the COVID vaccination rate is
 consistent across different parts of NYC. So we categorized people by
 borough. We predicted that there is no difference in vaccination rate in
 NYC across the six boroughs. We will perform the proportion test to
 verify our assumption.</p>
-<p>H0: the fully vaccination rate is the same across all boroughs. H1:
-the fully vaccination rate is not same across all boroughs.</p>
+<p>H0: the fully vaccination rate is the same across all boroughs.</p>
+<p>H1: the fully vaccination rate is not same across all boroughs.</p>
 <pre class="r"><code>demo_boro = 
   stratified %&gt;%
   filter(group == &quot;Borough&quot;,
@@ -448,15 +637,15 @@ knitr::kable(demo_boro, digits = 3)</code></pre>
 <p>Conclusion: The p-value is much smaller than the critical value alpha
 = 0.5, so we could reject the null hypothesis and conclude that the
 fully vaccinated rate is different by geographical locations in NYC.</p>
-<ul>
-<li>Race</li>
-</ul>
+</div>
+<div id="race" class="section level3">
+<h3>Race</h3>
 <p>Second, we want to examine whether the COVID vaccination rate is the
 same across different race group in NYC so we stratified people by their
 races. We predicted that there is no difference in vaccination rate in
 NYC across the races.</p>
-<p>H0: the fully vaccination rate is the same across all races H1: the
-fully vaccination rate is not same across all races.</p>
+<p>H0: the fully vaccination rate is the same across all races</p>
+<p>H1: the fully vaccination rate is not same across all races.</p>
 <pre class="r"><code>demo_race = 
   stratified %&gt;%
   filter(group == &quot;Race/ethnicity&quot;,
@@ -524,15 +713,15 @@ knitr::kable(demo_race, digit = 3)</code></pre>
 <p>Conclusion: The p-value is much smaller than the critical value alpha
 = 0.5, so we could reject the null hypothesis and conclude that the
 fully vaccinated rate is different by races in NYC.</p>
-<ul>
-<li>Sex</li>
-</ul>
+</div>
+<div id="sex" class="section level3">
+<h3>Sex</h3>
 <p>Then, we want to test whether the COVID vaccination rate is constant
 between male and female population in NYC so we grouped people by their
 gender. We predicted that there is no difference in vaccination rate in
 NYC across the gender.</p>
-<p>H0: the fully vaccination rate is the same for male and female. H1:
-the fully vaccination rate is not same for male and female.</p>
+<p>H0: the fully vaccination rate is the same for male and female.</p>
+<p>H1: the fully vaccination rate is not same for male and female.</p>
 <pre class="r"><code>demo_sex = 
   stratified %&gt;%
   filter(group == &quot;Sex&quot;,
@@ -586,15 +775,17 @@ knitr::kable(demo_sex, digit = 3)</code></pre>
 <p>Conclusion: The p-value is much smaller than the critical value alpha
 = 0.5, so we could reject the null hypothesis and conclude that the
 fully vaccinated rate is different by gender in NYC.</p>
-<ul>
-<li>age</li>
-</ul>
+</div>
+<div id="age" class="section level3">
+<h3>age</h3>
 <p>Last, we want to test whether the COVID vaccination rate is the same
 across different age groups in NYC so we grouped people by their ages.
 We predicted that there is no difference in vaccination rate in NYC
 across their ages.</p>
-<p>H0: the fully vaccination rate is the same for different age groups.
-H1: the fully vaccination rate is not same for different age groups.</p>
+<p>H0: the fully vaccination rate is the same for different age
+groups.</p>
+<p>H1: the fully vaccination rate is not same for different age
+groups.</p>
 <pre class="r"><code>demo_age = 
   stratified %&gt;%
   filter(
@@ -685,9 +876,12 @@ knitr::kable(demo_age, digits = 3)</code></pre>
 = 0.5, so we could reject the null hypothesis and conclude that the
 fully vaccinated rate is different by age groups in NYC.</p>
 </div>
+</div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -719,7 +913,41 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
