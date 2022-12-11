@@ -1,0 +1,137 @@
+---
+title: "prop_test"
+author: "Qingyue Zhuo qz2493"
+date: "2022-12-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(modelr)
+library(mgcv)
+```
+
+### Selection of Predictors
+
+* Data Cleaning
+The first dataset is stratified by age, race/ethnicity, gender, or geographical locations.
+```{r}
+stratified = 
+  read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv") %>%
+  janitor::clean_names() %>%
+  select(group, subgroup, count_fully_cumulative, pop_denominator ) %>%
+  drop_na()
+```
+
+The second dataset categorizes observations by their age group and race/ethnicity. 
+```{r}
+unstratified = 
+  read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_boro_demo_full.csv") %>%
+  janitor::clean_names() %>%
+  select(age_group, race_ethnicity, city_count_fully_cumulative) %>%
+  filter(
+    !age_group %in% c("Boroughwide", "All ages", "65+", "13-17", "18-44", "45-64") 
+)
+```
+
+* Borough
+
+```{r}
+demo_boro = 
+  stratified %>%
+  filter(group == "Borough") %>% 
+  select(-group) %>%
+  group_by(subgroup) %>%
+  summarise(
+    x = sum(count_fully_cumulative),
+    n = sum(pop_denominator)) %>%
+  filter(subgroup != "Citywide") %>%
+  select(-subgroup) %>%
+  data.matrix()
+
+rownames(demo_boro) = c("Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island")
+
+knitr::kable(demo_boro, digits = 3)
+```
+
+
+```{r}
+prop.test(as.data.frame(demo_boro)$x, as.data.frame(demo_boro)$n)
+```
+
+* Race
+
+```{r}
+demo_race = 
+  stratified %>%
+  filter(group == "Race/ethnicity") %>%
+
+  select(-group) %>%
+  group_by(subgroup) %>%
+  summarise(
+    x = sum(count_fully_cumulative),
+    n = sum(pop_denominator)) %>%
+  filter(!subgroup %in% c( "Native American/Alaska Native", "Other", "Unknown")) %>%
+  select(-subgroup) %>%
+  data.matrix()
+
+rownames(demo_race) = c("Asian", "Black", "Hispanic/Latino", "Multiracial","White")
+
+knitr::kable(demo_race, digit = 3)
+```
+
+```{r}
+prop.test(as.data.frame(demo_race)$x, as.data.frame(demo_race)$n)
+```
+
+
+* Sex
+
+```{r}
+demo_sex = 
+  stratified %>%
+  filter(group == "Sex") %>%
+  select(-group) %>%
+  group_by(subgroup) %>%
+  summarise(
+    x = sum(count_fully_cumulative),
+    n = sum(pop_denominator)) %>%
+  filter(!subgroup %in% c("Other", "Prefer not to answer","Unknown")) %>%
+  select(-subgroup) %>%
+  data.matrix()
+
+rownames(demo_sex) = c("Female", "Male")
+
+knitr::kable(demo_sex, digit = 3)
+```
+
+```{r}
+prop.test(as.data.frame(demo_sex)$x, as.data.frame(demo_sex)$n)
+```
+
+* age
+
+```{r}
+demo_age = 
+  stratified %>%
+  filter(
+    group == "Age",
+    ! subgroup %in% c( "'5-12","'0-4", "'13-17", "'0-17", "'18-24", "'25-34", "'35-44", "'45-54", "'55-64", "'65-74", "'75-84","'85+"))%>%
+  select(-group) %>% 
+  group_by(subgroup) %>%
+  summarise(
+    x = sum(count_fully_cumulative),
+    n = sum(pop_denominator)) %>%
+  select(-subgroup) %>%
+  data.matrix() 
+
+rownames(demo_age) = c("0-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65-74", "75-84", "85+")
+
+knitr::kable(demo_age, digits = 3)
+```
+
+```{r}
+prop.test(as.data.frame(demo_age)$x, as.data.frame(demo_age)$n)
+```
+

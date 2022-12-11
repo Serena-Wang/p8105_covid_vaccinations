@@ -335,7 +335,7 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="project_report.html">Our Project</a>
+      <a href="report.html">Report</a>
     </li>
   </ul>
 </li>
@@ -557,9 +557,10 @@ March and April 2020. This was considerably prior to the vaccine
 rollouts.</li>
 </ul>
 </div>
-<div id="heatmaps" class="section level3">
+<div id="vaccionate-rate-heatmap" class="section level3">
 <h3><a
-href="https://serena-wang.github.io/p8105_covid_vaccinations/exploratory_analysis.html#Vaccination_Rate_-_Demographic_Features">Heatmaps</a></h3>
+href="https://serena-wang.github.io/p8105_covid_vaccinations/exploratory_analysis.html#Vaccination_Rate_-_Demographic_Features">Vaccionate
+Rate Heatmap</a></h3>
 <p>We did an exploratory analysis of the relationship among vaccination
 rate and different demographic features. In this section, we focused on
 2 vaccination statuses: complete primary series vaccination and booster
@@ -603,6 +604,59 @@ sexes, compared with lower age groups.</li>
 <li>Similarly, booster vaccination rates by sex are very close. Until
 November 29th, adults have higher booster vaccination rates than
 children for all sexes.</li>
+</ul>
+</div>
+</div>
+<div id="hypothesis-testing" class="section level2">
+<h2>Hypothesis Testing</h2>
+<p>According to the tidy dataset, several geographical and demographic
+factors were measured across time, and may have a direct influence on
+the overall vaccination count in NYC. We conducted chi-square tests to
+examine individual association of borough, race, age, and gender in
+determining the vaccination count in NYC. We then built statistical
+models between selected geographical and demographic factors and the
+primary series vaccination counts in NYC.</p>
+</div>
+<div id="discussion" class="section level2">
+<h2>Discussion:</h2>
+<div id="problems" class="section level3">
+<h3>Problems:</h3>
+<ul>
+<li>Technical challenges with establishing the shiny flexdashboard.</li>
+<li>Hiccups with git! We faced many (many many many … many) challenges
+in the process of bringing the website into its current form.</li>
+<li>Initially, it was quite daunting to identify the scope of analyses
+regarding the topic and then to find contextually relevant data sources
+that were suitable to provide answers to the questions we were
+considering.</li>
+</ul>
+</div>
+<div id="resultstakeaways" class="section level3">
+<h3>Results/Takeaways:</h3>
+<ul>
+<li>There do exist demographic differences amongst vaccination trends in
+New York City.</li>
+<li>In general, the booster vaccination rate is lower than the primary
+series vaccination rate across the board.</li>
+<li>Vaccination rate differs across age-groups and a larger group of
+adults (compared to children under 18) are vaccinated against COVID (at
+least primary series).</li>
+</ul>
+</div>
+<div id="products" class="section level3">
+<h3>Products:</h3>
+<ul>
+<li>An interactive visualization of the current overall weekly and
+cumulative vaccination trends including simultaneous display of
+infections and re-infection counts, and also hospitalization and death
+counts.</li>
+<li>In-depth exploratory analyses that revealed demographic differences
+amongst vaccine coverage patterns across New York City. Statistical
+analyses to explore potential differences in vaccination rates across
+lines of age and race.</li>
+<li>A simple predictive model that seeks to predict overall vaccination
+rate using age, race, and their interaction terms as the
+predictors.</li>
 </ul>
 </div>
 </div>
