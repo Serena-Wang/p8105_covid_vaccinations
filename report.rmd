@@ -2,6 +2,7 @@
 title: "Report"
 output: 
   html_document:
+    code_folding: hide
     toc: true
     toc_float: true
   always_allow_html: true
@@ -93,8 +94,8 @@ Observations:
 
 ## Hypothesis Testing
 
-```{r include=FALSE}
-knitr::opts_chunk$set(include = FALSE)
+```{r message=FALSE, warning=FALSE}
+
 library(tidyverse)
 library(modelr)
 library(mgcv)
@@ -102,7 +103,7 @@ library(mgcv)
 
 According to the tidy dataset, several geographical and demographic factors were measured across time, and may have a direct influence on the overall vaccination count in NYC. We conducted chi-square tests to examine individual association of borough, race, age, and gender in determining the vaccination count in NYC. We then built statistical models between selected geographical and demographic factors and the primary series vaccination counts in NYC. 
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r message=FALSE, warning=FALSE}
 stratified = 
   read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv") %>%
   janitor::clean_names() %>%
@@ -112,7 +113,7 @@ stratified =
 knitr::kable(head(stratified), digits = 3)
 ```
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r message=FALSE, warning=FALSE}
 unstratified = 
   read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_boro_demo_full.csv") %>%
   janitor::clean_names() %>%
@@ -132,7 +133,7 @@ H0: the fully vaccination rate is the same across all boroughs.
 
 H1: the fully vaccination rate is not same across all boroughs.
 
-```{r echo=TRUE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 demo_boro = 
   stratified %>%
   filter(group == "Borough",
@@ -152,7 +153,7 @@ rownames(demo_boro) = c("Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Isla
 knitr::kable(demo_boro, digits = 3)
 ```
 
-```{r echo=TRUE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 prop.test(as.data.frame(demo_boro)$x, as.data.frame(demo_boro)$n)
 ```
 
@@ -166,7 +167,7 @@ H0: the fully vaccination rate is the same across all races
 
 H1: the fully vaccination rate is not same across all races.
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 demo_race = 
   stratified %>%
   filter(group == "Race/ethnicity",
@@ -187,7 +188,7 @@ rownames(demo_race) = c("Asian", "Black", "Hispanic/Latino", "Multiracial","Whit
 knitr::kable(demo_race, digit = 3)
 ```
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 prop.test(as.data.frame(demo_race)$x, as.data.frame(demo_race)$n)
 ```
 
@@ -201,7 +202,7 @@ H0: the fully vaccination rate is the same for male and female.
 
 H1: the fully vaccination rate is not same for male and female.
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 demo_sex = 
   stratified %>%
   filter(group == "Sex",
@@ -221,7 +222,7 @@ rownames(demo_sex) = c("Female", "Male")
 knitr::kable(demo_sex, digit = 3)
 ```
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 prop.test(as.data.frame(demo_sex)$x, as.data.frame(demo_sex)$n)
 ```
 
@@ -235,7 +236,7 @@ H0: the fully vaccination rate is the same for different age groups.
 
 H1: the fully vaccination rate is not same for different age groups.
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 demo_age = 
   stratified %>%
   filter(
@@ -256,7 +257,7 @@ rownames(demo_age) = c("0-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65-
 knitr::kable(demo_age, digits = 3)
 ```
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 prop.test(as.data.frame(demo_age)$x, as.data.frame(demo_age)$n)
 ```
 
@@ -264,7 +265,7 @@ Conclusion: The p-value is much smaller than the critical value alpha = 0.5, so 
 
 ## Model Fitting
 
-```{r setup, include=FALSE}
+```{r message=FALSE, warning=FALSE, setup, include=FALSE}
 
 library(tidyverse)
 library(modelr)
@@ -290,7 +291,7 @@ We propose 3 models for prediction based on previous analysis & data availabilit
 ### Age Group Model
 
 Age group model is a simple linear model that contains only the most significant predictor: age of the NYC residents. Age predictor has five levels: 5-12, 13-17, 18-44, 45-64 and 65+.
-```{r echo=TRUE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 fit_lm_age = lm(city_perc_fully ~ age_group, data = unstratified  )
 fit_lm_age  %>% broom::tidy() %>% knitr::kable(digits = 2)
 ```
@@ -298,7 +299,7 @@ fit_lm_age  %>% broom::tidy() %>% knitr::kable(digits = 2)
 ### Main Effect Model
 
 Main effect model contains is a multiple linear regression model with two predictors: age and race/ethnicity. Age predictor has five levels: 5-12, 13-17, 18-44, 45-64 and 65+. And race group has three levels: Black, White, and Hispanic/Latino.
-```{r echo=TRUE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 fit_lm_main = lm(city_perc_fully ~ age_group  +  race_ethnicity, 
                  data = unstratified )
 fit_lm_main  %>% broom::tidy() %>% knitr::kable(digits = 2)
@@ -307,7 +308,7 @@ fit_lm_main  %>% broom::tidy() %>% knitr::kable(digits = 2)
 ### Interaction Model
 
 Interaction model is a multiple linear regression model with three predictiors: age, race, and age*race. 
-```{r echo=TRUE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 fit_lm_interaction = lm(city_perc_fully ~ age_group  +  race_ethnicity +
                         age_group * race_ethnicity, 
                         data = unstratified )
@@ -318,7 +319,7 @@ fit_lm_interaction  %>% broom::tidy() %>% knitr::kable(digits = 2)
 
 Although race is not statistically significant under the critical value alpha = 0.05, it increases the prediction ability of the simple linear model : lm(city_perc_fully ~ age_group). What's more, we notice that interaction term is contributing to model predictability as well. We would say the interaction model  will be better than the other one because its root means square error seems to be smaller. Therefore, interaction model could be useful for predicting the fully vaccinated rate in NYC.
 
-```{r echo=TRUE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 cv_df =
   crossv_mc(unstratified, 100) %>% 
   mutate(
@@ -326,7 +327,7 @@ cv_df =
     test = map(test, as_tibble))
 ```
 
-```{r echo=TRUE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 cv_df = 
   cv_df %>% 
   mutate(
@@ -339,7 +340,7 @@ cv_df =
     rmse_interaction = map2_dbl(interaction_mod, test, ~rmse(model = .x, data = .y)))
 ```
 
-```{r echo=TRUE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 cv_df %>% 
   select(starts_with("rmse")) %>% 
   pivot_longer(

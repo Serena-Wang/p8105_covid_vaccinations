@@ -33,6 +33,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -221,6 +222,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -361,6 +365,14 @@ div.tocify {
 </div><!--/.navbar -->
 
 <div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
 
@@ -602,6 +614,9 @@ children for all sexes.</li>
 </div>
 <div id="hypothesis-testing" class="section level2">
 <h2>Hypothesis Testing</h2>
+<pre class="r"><code>library(tidyverse)
+library(modelr)
+library(mgcv)</code></pre>
 <p>According to the tidy dataset, several geographical and demographic
 factors were measured across time, and may have a direct influence on
 the overall vaccination count in NYC. We conducted chi-square tests to
@@ -609,6 +624,133 @@ examine individual association of borough, race, age, and gender in
 determining the vaccination count in NYC. We then built statistical
 models between selected geographical and demographic factors and the
 primary series vaccination counts in NYC.</p>
+<pre class="r"><code>stratified = 
+  read_csv(&quot;https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv&quot;) %&gt;%
+  janitor::clean_names() %&gt;%
+  select(date, population, group, subgroup, count_fully_cumulative, pop_denominator ) %&gt;%
+  drop_na()
+
+knitr::kable(head(stratified), digits = 3)</code></pre>
+<table>
+<colgroup>
+<col width="13%" />
+<col width="19%" />
+<col width="9%" />
+<col width="10%" />
+<col width="27%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">date</th>
+<th align="left">population</th>
+<th align="left">group</th>
+<th align="left">subgroup</th>
+<th align="right">count_fully_cumulative</th>
+<th align="right">pop_denominator</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2022-11-10</td>
+<td align="left">Children (0-17)</td>
+<td align="left">Age</td>
+<td align="left">’0-4</td>
+<td align="right">23081</td>
+<td align="right">523718</td>
+</tr>
+<tr class="even">
+<td align="left">2022-11-10</td>
+<td align="left">Children (0-17)</td>
+<td align="left">Age</td>
+<td align="left">’5-12</td>
+<td align="right">375933</td>
+<td align="right">747560</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-11-10</td>
+<td align="left">Children (0-17)</td>
+<td align="left">Age</td>
+<td align="left">’13-17</td>
+<td align="right">356982</td>
+<td align="right">432840</td>
+</tr>
+<tr class="even">
+<td align="left">2022-11-10</td>
+<td align="left">Children (0-17)</td>
+<td align="left">Borough</td>
+<td align="left">Citywide</td>
+<td align="right">755996</td>
+<td align="right">1704118</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-11-10</td>
+<td align="left">Children (0-17)</td>
+<td align="left">Borough</td>
+<td align="left">Bronx</td>
+<td align="right">146761</td>
+<td align="right">347020</td>
+</tr>
+<tr class="even">
+<td align="left">2022-11-10</td>
+<td align="left">Children (0-17)</td>
+<td align="left">Borough</td>
+<td align="left">Brooklyn</td>
+<td align="right">212484</td>
+<td align="right">575063</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>unstratified = 
+  read_csv(&quot;https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_boro_demo_full.csv&quot;) %&gt;%
+  janitor::clean_names() %&gt;%
+  select(age_group, race_ethnicity, city_count_fully_cumulative) %&gt;%
+  filter(
+    !age_group %in% c(&quot;Boroughwide&quot;, &quot;All ages&quot;, &quot;65+&quot;, &quot;13-17&quot;, &quot;18-44&quot;, &quot;45-64&quot;) 
+)
+
+knitr::kable(head(unstratified), digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">age_group</th>
+<th align="left">race_ethnicity</th>
+<th align="right">city_count_fully_cumulative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">’0-4</td>
+<td align="left">Asian/NHPI</td>
+<td align="right">5847</td>
+</tr>
+<tr class="even">
+<td align="left">’0-4</td>
+<td align="left">Black</td>
+<td align="right">1079</td>
+</tr>
+<tr class="odd">
+<td align="left">’0-4</td>
+<td align="left">Hispanic/Latino</td>
+<td align="right">2147</td>
+</tr>
+<tr class="even">
+<td align="left">’0-4</td>
+<td align="left">White</td>
+<td align="right">12491</td>
+</tr>
+<tr class="odd">
+<td align="left">’5-12</td>
+<td align="left">Asian/NHPI</td>
+<td align="right">96874</td>
+</tr>
+<tr class="even">
+<td align="left">’5-12</td>
+<td align="left">Black</td>
+<td align="right">61858</td>
+</tr>
+</tbody>
+</table>
 <div id="borough" class="section level3">
 <h3>Borough</h3>
 <p>First, we want to see whether the COVID vaccination rate is
@@ -618,6 +760,69 @@ NYC across the six boroughs. We will perform the proportion test to
 verify our assumption.</p>
 <p>H0: the fully vaccination rate is the same across all boroughs.</p>
 <p>H1: the fully vaccination rate is not same across all boroughs.</p>
+<pre class="r"><code>demo_boro = 
+  stratified %&gt;%
+  filter(group == &quot;Borough&quot;,
+         date == max(date),
+         population == &quot;All ages&quot;) %&gt;%
+  select(-group, -date, -population) %&gt;%
+  group_by(subgroup) %&gt;%
+  summarise(
+    x = count_fully_cumulative,
+    n = pop_denominator) %&gt;%
+  filter(subgroup != &quot;Citywide&quot;) %&gt;%
+  select(-subgroup) %&gt;%
+  data.matrix()
+
+rownames(demo_boro) = c(&quot;Bronx&quot;, &quot;Brooklyn&quot;, &quot;Manhattan&quot;, &quot;Queens&quot;, &quot;Staten Island&quot;)
+
+knitr::kable(demo_boro, digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">x</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Bronx</td>
+<td align="right">1083678</td>
+<td align="right">1418208</td>
+</tr>
+<tr class="even">
+<td align="left">Brooklyn</td>
+<td align="right">1877156</td>
+<td align="right">2559901</td>
+</tr>
+<tr class="odd">
+<td align="left">Manhattan</td>
+<td align="right">1382884</td>
+<td align="right">1628706</td>
+</tr>
+<tr class="even">
+<td align="left">Queens</td>
+<td align="right">1957412</td>
+<td align="right">2253857</td>
+</tr>
+<tr class="odd">
+<td align="left">Staten Island</td>
+<td align="right">362297</td>
+<td align="right">476143</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>prop.test(as.data.frame(demo_boro)$x, as.data.frame(demo_boro)$n)</code></pre>
+<pre><code>## 
+##  5-sample test for equality of proportions without continuity correction
+## 
+## data:  as.data.frame(demo_boro)$x out of as.data.frame(demo_boro)$n
+## X-squared = 177205, df = 4, p-value &lt; 2.2e-16
+## alternative hypothesis: two.sided
+## sample estimates:
+##    prop 1    prop 2    prop 3    prop 4    prop 5 
+## 0.7641178 0.7332924 0.8490691 0.8684721 0.7608996</code></pre>
 <p>Conclusion: The p-value is much smaller than the critical value alpha
 = 0.5, so we could reject the null hypothesis and conclude that the
 fully vaccinated rate is different by geographical locations in NYC.</p>
@@ -630,6 +835,70 @@ races. We predicted that there is no difference in vaccination rate in
 NYC across the races.</p>
 <p>H0: the fully vaccination rate is the same across all races</p>
 <p>H1: the fully vaccination rate is not same across all races.</p>
+<pre class="r"><code>demo_race = 
+  stratified %&gt;%
+  filter(group == &quot;Race/ethnicity&quot;,
+         date == max(date),
+         population == &quot;All ages&quot;) %&gt;%
+
+  select(-group) %&gt;%
+  group_by(subgroup) %&gt;%
+  summarise(
+    x = count_fully_cumulative,
+    n = pop_denominator) %&gt;%
+  filter(!subgroup %in% c( &quot;Native American/Alaska Native&quot;, &quot;Other&quot;, &quot;Unknown&quot;)) %&gt;%
+  select(-subgroup) %&gt;%
+  data.matrix()
+
+rownames(demo_race) = c(&quot;Asian&quot;, &quot;Black&quot;, &quot;Hispanic/Latino&quot;, &quot;Multiracial&quot;,&quot;White&quot;)
+
+knitr::kable(demo_race, digit = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">x</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Asian</td>
+<td align="right">1223600</td>
+<td align="right">1233643</td>
+</tr>
+<tr class="even">
+<td align="left">Black</td>
+<td align="right">1130382</td>
+<td align="right">1825847</td>
+</tr>
+<tr class="odd">
+<td align="left">Hispanic/Latino</td>
+<td align="right">1808262</td>
+<td align="right">2423589</td>
+</tr>
+<tr class="even">
+<td align="left">Multiracial</td>
+<td align="right">9874</td>
+<td align="right">152897</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">1731189</td>
+<td align="right">2681975</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>prop.test(as.data.frame(demo_race)$x, as.data.frame(demo_race)$n)</code></pre>
+<pre><code>## 
+##  5-sample test for equality of proportions without continuity correction
+## 
+## data:  as.data.frame(demo_race)$x out of as.data.frame(demo_race)$n
+## X-squared = 927591, df = 4, p-value &lt; 2.2e-16
+## alternative hypothesis: two.sided
+## sample estimates:
+##     prop 1     prop 2     prop 3     prop 4     prop 5 
+## 0.99185907 0.61910007 0.74610918 0.06457942 0.64549036</code></pre>
 <p>Conclusion: The p-value is much smaller than the critical value alpha
 = 0.5, so we could reject the null hypothesis and conclude that the
 fully vaccinated rate is different by races in NYC.</p>
@@ -642,6 +911,56 @@ gender. We predicted that there is no difference in vaccination rate in
 NYC across the gender.</p>
 <p>H0: the fully vaccination rate is the same for male and female.</p>
 <p>H1: the fully vaccination rate is not same for male and female.</p>
+<pre class="r"><code>demo_sex = 
+  stratified %&gt;%
+  filter(group == &quot;Sex&quot;,
+         date == max(date),
+         population == &quot;All ages&quot;) %&gt;%
+  select(-group) %&gt;%
+  group_by(subgroup) %&gt;%
+  summarise(
+    x = count_fully_cumulative,
+    n = pop_denominator) %&gt;%
+  filter(!subgroup %in% c(&quot;Other&quot;, &quot;Prefer not to answer&quot;,&quot;Unknown&quot;)) %&gt;%
+  select(-subgroup) %&gt;%
+  data.matrix()
+
+rownames(demo_sex) = c(&quot;Female&quot;, &quot;Male&quot;)
+
+knitr::kable(demo_sex, digit = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">x</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="right">3490394</td>
+<td align="right">4358377</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="right">3122712</td>
+<td align="right">3978438</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>prop.test(as.data.frame(demo_sex)$x, as.data.frame(demo_sex)$n)</code></pre>
+<pre><code>## 
+##  2-sample test for equality of proportions with continuity correction
+## 
+## data:  as.data.frame(demo_sex)$x out of as.data.frame(demo_sex)$n
+## X-squared = 3221.3, df = 1, p-value &lt; 2.2e-16
+## alternative hypothesis: two.sided
+## 95 percent confidence interval:
+##  0.01538691 0.01648937
+## sample estimates:
+##    prop 1    prop 2 
+## 0.8008472 0.7849091</code></pre>
 <p>Conclusion: The p-value is much smaller than the critical value alpha
 = 0.5, so we could reject the null hypothesis and conclude that the
 fully vaccinated rate is different by gender in NYC.</p>
@@ -656,6 +975,92 @@ across their ages.</p>
 groups.</p>
 <p>H1: the fully vaccination rate is not same for different age
 groups.</p>
+<pre class="r"><code>demo_age = 
+  stratified %&gt;%
+  filter(
+    group == &quot;Age&quot;,
+    date == max(date),
+    population == &quot;All ages&quot;,
+    !subgroup %in% c(&quot;&#39;0-4&quot;, &quot;&#39;5-12&quot;, &quot;&#39;13-17&quot;)) %&gt;%
+  select(-group) %&gt;% 
+  group_by(subgroup) %&gt;%
+  summarise(
+    x = count_fully_cumulative,
+    n = pop_denominator) %&gt;%
+  select(-subgroup) %&gt;%
+  data.matrix() 
+
+rownames(demo_age) = c(&quot;0-17&quot;, &quot;18-24&quot;, &quot;25-34&quot;, &quot;35-44&quot;, &quot;45-54&quot;, &quot;55-64&quot;, &quot;65-74&quot;, &quot;75-84&quot;, &quot;85+&quot;)
+
+knitr::kable(demo_age, digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">x</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0-17</td>
+<td align="right">755996</td>
+<td align="right">1704118</td>
+</tr>
+<tr class="even">
+<td align="left">18-24</td>
+<td align="right">636306</td>
+<td align="right">704673</td>
+</tr>
+<tr class="odd">
+<td align="left">25-34</td>
+<td align="right">1245178</td>
+<td align="right">1483699</td>
+</tr>
+<tr class="even">
+<td align="left">35-44</td>
+<td align="right">1063130</td>
+<td align="right">1136906</td>
+</tr>
+<tr class="odd">
+<td align="left">45-54</td>
+<td align="right">952463</td>
+<td align="right">1028087</td>
+</tr>
+<tr class="even">
+<td align="left">55-64</td>
+<td align="right">934623</td>
+<td align="right">998927</td>
+</tr>
+<tr class="odd">
+<td align="left">65-74</td>
+<td align="right">652936</td>
+<td align="right">718795</td>
+</tr>
+<tr class="even">
+<td align="left">75-84</td>
+<td align="right">307432</td>
+<td align="right">382672</td>
+</tr>
+<tr class="odd">
+<td align="left">85+</td>
+<td align="right">115363</td>
+<td align="right">178938</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>prop.test(as.data.frame(demo_age)$x, as.data.frame(demo_age)$n)</code></pre>
+<pre><code>## 
+##  9-sample test for equality of proportions without continuity correction
+## 
+## data:  as.data.frame(demo_age)$x out of as.data.frame(demo_age)$n
+## X-squared = 1835678, df = 8, p-value &lt; 2.2e-16
+## alternative hypothesis: two.sided
+## sample estimates:
+##    prop 1    prop 2    prop 3    prop 4    prop 5    prop 6    prop 7    prop 8 
+## 0.4436289 0.9029805 0.8392390 0.9351081 0.9264420 0.9356269 0.9083758 0.8033825 
+##    prop 9 
+## 0.6447093</code></pre>
 <p>Conclusion: The p-value is much smaller than the critical value alpha
 = 0.5, so we could reject the null hypothesis and conclude that the
 fully vaccinated rate is different by age groups in NYC.</p>
@@ -677,6 +1082,63 @@ age_group * race_ethnicity, assuming that there are interaction</p></li>
 <p>Age group model is a simple linear model that contains only the most
 significant predictor: age of the NYC residents. Age predictor has five
 levels: 5-12, 13-17, 18-44, 45-64 and 65+.</p>
+<pre class="r"><code>fit_lm_age = lm(city_perc_fully ~ age_group, data = unstratified  )
+fit_lm_age  %&gt;% broom::tidy() %&gt;% knitr::kable(digits = 2)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">2.50</td>
+<td align="right">1.77</td>
+<td align="right">1.41</td>
+<td align="right">0.16</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’13-17</td>
+<td align="right">73.06</td>
+<td align="right">1.88</td>
+<td align="right">38.76</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’18-44</td>
+<td align="right">74.81</td>
+<td align="right">1.88</td>
+<td align="right">39.70</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’45-64</td>
+<td align="right">79.41</td>
+<td align="right">1.88</td>
+<td align="right">42.14</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’5-12</td>
+<td align="right">42.17</td>
+<td align="right">1.88</td>
+<td align="right">22.37</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’65+</td>
+<td align="right">73.94</td>
+<td align="right">1.88</td>
+<td align="right">39.23</td>
+<td align="right">0.00</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="main-effect-model" class="section level3">
 <h3>Main Effect Model</h3>
@@ -684,11 +1146,289 @@ levels: 5-12, 13-17, 18-44, 45-64 and 65+.</p>
 two predictors: age and race/ethnicity. Age predictor has five levels:
 5-12, 13-17, 18-44, 45-64 and 65+. And race group has three levels:
 Black, White, and Hispanic/Latino.</p>
+<pre class="r"><code>fit_lm_main = lm(city_perc_fully ~ age_group  +  race_ethnicity, 
+                 data = unstratified )
+fit_lm_main  %&gt;% broom::tidy() %&gt;% knitr::kable(digits = 2)</code></pre>
+<table>
+<colgroup>
+<col width="44%" />
+<col width="13%" />
+<col width="14%" />
+<col width="14%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">29.83</td>
+<td align="right">0.94</td>
+<td align="right">31.78</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’13-17</td>
+<td align="right">73.06</td>
+<td align="right">0.96</td>
+<td align="right">75.93</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’18-44</td>
+<td align="right">74.81</td>
+<td align="right">0.96</td>
+<td align="right">77.76</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’45-64</td>
+<td align="right">79.41</td>
+<td align="right">0.96</td>
+<td align="right">82.54</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’5-12</td>
+<td align="right">42.17</td>
+<td align="right">0.96</td>
+<td align="right">43.83</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’65+</td>
+<td align="right">73.94</td>
+<td align="right">0.96</td>
+<td align="right">76.85</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">race_ethnicityBlack</td>
+<td align="right">-41.28</td>
+<td align="right">0.41</td>
+<td align="right">-100.96</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">race_ethnicityHispanic/Latino</td>
+<td align="right">-27.57</td>
+<td align="right">0.41</td>
+<td align="right">-67.43</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">race_ethnicityWhite</td>
+<td align="right">-40.44</td>
+<td align="right">0.41</td>
+<td align="right">-98.91</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="interaction-model" class="section level3">
 <h3>Interaction Model</h3>
 <p>Interaction model is a multiple linear regression model with three
 predictiors: age, race, and age*race.</p>
+<pre class="r"><code>fit_lm_interaction = lm(city_perc_fully ~ age_group  +  race_ethnicity +
+                        age_group * race_ethnicity, 
+                        data = unstratified )
+fit_lm_interaction  %&gt;% broom::tidy() %&gt;% knitr::kable(digits = 2)</code></pre>
+<table style="width:100%;">
+<colgroup>
+<col width="55%" />
+<col width="10%" />
+<col width="12%" />
+<col width="12%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">4.32</td>
+<td align="right">1.33</td>
+<td align="right">3.25</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’13-17</td>
+<td align="right">110.21</td>
+<td align="right">1.41</td>
+<td align="right">78.04</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’18-44</td>
+<td align="right">97.70</td>
+<td align="right">1.41</td>
+<td align="right">69.18</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’45-64</td>
+<td align="right">96.80</td>
+<td align="right">1.41</td>
+<td align="right">68.55</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’5-12</td>
+<td align="right">79.58</td>
+<td align="right">1.41</td>
+<td align="right">56.35</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’65+</td>
+<td align="right">89.97</td>
+<td align="right">1.41</td>
+<td align="right">63.71</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">race_ethnicityBlack</td>
+<td align="right">-3.87</td>
+<td align="right">1.88</td>
+<td align="right">-2.06</td>
+<td align="right">0.04</td>
+</tr>
+<tr class="even">
+<td align="left">race_ethnicityHispanic/Latino</td>
+<td align="right">-3.77</td>
+<td align="right">1.88</td>
+<td align="right">-2.01</td>
+<td align="right">0.04</td>
+</tr>
+<tr class="odd">
+<td align="left">race_ethnicityWhite</td>
+<td align="right">0.38</td>
+<td align="right">1.88</td>
+<td align="right">0.20</td>
+<td align="right">0.84</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’13-17:race_ethnicityBlack</td>
+<td align="right">-51.50</td>
+<td align="right">2.00</td>
+<td align="right">-25.79</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’18-44:race_ethnicityBlack</td>
+<td align="right">-38.98</td>
+<td align="right">2.00</td>
+<td align="right">-19.52</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’45-64:race_ethnicityBlack</td>
+<td align="right">-27.07</td>
+<td align="right">2.00</td>
+<td align="right">-13.55</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’5-12:race_ethnicityBlack</td>
+<td align="right">-51.53</td>
+<td align="right">2.00</td>
+<td align="right">-25.80</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’65+:race_ethnicityBlack</td>
+<td align="right">-22.87</td>
+<td align="right">2.00</td>
+<td align="right">-11.45</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’13-17:race_ethnicityHispanic/Latino</td>
+<td align="right">-33.06</td>
+<td align="right">2.00</td>
+<td align="right">-16.55</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’18-44:race_ethnicityHispanic/Latino</td>
+<td align="right">-17.36</td>
+<td align="right">2.00</td>
+<td align="right">-8.69</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’45-64:race_ethnicityHispanic/Latino</td>
+<td align="right">-11.50</td>
+<td align="right">2.00</td>
+<td align="right">-5.76</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’5-12:race_ethnicityHispanic/Latino</td>
+<td align="right">-44.51</td>
+<td align="right">2.00</td>
+<td align="right">-22.29</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’65+:race_ethnicityHispanic/Latino</td>
+<td align="right">-15.71</td>
+<td align="right">2.00</td>
+<td align="right">-7.87</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’13-17:race_ethnicityWhite</td>
+<td align="right">-64.06</td>
+<td align="right">2.00</td>
+<td align="right">-32.08</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’18-44:race_ethnicityWhite</td>
+<td align="right">-35.23</td>
+<td align="right">2.00</td>
+<td align="right">-17.64</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’45-64:race_ethnicityWhite</td>
+<td align="right">-30.99</td>
+<td align="right">2.00</td>
+<td align="right">-15.52</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">age_group’5-12:race_ethnicityWhite</td>
+<td align="right">-53.63</td>
+<td align="right">2.00</td>
+<td align="right">-26.85</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">age_group’65+:race_ethnicityWhite</td>
+<td align="right">-25.55</td>
+<td align="right">2.00</td>
+<td align="right">-12.79</td>
+<td align="right">0.00</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="cross-validation" class="section level3">
 <h3>Cross Validation</h3>
@@ -700,6 +1440,31 @@ We would say the interaction model will be better than the other one
 because its root means square error seems to be smaller. Therefore,
 interaction model could be useful for predicting the fully vaccinated
 rate in NYC.</p>
+<pre class="r"><code>cv_df =
+  crossv_mc(unstratified, 100) %&gt;% 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble))</code></pre>
+<pre class="r"><code>cv_df = 
+  cv_df %&gt;% 
+  mutate(
+    age_mod = map(train, ~lm(city_perc_fully ~ age_group, data = .x)),
+    main_mod  = map(train, ~lm(city_perc_fully ~ age_group  +  race_ethnicity, data = .x)),
+    interaction_mod = map(train, ~lm(city_perc_fully ~ age_group  +  race_ethnicity + age_group * race_ethnicity, data = .x))) %&gt;% 
+  mutate(
+    rmse_age = map2_dbl(age_mod, test, ~rmse(model = .x, data = .y)),
+    rmse_main = map2_dbl(main_mod, test, ~rmse(model = .x, data = .y)),
+    rmse_interaction = map2_dbl(interaction_mod, test, ~rmse(model = .x, data = .y)))</code></pre>
+<pre class="r"><code>cv_df %&gt;% 
+  select(starts_with(&quot;rmse&quot;)) %&gt;% 
+  pivot_longer(
+    everything(),
+    names_to = &quot;model&quot;, 
+    values_to = &quot;rmse&quot;,
+    names_prefix = &quot;rmse_&quot;) %&gt;% 
+  mutate(model = fct_inorder(model)) %&gt;% 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()</code></pre>
+<p><img src="report_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 </div>
 <div id="model-conclusion" class="section level3">
 <h3>Model Conclusion</h3>
@@ -790,6 +1555,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {
