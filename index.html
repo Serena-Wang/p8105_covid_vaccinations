@@ -409,14 +409,19 @@ promising results in reducing the overall infection rate.</p>
 Due to systematic disparities in access to health resources, we are
 interested in exploring whether there exist disparities in vaccination
 rates across different races, ages, gender, and geographies in NYC.</p>
-<p>Taking the population in NYC as a whole, we are also interested in
-whether infection rate (first infections &amp; reinfections) is
-associated with vaccination rate across time in NYC.</p>
+<p>Taking the population in NYC as a whole, we would like to know
+whether different variants coincide with specific infection peaks and
+vaccination rate patterns over time. We are also interested in if there
+are any associations between vaccination rate and infection rate (first
+infection &amp; reinfection). Also, we collect the dataset about two
+health outcomes: a)death and b) hospitalization, and are interested in
+the trends of the total number of those outcomes over time.</p>
 </div>
 <div id="datasets" class="section level2">
 <h2>Datasets</h2>
 <p>For the purpose of characterizing the pattern of the COVID-19
-vaccination rate and infection rate in NYC over time:</p>
+vaccination rate and infection rate(first infectin and reinfection) in
+NYC over time:</p>
 <ul>
 <li><p>We used <code>doses by day data</code> to see the trends of
 getting shots of every vaccine. <a
@@ -427,9 +432,20 @@ which gave us timely information about the trends in first infections
 and reinfections in New York City. <a
 href="https://health.data.ny.gov/Health/New-York-State-Statewide-COVID-19-Reinfection-Data/7aaj-cdtu">Reinfection
 Data</a></p></li>
-<li><p>We collected <code>Variant Data</code> from <a
+</ul>
+<p>For exploring whether different variants coincide with specific
+infection peaks and vaccination rate patterns over time:</p>
+<ul>
+<li>We collected <code>Variant Data</code> from <a
 href="https://coronavirus.health.ny.gov/covid-19-variant-data">Variant
-Data</a></p></li>
+Data</a></li>
+</ul>
+<p>For researching the trends of the counts of hospitalizations and
+deaths:</p>
+<ul>
+<li>We used the
+<code>COVID-19_Daily_Counts_of_Cases__Hospitalizations__and_Deaths</code>
+dataset to obtain the daily counts of hospitalizations and deaths.</li>
 </ul>
 <p>For exploring whether there exist disparities in vaccination rates
 across different races, ages, gender, and geographies:</p>
@@ -443,23 +459,29 @@ href="https://github.com/nychealth/covid-vaccine-data/tree/main/people">People</
 <div id="focus-of-our-project" class="section level2">
 <h2>Focus of our Project</h2>
 <p>Considering the area in NYC, knowing that the COVID-19 vaccine is
-effective, we aimed to show trends in vaccination rate and infection
-rate to roughly see the vaccine efficacy. And because of the existence
-of global vaccine disparities, we wanted to investigate associations
-between the vaccination rate and a range of demographic &amp; geographic
-factors.</p>
+effective, We aimed to show trends in vaccination rate and infection
+rate to roughly see the vaccine efficacy and the trends in the total
+number of hospitalizations and deaths to seek some insight. Furthermore,
+regarding variant classifications, we want to visualize the overall
+trend of variant sequencing during the pandemic. And because of the
+existence of global vaccine disparities, we tried to investigate
+associations between the vaccination rate and a range of demographic
+&amp; geographic factors.</p>
 </div>
 <div id="main-questions" class="section level2">
 <h2>Main Questions</h2>
 <p>We followed our exploratory by some detailed questions:</p>
 <ul>
-<li><p>What does the <em>trend</em> of every kind of cumulative
-vaccination rate in NYC over days look like?</p></li>
-<li><p>What does the <em>trend</em> of every kind of daily vaccination
-rate over time look like?</p></li>
-<li><p>What does the <em>trend</em> of infection rate over time look
-like, and is there any interesting information we can recognize when
-comparing this to the other two above?</p></li>
+<li><p>What is the <em>trend</em> of cumulative vaccination counts in
+NYC?</p></li>
+<li><p>What is the <em>trend</em> in infection/reinfection counts, and
+is there any interesting information we can recognize when comparing
+this to the abovementioned trends?</p></li>
+<li><p>What is the <em>trend</em> among various vaccine types?</p></li>
+<li><p>What is the <em>trend</em> of hospitalizations and
+deaths?</p></li>
+<li><p>Are vaccination rates influenced by demographic/race-based
+features? If so, what are the underlying <em>trends</em>?</p></li>
 <li><p>What should be the <em>predictors</em> for vaccination rate?
 Also, is there a <em>significant association</em> between vaccination
 rate and races / ages / gender / boroughs?</p></li>
@@ -468,7 +490,15 @@ rate and races / ages / gender / boroughs?</p></li>
 </div>
 <div id="take-away" class="section level2">
 <h2>Take away</h2>
-<p>some conclusion</p>
+<ul>
+<li><p>There do exist demographic differences amongst vaccination trends
+in New York City.</p></li>
+<li><p>In general, the booster vaccination rate is lower than the
+primary series vaccination rate across the board.</p></li>
+<li><p>Vaccination rate differs across age-groups and a larger group of
+adults (compared to children under 18) are vaccinated against COVID (at
+least primary series).</p></li>
+</ul>
 </div>
 <div id="our-team" class="section level2">
 <h2>Our team</h2>
