@@ -20,7 +20,7 @@ The first dataset is stratified by age, race/ethnicity, gender, or geographical 
 stratified = 
   read_csv("https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv") %>%
   janitor::clean_names() %>%
-  select(group, subgroup, count_fully_cumulative, pop_denominator ) %>%
+  select(date, population, group, subgroup, count_fully_cumulative, pop_denominator ) %>%
   drop_na()
 ```
 
@@ -37,15 +37,22 @@ unstratified =
 
 * Borough
 
+First, we want to see whether the COVID vaccination rate is consistent across different parts of NYC. So we categorized people by borough. We predicted that there is no difference in vaccination rate in NYC across the six boroughs. We will perform the proportion test to verify our assumption.
+
+H0: the fully vaccination rate is the same across all boroughs.
+H1: the fully vaccination rate is not same across all boroughs.
+
 ```{r}
 demo_boro = 
   stratified %>%
-  filter(group == "Borough") %>% 
-  select(-group) %>%
+  filter(group == "Borough",
+         date == max(date),
+         population == "All ages") %>%
+  select(-group, -date, -population) %>%
   group_by(subgroup) %>%
   summarise(
-    x = sum(count_fully_cumulative),
-    n = sum(pop_denominator)) %>%
+    x = count_fully_cumulative,
+    n = pop_denominator) %>%
   filter(subgroup != "Citywide") %>%
   select(-subgroup) %>%
   data.matrix()
@@ -55,23 +62,31 @@ rownames(demo_boro) = c("Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Isla
 knitr::kable(demo_boro, digits = 3)
 ```
 
-
 ```{r}
 prop.test(as.data.frame(demo_boro)$x, as.data.frame(demo_boro)$n)
 ```
 
+Conclusion: The p-value is much smaller than the critical value alpha = 0.5, so we could reject the null hypothesis and conclude that the fully vaccinated rate is different by geographical locations in NYC.
+
 * Race
+
+Second, we want to examine whether the COVID vaccination rate is the same across different race group in NYC so we stratified people by their races. We predicted that there is no difference in vaccination rate in NYC across the races.
+
+H0: the fully vaccination rate is the same across all boroughs.
+H1: the fully vaccination rate is not same across all boroughs.
 
 ```{r}
 demo_race = 
   stratified %>%
-  filter(group == "Race/ethnicity") %>%
+  filter(group == "Race/ethnicity",
+         date == max(date),
+         population == "All ages") %>%
 
   select(-group) %>%
   group_by(subgroup) %>%
   summarise(
-    x = sum(count_fully_cumulative),
-    n = sum(pop_denominator)) %>%
+    x = count_fully_cumulative,
+    n = pop_denominator) %>%
   filter(!subgroup %in% c( "Native American/Alaska Native", "Other", "Unknown")) %>%
   select(-subgroup) %>%
   data.matrix()
@@ -91,12 +106,14 @@ prop.test(as.data.frame(demo_race)$x, as.data.frame(demo_race)$n)
 ```{r}
 demo_sex = 
   stratified %>%
-  filter(group == "Sex") %>%
+  filter(group == "Sex",
+         date == max(date),
+         population == "All ages") %>%
   select(-group) %>%
   group_by(subgroup) %>%
   summarise(
-    x = sum(count_fully_cumulative),
-    n = sum(pop_denominator)) %>%
+    x = count_fully_cumulative,
+    n = pop_denominator) %>%
   filter(!subgroup %in% c("Other", "Prefer not to answer","Unknown")) %>%
   select(-subgroup) %>%
   data.matrix()
@@ -117,12 +134,14 @@ demo_age =
   stratified %>%
   filter(
     group == "Age",
-    ! subgroup %in% c( "'5-12","'0-4", "'13-17", "'0-17", "'18-24", "'25-34", "'35-44", "'45-54", "'55-64", "'65-74", "'75-84","'85+"))%>%
+    date == max(date),
+    population == "All ages",
+    !subgroup %in% c("'0-4", "'5-12", "'13-17")) %>%
   select(-group) %>% 
   group_by(subgroup) %>%
   summarise(
-    x = sum(count_fully_cumulative),
-    n = sum(pop_denominator)) %>%
+    x = count_fully_cumulative,
+    n = pop_denominator) %>%
   select(-subgroup) %>%
   data.matrix() 
 

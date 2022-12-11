@@ -254,7 +254,7 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="project_report.html">Our Project</a>
+      <a href="report.html">Report</a>
     </li>
   </ul>
 </li>
@@ -264,16 +264,16 @@ $(document).ready(function () {
   <a href="PRE_PROCESSING.html">Data Pre-Processing</a>
 </li>
 <li>
+  <a href="https://tvishad.shinyapps.io/shiny/">Overall Vaccination Trends</a>
+</li>
+<li>
   <a href="exploratory_analysis.html">Exploratory Analysis</a>
 </li>
 <li>
-  <a href="demographic_features.html">Statistical Analysis</a>
+  <a href="statistical-analysis.html">Statistical Analysis</a>
 </li>
 <li>
-  <a href="Model-Fitting.html">Model Prediction</a>
-</li>
-<li>
-  <a href="https://tvishad.shinyapps.io/shiny/">Overall Vaccination Trends</a>
+  <a href="Model-Fitting.html">Model Fitting</a>
 </li>
 <li>
   <a href="https://github.com/Serena-Wang/p8105_covid_vaccinations">
@@ -306,7 +306,7 @@ race/ethnicity, gender, or geographical locations.</li>
 <pre class="r"><code>stratified = 
   read_csv(&quot;https://raw.githubusercontent.com/Serena-Wang/p8105_covid_vaccinations/main/Data/coverage_by_demo_full.csv&quot;) %&gt;%
   janitor::clean_names() %&gt;%
-  select(group, subgroup, count_fully_cumulative, pop_denominator ) %&gt;%
+  select(date, population, group, subgroup, count_fully_cumulative, pop_denominator ) %&gt;%
   drop_na()</code></pre>
 <pre><code>## Rows: 30352 Columns: 13
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -338,14 +338,23 @@ race/ethnicity.</p>
 <ul>
 <li>Borough</li>
 </ul>
+<p>First, we want to see whether the COVID vaccination rate is
+consistent across different parts of NYC. So we categorized people by
+borough. We predicted that there is no difference in vaccination rate in
+NYC across the six boroughs. We will perform the proportion test to
+verify our assumption.</p>
+<p>H0: the fully vaccination rate is the same across all boroughs. H1:
+the fully vaccination rate is not same across all boroughs.</p>
 <pre class="r"><code>demo_boro = 
   stratified %&gt;%
-  filter(group == &quot;Borough&quot;) %&gt;% 
-  select(-group) %&gt;%
+  filter(group == &quot;Borough&quot;,
+         date == max(date),
+         population == &quot;All ages&quot;) %&gt;%
+  select(-group, -date, -population) %&gt;%
   group_by(subgroup) %&gt;%
   summarise(
-    x = sum(count_fully_cumulative),
-    n = sum(pop_denominator)) %&gt;%
+    x = count_fully_cumulative,
+    n = pop_denominator) %&gt;%
   filter(subgroup != &quot;Citywide&quot;) %&gt;%
   select(-subgroup) %&gt;%
   data.matrix()
@@ -364,28 +373,28 @@ knitr::kable(demo_boro, digits = 3)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">Bronx</td>
-<td align="right">722298779</td>
-<td align="right">1088999695</td>
+<td align="right">1083678</td>
+<td align="right">1418208</td>
 </tr>
 <tr class="even">
 <td align="left">Brooklyn</td>
-<td align="right">1286110295</td>
-<td align="right">1967855396</td>
+<td align="right">1877156</td>
+<td align="right">2559901</td>
 </tr>
 <tr class="odd">
 <td align="left">Manhattan</td>
-<td align="right">996388120</td>
-<td align="right">1270650399</td>
+<td align="right">1382884</td>
+<td align="right">1628706</td>
 </tr>
 <tr class="even">
 <td align="left">Queens</td>
-<td align="right">1374882286</td>
-<td align="right">1750234553</td>
+<td align="right">1957412</td>
+<td align="right">2253857</td>
 </tr>
 <tr class="odd">
 <td align="left">Staten Island</td>
-<td align="right">250641732</td>
-<td align="right">368678103</td>
+<td align="right">362297</td>
+<td align="right">476143</td>
 </tr>
 </tbody>
 </table>
@@ -394,23 +403,34 @@ knitr::kable(demo_boro, digits = 3)</code></pre>
 ##  5-sample test for equality of proportions without continuity correction
 ## 
 ## data:  as.data.frame(demo_boro)$x out of as.data.frame(demo_boro)$n
-## X-squared = 126094494, df = 4, p-value &lt; 2.2e-16
+## X-squared = 177205, df = 4, p-value &lt; 2.2e-16
 ## alternative hypothesis: two.sided
 ## sample estimates:
 ##    prop 1    prop 2    prop 3    prop 4    prop 5 
-## 0.6632681 0.6535594 0.7841560 0.7855417 0.6798389</code></pre>
+## 0.7641178 0.7332924 0.8490691 0.8684721 0.7608996</code></pre>
+<p>Conclusion: The p-value is much smaller than the critical value alpha
+= 0.5, so we could reject the null hypothesis and conclude that the
+fully vaccinated rate is different by geographical locations in NYC.</p>
 <ul>
 <li>Race</li>
 </ul>
+<p>Second, we want to examine whether the COVID vaccination rate is the
+same across different race group in NYC so we stratified people by their
+races. We predicted that there is no difference in vaccination rate in
+NYC across the races.</p>
+<p>H0: the fully vaccination rate is the same across all boroughs. H1:
+the fully vaccination rate is not same across all boroughs.</p>
 <pre class="r"><code>demo_race = 
   stratified %&gt;%
-  filter(group == &quot;Race/ethnicity&quot;) %&gt;%
+  filter(group == &quot;Race/ethnicity&quot;,
+         date == max(date),
+         population == &quot;All ages&quot;) %&gt;%
 
   select(-group) %&gt;%
   group_by(subgroup) %&gt;%
   summarise(
-    x = sum(count_fully_cumulative),
-    n = sum(pop_denominator)) %&gt;%
+    x = count_fully_cumulative,
+    n = pop_denominator) %&gt;%
   filter(!subgroup %in% c( &quot;Native American/Alaska Native&quot;, &quot;Other&quot;, &quot;Unknown&quot;)) %&gt;%
   select(-subgroup) %&gt;%
   data.matrix()
@@ -429,28 +449,28 @@ knitr::kable(demo_race, digit = 3)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">Asian</td>
-<td align="right">847727388</td>
-<td align="right">960247461</td>
+<td align="right">1223600</td>
+<td align="right">1233643</td>
 </tr>
 <tr class="even">
 <td align="left">Black</td>
-<td align="right">707517792</td>
-<td align="right">1415073553</td>
+<td align="right">1130382</td>
+<td align="right">1825847</td>
 </tr>
 <tr class="odd">
 <td align="left">Hispanic/Latino</td>
-<td align="right">1178475578</td>
-<td align="right">1857816198</td>
+<td align="right">1808262</td>
+<td align="right">2423589</td>
 </tr>
 <tr class="even">
 <td align="left">Multiracial</td>
-<td align="right">4779670</td>
-<td align="right">112159215</td>
+<td align="right">9874</td>
+<td align="right">152897</td>
 </tr>
 <tr class="odd">
 <td align="left">White</td>
-<td align="right">1198886993</td>
-<td align="right">2086335135</td>
+<td align="right">1731189</td>
+<td align="right">2681975</td>
 </tr>
 </tbody>
 </table>
@@ -459,22 +479,24 @@ knitr::kable(demo_race, digit = 3)</code></pre>
 ##  5-sample test for equality of proportions without continuity correction
 ## 
 ## data:  as.data.frame(demo_race)$x out of as.data.frame(demo_race)$n
-## X-squared = 540764087, df = 4, p-value &lt; 2.2e-16
+## X-squared = 927591, df = 4, p-value &lt; 2.2e-16
 ## alternative hypothesis: two.sided
 ## sample estimates:
 ##     prop 1     prop 2     prop 3     prop 4     prop 5 
-## 0.88282180 0.49998658 0.63433378 0.04261504 0.57463778</code></pre>
+## 0.99185907 0.61910007 0.74610918 0.06457942 0.64549036</code></pre>
 <ul>
 <li>Sex</li>
 </ul>
 <pre class="r"><code>demo_sex = 
   stratified %&gt;%
-  filter(group == &quot;Sex&quot;) %&gt;%
+  filter(group == &quot;Sex&quot;,
+         date == max(date),
+         population == &quot;All ages&quot;) %&gt;%
   select(-group) %&gt;%
   group_by(subgroup) %&gt;%
   summarise(
-    x = sum(count_fully_cumulative),
-    n = sum(pop_denominator)) %&gt;%
+    x = count_fully_cumulative,
+    n = pop_denominator) %&gt;%
   filter(!subgroup %in% c(&quot;Other&quot;, &quot;Prefer not to answer&quot;,&quot;Unknown&quot;)) %&gt;%
   select(-subgroup) %&gt;%
   data.matrix()
@@ -493,13 +515,13 @@ knitr::kable(demo_sex, digit = 3)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">Female</td>
-<td align="right">2432309180</td>
-<td align="right">3380636041</td>
+<td align="right">3490394</td>
+<td align="right">4358377</td>
 </tr>
 <tr class="even">
 <td align="left">Male</td>
-<td align="right">2154878514</td>
-<td align="right">3065782107</td>
+<td align="right">3122712</td>
+<td align="right">3978438</td>
 </tr>
 </tbody>
 </table>
@@ -508,13 +530,13 @@ knitr::kable(demo_sex, digit = 3)</code></pre>
 ##  2-sample test for equality of proportions with continuity correction
 ## 
 ## data:  as.data.frame(demo_sex)$x out of as.data.frame(demo_sex)$n
-## X-squared = 2159282, df = 1, p-value &lt; 2.2e-16
+## X-squared = 3221.3, df = 1, p-value &lt; 2.2e-16
 ## alternative hypothesis: two.sided
 ## 95 percent confidence interval:
-##  0.01658003 0.01662435
+##  0.01538691 0.01648937
 ## sample estimates:
 ##    prop 1    prop 2 
-## 0.7194827 0.7028805</code></pre>
+## 0.8008472 0.7849091</code></pre>
 <ul>
 <li>age</li>
 </ul>
@@ -522,12 +544,14 @@ knitr::kable(demo_sex, digit = 3)</code></pre>
   stratified %&gt;%
   filter(
     group == &quot;Age&quot;,
-    ! subgroup %in% c( &quot;&#39;5-12&quot;,&quot;&#39;0-4&quot;, &quot;&#39;13-17&quot;, &quot;&#39;0-17&quot;, &quot;&#39;18-24&quot;, &quot;&#39;25-34&quot;, &quot;&#39;35-44&quot;, &quot;&#39;45-54&quot;, &quot;&#39;55-64&quot;, &quot;&#39;65-74&quot;, &quot;&#39;75-84&quot;,&quot;&#39;85+&quot;))%&gt;%
+    date == max(date),
+    population == &quot;All ages&quot;,
+    !subgroup %in% c(&quot;&#39;0-4&quot;, &quot;&#39;5-12&quot;, &quot;&#39;13-17&quot;)) %&gt;%
   select(-group) %&gt;% 
   group_by(subgroup) %&gt;%
   summarise(
-    x = sum(count_fully_cumulative),
-    n = sum(pop_denominator)) %&gt;%
+    x = count_fully_cumulative,
+    n = pop_denominator) %&gt;%
   select(-subgroup) %&gt;%
   data.matrix() 
 
@@ -545,48 +569,48 @@ knitr::kable(demo_age, digits = 3)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">0-17</td>
-<td align="right">39958604</td>
-<td align="right">299925504</td>
+<td align="right">755996</td>
+<td align="right">1704118</td>
 </tr>
 <tr class="even">
 <td align="left">18-24</td>
-<td align="right">142023582</td>
-<td align="right">248044129</td>
+<td align="right">636306</td>
+<td align="right">704673</td>
 </tr>
 <tr class="odd">
 <td align="left">25-34</td>
-<td align="right">312782940</td>
-<td align="right">522262048</td>
+<td align="right">1245178</td>
+<td align="right">1483699</td>
 </tr>
 <tr class="even">
 <td align="left">35-44</td>
-<td align="right">275466308</td>
-<td align="right">400190912</td>
+<td align="right">1063130</td>
+<td align="right">1136906</td>
 </tr>
 <tr class="odd">
 <td align="left">45-54</td>
-<td align="right">262406914</td>
-<td align="right">361886624</td>
+<td align="right">952463</td>
+<td align="right">1028087</td>
 </tr>
 <tr class="even">
 <td align="left">55-64</td>
-<td align="right">271839758</td>
-<td align="right">351621396</td>
+<td align="right">934623</td>
+<td align="right">998927</td>
 </tr>
 <tr class="odd">
 <td align="left">65-74</td>
-<td align="right">199655338</td>
-<td align="right">253015840</td>
+<td align="right">652936</td>
+<td align="right">718795</td>
 </tr>
 <tr class="even">
 <td align="left">75-84</td>
-<td align="right">95008314</td>
-<td align="right">134701452</td>
+<td align="right">307432</td>
+<td align="right">382672</td>
 </tr>
 <tr class="odd">
 <td align="left">85+</td>
-<td align="right">35057576</td>
-<td align="right">62986176</td>
+<td align="right">115363</td>
+<td align="right">178938</td>
 </tr>
 </tbody>
 </table>
@@ -595,13 +619,13 @@ knitr::kable(demo_age, digits = 3)</code></pre>
 ##  9-sample test for equality of proportions without continuity correction
 ## 
 ## data:  as.data.frame(demo_age)$x out of as.data.frame(demo_age)$n
-## X-squared = 400939241, df = 8, p-value &lt; 2.2e-16
+## X-squared = 1835678, df = 8, p-value &lt; 2.2e-16
 ## alternative hypothesis: two.sided
 ## sample estimates:
 ##    prop 1    prop 2    prop 3    prop 4    prop 5    prop 6    prop 7    prop 8 
-## 0.1332284 0.5725739 0.5989004 0.6883372 0.7251081 0.7731036 0.7891021 0.7053251 
+## 0.4436289 0.9029805 0.8392390 0.9351081 0.9264420 0.9356269 0.9083758 0.8033825 
 ##    prop 9 
-## 0.5565916</code></pre>
+## 0.6447093</code></pre>
 </div>
 
 
