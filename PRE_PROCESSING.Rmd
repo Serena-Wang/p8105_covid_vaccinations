@@ -131,7 +131,7 @@ percent | The percentages of every variant type/classification in a specific seq
 
 **New York State Statewide COVID-19 Reinfection Data**
 
-Since we aim to characterize the trends of first infections and reinfections in NYC, we filter "New York City" in redc_region column. And here are the defination of major variables.
+Since we aim to characterize the trends of first infections and reinfections in NYC, we filter "New York City" in `redc_region` column. And here are the definition of major variables.
 
 Name | Definition
 -------|-----------
@@ -142,7 +142,7 @@ reinfections_count | Count of reinfection positive results
  
 **Hospitalization and Death Data**
 
-To better compare the trends of these health outcomes(reinfections/hospitalizations/deaths), we broke down days by weeks. After that, we combined 2 datasets (Hospitalization and Death Data/Reinfection Data) 
+To better compare the trends of these health outcomes(reinfections/hospitalizations/deaths), we broke down days by weeks.
 
 Name | Definition
 -------|-----------
