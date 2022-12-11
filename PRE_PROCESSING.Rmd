@@ -53,7 +53,7 @@ This dataset reports the number of first infections and reinfections in New York
 
 **Hospitalization and Death Data**[(Source)](https://data.cityofnewyork.us/Health/COVID-19-Daily-Counts-of-Cases-Hospitalizations-an/rc75-m7u3)
 
-This dataset collected daily counts of New York City residents who tested positive of COVID-19, hospitalizations for COVID-19, and deaths with COVID-19. We focus on the counts of hospitalizations and deaths to compare the trends of these health outcomes. *Notice: this dataset is actually provided by NYC DOHMH*
+This dataset collects daily counts of New York City residents who tested positive of COVID-19, hospitalizations for COVID-19, and deaths with COVID-19. We focused on the counts of hospitalizations and deaths to compare the trends of these health outcomes. *Notice: this dataset is actually provided by NYC DOHMH*
 
 ## Data Cleaning
 
@@ -131,7 +131,7 @@ percent | The percentages of every variant type/classification in a specific seq
 
 **New York State Statewide COVID-19 Reinfection Data**
 
-Since we aim to characterize the trends of first infections and reinfections in NYC, we filter "New York City" in `redc_region` column. And here are the definition of major variables.
+Since we aim to characterize the trends of first infections and reinfections in NYC, we filtered "New York City" in `redc_region` column. And here are the definition of major variables.
 
 Name | Definition
 -------|-----------
